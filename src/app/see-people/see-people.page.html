@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar class="topMenu">
+      <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+    <ion-title>Summit</ion-title>
+    
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-title>Personas Asociadas</ion-title>
+ 
+    <ion-list>
+      <ion-card-content ion-item *ngFor="let device of devices">
+        <p>{{device.name || 'Unnamed'}}</p>
+        <p>{{device.id}}</p>
+        <p> RSSI: {{device.rssi}}</p>
+        
+      </ion-card-content>
+    </ion-list>
+    <!--<ion-list>
+      <ion-card-content ion-item *ngFor="let beacon of beacons">
+        <p>{{beacon.major}}</p>
+        <p>{{beacon.minor}}</p>
+        <p> {{beacon.rssi}}</p>
+        
+      </ion-card-content>
+     
+      
+      </ion-list>-->
+</ion-content>

@@ -1,0 +1,22 @@
+.topMenu{
+    --background: #203B69;
+    --color: #fff;
+    text-align: right;
+}
+.line-input {
+    margin-bottom: 0!important;
+    ion-item {
+        --border-color: transparent!important;
+        --highlight-height: 0;
+        border: 1px solid #dedede;
+        border-radius: 4px;
+        &.item-has-focus {
+            border: 1px solid var(--ion-color-primary);
+        }
+        ion-label {
+            color: #807e7e!important;
+            font-weight: 300;
+            font-size: 1rem!important;
+        }
+    }
+}

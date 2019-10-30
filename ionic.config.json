@@ -1,5 +1,7 @@
 {
   "name": "summitPruebaIonic",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
