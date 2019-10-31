@@ -28,43 +28,35 @@ export class BeaconService {
 
 
   initialise(): any {
-    let promise = new Promise((resolve, reject) => {
-    // we need to be running on a device
-    if (this.platform.is('cordova')) {
-    
-    // Request permission to use location on iOS
     this.ibeacon.requestAlwaysAuthorization();
-    
     // create a new delegate and register it with the native layer
-    this.delegate = this.ibeacon.Delegate();
+    let delegate = this.ibeacon.Delegate();
     
-    // Subscribe to some of the delegate’s event handlers
-    this.delegate.didRangeBeaconsInRegion()
-    .subscribe(
-    data => {
-    this.events.publish('didRangeBeaconsInRegion', data);
-    },
-    error => console.error()
-    );
+    // Subscribe to some of the delegate's event handlers
+    delegate.didRangeBeaconsInRegion()
+      .subscribe(
+        data => console.log('didRangeBeaconsInRegion: ', data),
+        error => console.error()
+      );
+    delegate.didStartMonitoringForRegion()
+      .subscribe(
+        data => console.log('didStartMonitoringForRegion: ', data),
+        error => console.error()
+      );
+    delegate.didEnterRegion()
+      .subscribe(
+        data => {
+          console.log('didEnterRegion: ', data);
+        }
+      );
     
-    // setup a beacon region – CHANGE THIS TO YOUR OWN UUID
-    this.region = this.ibeacon.BeaconRegion('deskBeacon', '00112233-4455-6677-8899-AABBCCDDEEFF');
+    let beaconRegion = this.ibeacon.BeaconRegion('deskBeacon','00112233-4455-6677-8899-AABBCCDDEEFF');
     
-    // start ranging
-    this.ibeacon.startRangingBeaconsInRegion(this.region).then(() => {
-    resolve(true);
-  },error => {
-    console.error('Failed to begin monitoring: ', error);
-    resolve(false);
-    }
-    );
-    } else {
-    console.error('This application needs to be running on a device');
-    resolve(false);
-    }
-    });
-    
-    return promise;
+    this.ibeacon.startMonitoringForRegion(beaconRegion)
+      .then(
+        () => console.log('Native layer received the request to monitoring'),
+        error => console.error('Native layer failed to begin monitoring: ', error)
+      );
     }
     
   
