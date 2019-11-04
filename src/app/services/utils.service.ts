@@ -50,6 +50,10 @@ export class UtilsService {
 
 
    };
+
+   mapwizeParams = {
+      searchdirection:""
+   }
   constructor() { 
     var newserverURL = 'http://34.70.117.247/summit/api/';
     this.params.serverurl = newserverURL;
@@ -95,9 +99,13 @@ export class UtilsService {
     this.params.personalert = newserverURL+"person_alert";
     this.params.assetalert = newserverURL+"asset_alert";
 
+    var mapwizeurl = "https://api.mapwize.io/v1/";
+    var apikey= "?api_key=439578d65ac560a55bb586feaa299bf7";
+    this.mapwizeParams.searchdirection = mapwizeurl+ "directions"+apikey;
+
 
   }//fin de bob
 
 
 
-}//fin de class
+}//fin de class439578d65ac560a55bb586feaa299bf7
