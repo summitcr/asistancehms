@@ -14,8 +14,9 @@ export class SeePeoplePage implements OnInit, AfterViewInit{
   
   devices:any[] = [];
   beacons: BeaconModel[] = [];
-  serviceUUID="C2:46:F9:66:19:CD";
+  serviceUUID=["C2:46:F9:66:19:CD","C8:D6:32:BF:C5:F6"];
 zone: any;
+  rssi: any;
   constructor(private ble:BLE,private ngZone: NgZone,public beaconService:BeaconService, public platform: Platform,public events: Events) { 
     this.zone = new NgZone({ enableLongStackTrace: false });
   }
@@ -26,16 +27,20 @@ zone: any;
 
   ngAfterViewInit(){
 this.Scan();
+
 //this.ionViewDidLoad();
   }
   Scan(){
     this.devices = [];
-    this.ble.connect(this.serviceUUID).subscribe(
+    this.ble.startScan(this.serviceUUID).subscribe(
       device => this.onDeviceDiscovered(device)
       
+      
     );
+    
   }
 
+  
 
   onDeviceDiscovered(device){
     
