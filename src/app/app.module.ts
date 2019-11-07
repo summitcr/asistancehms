@@ -15,6 +15,7 @@ import { AutoCompleteModule } from 'ionic4-auto-complete';
 import { BeaconService } from './services/beacon.service';
 import { IBeacon } from '@ionic-native/ibeacon/ngx';
 import { BLE } from '@ionic-native/ble/ngx';
+import { Toast } from '@ionic-native/toast/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,8 +24,9 @@ import { BLE } from '@ionic-native/ble/ngx';
   providers: [
     StatusBar,
     SplashScreen,
+    
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    CrudService,UtilsService, BeaconService,IBeacon, BLE
+    CrudService,UtilsService, BeaconService,IBeacon, BLE, Toast
   ],
   bootstrap: [AppComponent]
 })

@@ -63,35 +63,9 @@ export class Tab1Page implements OnInit, AfterViewInit {
   });
 
 
-    this.ionViewDidLoad();
+    
   }//fin de after
 
-  ionViewDidLoad() {
-    this.platform.ready().then(() => {
-      this.beaconService.initialise().then((isInitialised) => {
-        if (isInitialised) {
-          this.listenToBeaconEvents();
-        }
-      });
-    });
-  }
-  listenToBeaconEvents() {
-    this.events.subscribe('didRangeBeaconsInRegion', (data) => {
 
-      // update the UI with the beacon list
-      this.zone.run(() => {
-
-        this.beacons = [];
-
-        let beaconList = data.beacons;
-        beaconList.forEach((beacon) => {
-          let beaconObject = new BeaconModel(beacon);
-          this.beacons.push(beaconObject);
-        });
-
-      });
-
-    });
-  }
 
 }// fin
