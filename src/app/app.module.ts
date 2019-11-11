@@ -16,6 +16,7 @@ import { BeaconService } from './services/beacon.service';
 import { IBeacon } from '@ionic-native/ibeacon/ngx';
 import { BLE } from '@ionic-native/ble/ngx';
 import { Toast } from '@ionic-native/toast/ngx';
+import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,7 +27,7 @@ import { Toast } from '@ionic-native/toast/ngx';
     SplashScreen,
     
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    CrudService,UtilsService, BeaconService,IBeacon, BLE, Toast
+    CrudService,UtilsService, BeaconService,IBeacon, BLE, Toast, QRScanner
   ],
   bootstrap: [AppComponent]
 })

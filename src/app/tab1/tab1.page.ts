@@ -5,6 +5,7 @@ import { BeaconService, BeaconModel } from '../services/beacon.service';
 import { UtilsService } from '../services/utils.service';
 import { IBeacon } from '@ionic-native/ibeacon/ngx';
 import { CrudService } from '../services/crud.service';
+import { Vibration } from '@ionic-native/vibration/ngx';
 
 //declare var require:any;
 //const Mapwize = require('mapwize');
@@ -32,7 +33,9 @@ export class Tab1Page implements OnInit, AfterViewInit {
   ngOnInit() {
 
   }
-
+  setVibration(){
+    navigator.vibrate([500, 500, 500]);
+  }
   setRoute() {
    
 
