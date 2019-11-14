@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router, RouterEvent } from '@angular/router';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-menu',
@@ -19,7 +20,9 @@ url:'/menu/seconds'
 ];
 selectedPath='';
 
-  constructor(private router: Router) { 
+  person: any;
+
+  constructor(private router: Router, private storage: Storage) { 
     this.router.events.subscribe((event: RouterEvent)=>{
       if(event && event.url){
           this.selectedPath=event.url;
@@ -28,6 +31,14 @@ selectedPath='';
   }
 
   ngOnInit() {
+    this.storage.get('wa-data').then((val) => {
+      this.person = val;
+    });
+  }
+
+  logout(){
+    //this.storage.clear();
+    this.router.navigateByUrl('/login');
   }
 
 }

@@ -6,6 +6,7 @@ import { UtilsService } from '../services/utils.service';
 import { IBeacon } from '@ionic-native/ibeacon/ngx';
 import { CrudService } from '../services/crud.service';
 import { Vibration } from '@ionic-native/vibration/ngx';
+import { Storage } from '@ionic/storage';
 
 //declare var require:any;
 //const Mapwize = require('mapwize');
@@ -22,8 +23,9 @@ export class Tab1Page implements OnInit, AfterViewInit {
   beacons: BeaconModel[] = [];
   zone: any;
   mapwizeMap: any;
+  person: any;
 
-  constructor(private service: CrudService, public beaconService: BeaconService, public platform: Platform, public events: Events, public services: UtilsService) {
+  constructor(private storage: Storage, private service: CrudService, public beaconService: BeaconService, public platform: Platform, public events: Events, public services: UtilsService) {
 
 
     //Mapwize.apiKey("439578d65ac560a55bb586feaa299bf7");
@@ -31,10 +33,16 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-
+    this.storage.get('wa-data').then((val) => {
+      this.person = val;
+    });
   }
   setVibration(){
     navigator.vibrate([500, 500, 500]);
+    
+    console.log(this.person.name);
+    console.log(this.person.identifier);
+    console.log(this.person.personasocieted);
   }
   setRoute() {
    

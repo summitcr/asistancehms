@@ -14,9 +14,9 @@
       
         <ion-item> 
           <ion-label>Cédula</ion-label> 
-          <ion-input class="ion-text-right"></ion-input> 
+          <ion-input class="ion-text-right" [(ngModel)]="cedula"></ion-input> 
         </ion-item> 
       </ion-list>
   <!--<button ion-button full (click)="doLogin()">Login</button>-->
-  <ion-button expand="block" routerLink="/menu/first">Login</ion-button>
+  <ion-button expand="block" (click) ="login()">Login</ion-button>
 </ion-content>

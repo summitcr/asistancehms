@@ -29,6 +29,7 @@
     "@ionic-native/toast": "^5.16.0",
     "@ionic-native/vibration": "^5.16.0",
     "@ionic/angular": "^4.7.1",
+    "@ionic/storage": "^2.2.0",
     "com.unarin.cordova.beacon": "~3.8.1",
     "cordova-android": "^8.1.0",
     "cordova-ios": "^4.5.5",
@@ -99,7 +100,8 @@
       "cordova-plugin-qrscanner": {},
       "cordova-plugin-androidx": {},
       "cordova-plugin-androidx-adapter": {},
-      "cordova-plugin-vibration": {}
+      "cordova-plugin-vibration": {},
+      "cordova-sqlite-storage": {}
     },
     "platforms": [
       "ios",
