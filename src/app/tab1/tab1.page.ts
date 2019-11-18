@@ -7,6 +7,7 @@ import { IBeacon } from '@ionic-native/ibeacon/ngx';
 import { CrudService } from '../services/crud.service';
 import { Vibration } from '@ionic-native/vibration/ngx';
 import { Storage } from '@ionic/storage';
+import mapboxgl from 'mapbox-gl';
 
 //declare var require:any;
 //const Mapwize = require('mapwize');
@@ -45,8 +46,6 @@ export class Tab1Page implements OnInit, AfterViewInit {
     console.log(this.person.personasocieted);
   }
   setRoute() {
-   
-
     var dir  = { 
         "from": { "placeId": "5d7448f0ce095b0051f9aa3d" }, 
         "to": { "placeId": "5d8e6bb4478407002c9ff811" },
@@ -54,13 +53,12 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
     this.service.save(this.services.mapwizeParams.searchdirection, dir).subscribe((response) => {
       this.mapwizeMap.setDirection(response);
-
     }, (err) => {
 
       console.error(err);
     });
-
   }
+
   ngAfterViewInit() {
 
    MapwizeUI.map({
@@ -70,13 +68,65 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
     }).then(instance => {
       this.mapwizeMap = instance;
-      return instance;
-  });
-
-
+      
+      this.personLocation();
+      
+    });
     
   }//fin de after
 
+  personLocation(){
+    /*this.mapwizeMap.addMarker({
+      latitude: 9.975285088159453,
+      longitude: -84.74990448755439,
+      floor: 0
+    });*/
+    let el = document.createElement('div');
+    el.className = 'marker';
+    
+    const myCustomMarker = new mapboxgl.Marker({color: 'red'});
+      myCustomMarker.setPopup(new mapboxgl.Popup({closeOnClick: false, closeButton: false}).setText(this.person.name));
+      
+      this.mapwizeMap.on('mapwize:markerclick', e => {
+        alert('marker: ' + e.marker);
+      });
+      this.mapwizeMap.addMarker({
+        latitude: 9.975285088159453,
+        longitude: -84.74990448755439,
+        floor: 0,
+      }, myCustomMarker).then((marker => {
 
+        var s = "";
+      }));
+  }
+
+  assignedPersonLocation(){
+    const myCustomMarker = new mapboxgl.Marker({color: 'yellow'});
+      myCustomMarker.setPopup(new mapboxgl.Popup({closeOnClick: false, closeButton: false}).setText('Nombre persona asignada'));
+      
+    this.mapwizeMap.on('mapwize:markerclick', e => {
+      alert('marker: ' + e.marker);
+    });
+    this.mapwizeMap.addMarker({
+      latitude: 9.974562999019767,
+      longitude: -84.74976922280277,
+      floor: 0,
+    }, myCustomMarker).then((marker => {
+
+      var s = "";
+    }));
+
+    var dir  = { 
+      "from": { "placeId": "5d7448f0ce095b0051f9aa3d" }, 
+      "to": { "placeId": "5d74287f731b47002c23c6e9" },
+      "options": { "isAccessible": false } };
+
+      this.service.save(this.services.mapwizeParams.searchdirection, dir).subscribe((response) => {
+        this.mapwizeMap.setDirection(response);
+      }, (err) => {
+
+        console.error(err);
+      });
+  }
 
 }// fin
