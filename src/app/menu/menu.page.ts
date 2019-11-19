@@ -37,7 +37,7 @@ selectedPath='';
   }
 
   logout(){
-    //this.storage.clear();
+    this.storage.clear();
     this.router.navigateByUrl('/login');
   }
 
