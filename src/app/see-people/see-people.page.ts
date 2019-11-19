@@ -3,13 +3,15 @@ import { BLE } from '@ionic-native/ble/ngx';
 import { BeaconModel, BeaconService } from '../services/beacon.service';
 import { IBeacon } from '@ionic-native/ibeacon/ngx';
 import { Platform, Events, NavController } from '@ionic/angular';
+import { CrudService } from '../services/crud.service';
+import { UtilsService } from '../services/utils.service';
 
 @Component({
   selector: 'app-see-people',
   templateUrl: './see-people.page.html',
   styleUrls: ['./see-people.page.scss'],
 })
-export class SeePeoplePage implements  AfterViewInit {
+export class SeePeoplePage implements AfterViewInit {
 
 
   devices: any[] = [];
@@ -18,11 +20,12 @@ export class SeePeoplePage implements  AfterViewInit {
   zone: any;
   rssi: any;
   tracker: string = "Personas Asociadas";
-  constructor(private ble: BLE, private ngZone: NgZone, public beaconService: BeaconService, public platform: Platform, public events: Events,public navCtrl: NavController) {
+  persons: any;
+  constructor(private ble: BLE, private ngZone: NgZone, public beaconService: BeaconService, public platform: Platform, public events: Events, public navCtrl: NavController, private services: CrudService, private params: UtilsService, ) {
     this.zone = new NgZone({ enableLongStackTrace: false });
   }
 
- 
+
 
   ngAfterViewInit() {
     //this.Scan();
@@ -69,7 +72,7 @@ export class SeePeoplePage implements  AfterViewInit {
 
       // update the UI with the beacon list
       this.zone.run(() => {
-        this.tracker="ionviweDiaload-run";
+        this.tracker = "ionviweDiaload-run";
         this.beacons = [];
 
         let beaconList = data.beacons;
@@ -81,6 +84,16 @@ export class SeePeoplePage implements  AfterViewInit {
       });
 
     });
+  }
+  //get de personas
+
+  getPersons() {
+
+    this.services.get(this.params.params.staffurl).subscribe((resp) => {
+      this.persons = resp;
+    }, (err) => {
+      console.error(err);
+    });;
   }
 
 }//fin de la class

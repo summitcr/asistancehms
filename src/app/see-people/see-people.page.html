@@ -9,10 +9,10 @@
 </ion-header>
 
 <ion-content padding>
-    <ion-title>{{tracker}}</ion-title>
+    <ion-title class="header-title">Personas Asociadas</ion-title>
 
 
-    <ion-label color="primary">Primary Label</ion-label>
+    
      <!--<ion-list>
       <ion-card-content ion-item *ngFor="let device of devices">
         <p>{{device.name || 'Unnamed'}}</p>
@@ -21,7 +21,7 @@
       
         
       </ion-card-content>
-    </ion-list>-->
+    </ion-list>
     <ion-list no-lines>
       <ion-item *ngFor="let beacon of beacons">
         <ion-grid>
@@ -39,5 +39,26 @@
           </ion-row>
         </ion-grid>
       </ion-item>
-    </ion-list>
+    </ion-list>-->
+    <ion-list>
+       
+     
+    <ion-card>
+        <ion-item>
+      
+      <ion-card-content>
+          <ion-label>Nombre:</ion-label>
+          <ion-label>Ubicacion:</ion-label>
+          <ion-label>Nose:</ion-label>
+        
+      </ion-card-content>
+      <ion-button class="btnGO" slot="end" color="primary" >Go</ion-button>
+    </ion-item>
+    
+    </ion-card>
+
+    
+  
+  </ion-list>
+  
 </ion-content>
