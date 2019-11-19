@@ -40,6 +40,10 @@
         </ion-grid>
       </ion-item>
     </ion-list>-->
+    <ion-button expand="block" (click)="scheduleNotification()" color="primary" >schedule</ion-button>
+    <ion-button expand="block" (click)="recurringNotification()" color="primary" >Every Minute</ion-button>
+    <ion-button expand="block" (click)="repeatDaily()" color="primary" >Daily</ion-button>
+    <ion-button expand="block" (click)="getAll()" color="primary" >get All</ion-button>
     <ion-list>
        
      
@@ -52,13 +56,17 @@
           <ion-label>Nose:</ion-label>
         
       </ion-card-content>
-      <ion-button class="btnGO" slot="end" color="primary" >Go</ion-button>
+      <ion-button class="btnGO" slot="end" color="primary"  (click)="go()">Go</ion-button>
     </ion-item>
     
     </ion-card>
-
-    
-  
+    <ion-item *ngFor="let n of scheduled">
+        <ion-label text-wrap>
+          {{ n.id }} - {{ n.title }}
+          <p>Trigger: {{ n.trigger | json }}</p>
+        </ion-label>
+      </ion-item>
+     
   </ion-list>
   
 </ion-content>

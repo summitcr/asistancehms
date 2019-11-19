@@ -8,6 +8,8 @@ import { CrudService } from '../services/crud.service';
 import { Vibration } from '@ionic-native/vibration/ngx';
 import { Storage } from '@ionic/storage';
 import mapboxgl from 'mapbox-gl';
+import { SeePeoplePage } from '../see-people/see-people.page';
+
 
 //declare var require:any;
 //const Mapwize = require('mapwize');
@@ -26,7 +28,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   mapwizeMap: any;
   person: any;
 
-  constructor(private storage: Storage, private service: CrudService, public beaconService: BeaconService, public platform: Platform, public events: Events, public services: UtilsService) {
+  constructor(private storage: Storage, private service: CrudService, public beaconService: BeaconService, public platform: Platform, public events: Events, public services: UtilsService, private seePeople: SeePeoplePage) {
 
 
     //Mapwize.apiKey("439578d65ac560a55bb586feaa299bf7");
@@ -34,10 +36,15 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+   
+  }
+  getStorage(){
     this.storage.get('wa-data').then((val) => {
       this.person = val;
-    });
-  }
+      console.log(this.person);
+  });
+}
+
   setVibration(){
     navigator.vibrate([500, 500, 500]);
     
@@ -61,17 +68,20 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
 
-   MapwizeUI.map({
-      apiKey: '439578d65ac560a55bb586feaa299bf7',
-      hideMenu: true,
-      centerOnVenue: '5d7420b31a255c0050e14fc5'
-
-    }).then(instance => {
-      this.mapwizeMap = instance;
+    setTimeout(() => {
+      this.getStorage();
+      MapwizeUI.map({
+        apiKey: '439578d65ac560a55bb586feaa299bf7',
+        hideMenu: true,
+        centerOnVenue: '5d7420b31a255c0050e14fc5'
+  
+      }).then(instance => {
+        this.mapwizeMap = instance;
       
-      this.personLocation();
-      
-    });
+        this.personLocation();
+        this.seePeople.peopleLocation();
+      });
+    }, 1000);
     
   }//fin de after
 

@@ -23,11 +23,11 @@
                 </ion-label>
             </ion-item>
           
-          
+            <ion-item (click)="openModal()">Menu Item</ion-item>
          
    
         </ion-menu-toggle>
-      <ion-item tappable routerLink="/login" routerDirection="root">
+      <ion-item tappable (click)="logout()" routerDirection="root">
       <ion-icon name="log-out" slot="start"> </ion-icon>
       logout
       </ion-item>
