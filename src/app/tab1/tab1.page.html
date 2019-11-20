@@ -4,9 +4,10 @@
             <ion-menu-button></ion-menu-button>
           </ion-buttons>
       <ion-title>Summit</ion-title>
-      <ion-button color="primary" (click)="setRoute()">Route</ion-button>
-      <ion-button color="primary" (click)="setVibration()">Vibration</ion-button>
-      <ion-button color="primary" (click)="assignedPersonLocation()">Go</ion-button>
+      <ion-button slot="end"  color="ligth" size="small" shape="round" (click)="notifications()">
+        <ion-icon  name="notifications"></ion-icon>
+        <ion-badge id="cart-badge" color="ligth" slot="end">{{alertAmount}}</ion-badge>
+    </ion-button>
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">

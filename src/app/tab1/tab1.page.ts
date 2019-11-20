@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, NgZone } from '@angular/core';
-import { AlertController, NavController, Platform, Events } from '@ionic/angular';
+import { AlertController, NavController, Platform, Events, ModalController } from '@ionic/angular';
 import { from } from 'rxjs';
 import { BeaconService, BeaconModel } from '../services/beacon.service';
 import { UtilsService } from '../services/utils.service';
@@ -9,7 +9,7 @@ import { Vibration } from '@ionic-native/vibration/ngx';
 import { Storage } from '@ionic/storage';
 import mapboxgl from 'mapbox-gl';
 import { SeePeoplePage } from '../see-people/see-people.page';
-
+import { NotificationsComponent } from './../notifications/notifications.component';
 
 //declare var require:any;
 //const Mapwize = require('mapwize');
@@ -27,8 +27,10 @@ export class Tab1Page implements OnInit, AfterViewInit {
   zone: any;
   mapwizeMap: any;
   person: any;
+  alertAmount: any;
 
-  constructor(private storage: Storage, private service: CrudService, public beaconService: BeaconService, public platform: Platform, public events: Events, public services: UtilsService, private seePeople: SeePeoplePage) {
+
+  constructor(private storage: Storage, private service: CrudService, public beaconService: BeaconService, public platform: Platform, public events: Events, public services: UtilsService, private seePeople: SeePeoplePage,private modalController:ModalController) {
 
 
     //Mapwize.apiKey("439578d65ac560a55bb586feaa299bf7");
@@ -70,6 +72,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
     setTimeout(() => {
       this.getStorage();
+      this.getAlertAmount();
       MapwizeUI.map({
         apiKey: '439578d65ac560a55bb586feaa299bf7',
         hideMenu: true,
@@ -138,5 +141,18 @@ export class Tab1Page implements OnInit, AfterViewInit {
         console.error(err);
       });
   }
-
+  async notifications(ev: any) {
+    const modal= await this.modalController.create({
+        component: NotificationsComponent,
+        animated: true,
+        showBackdrop: true
+    });
+    return await modal.present();
+}
+getAlertAmount(){
+  this.storage.get('alert-amount').then((val) => {
+    this.alertAmount = val;
+    console.log(this.alertAmount);
+  });
+}
 }// fin

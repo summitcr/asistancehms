@@ -2,12 +2,13 @@ import { Component, OnInit, NgZone, AfterViewInit } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
 import { BeaconModel, BeaconService } from '../services/beacon.service';
 import { IBeacon } from '@ionic-native/ibeacon/ngx';
-import { Platform, Events, NavController, AlertController } from '@ionic/angular';
+import { Platform, Events, NavController, AlertController, ModalController } from '@ionic/angular';
 import { CrudService } from '../services/crud.service';
 import { UtilsService } from '../services/utils.service';
 import { LocalNotifications, ELocalNotificationTriggerUnit } from '@ionic-native/local-notifications/ngx';
 import mapboxgl from 'mapbox-gl';
 import { Router } from '@angular/router';
+import { ModalPagePage } from '../modal-page/modal-page.page';
 declare var MapwizeUI: any;
 
 @Component({
@@ -44,7 +45,8 @@ export class SeePeoplePage implements AfterViewInit {
     private params: UtilsService,
     private localNotificactions: LocalNotifications,
     private alertCtrl: AlertController,
-    private router: Router) {
+    private router: Router,
+    private modalController:ModalController) {
 
     this.zone = new NgZone({ enableLongStackTrace: false });
     this.platform.ready().then(() => {
@@ -206,5 +208,10 @@ export class SeePeoplePage implements AfterViewInit {
     this.peopleLocation();
    
   }
-
+  async openModal(){
+    const modal= await this.modalController.create({
+  component: ModalPagePage,
+    });
+    modal.present();
+  }
 }//fin de la class

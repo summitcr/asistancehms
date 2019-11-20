@@ -2,10 +2,16 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const endpoint = 'http://34.70.117.247/summit/api/';
+const endpoint = 'https://34.70.117.247/summit/api/';
 const httpOptions = {
   headers: new HttpHeaders({
-    'Content-Type':  'application/json'
+    "Content-Type": "application/x-www-form-urlencoded; charset=utf-8", 
+    'Accept': 'application/json, text/plain',
+    "cache-control": "no-cache", 
+    "Access-Control-Allow-Origin": "*", 
+    "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token, Accept, Authorization, X-Request-With, Access-Control-Request-Method, Access-Control-Request-Headers",
+    "Access-Control-Allow-Credentials" : "true",
+    "Access-Control-Allow-Methods" : "GET, POST, DELETE, PUT, OPTIONS, TRACE, PATCH, CONNECT",
   })
 };
 
