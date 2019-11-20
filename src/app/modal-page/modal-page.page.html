@@ -1,0 +1,31 @@
+<ion-header>
+    <ion-toolbar class="topMenu">
+       
+      <ion-title>Ejemplo modals</ion-title>
+  
+    </ion-toolbar>
+  </ion-header>
+
+<ion-content>
+
+  <ion-card>
+    <ion-item>
+
+      <ion-card-content>
+        <ion-label>Nombre:</ion-label>
+        <ion-label>Ubicacion:</ion-label>
+        <ion-label>Nose:</ion-label>
+
+      </ion-card-content>
+      <ion-button class="btnGO" slot="end" color="primary">Go</ion-button>
+    </ion-item>
+
+  </ion-card>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-button expand="full" fill="clear" color="ligth" (click)="closeModal()">
+      Close
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>
