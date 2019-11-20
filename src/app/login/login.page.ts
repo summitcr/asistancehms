@@ -30,15 +30,15 @@ export class LoginPage implements OnInit {
       this.userdata = resp;
       this.saveData(this.userdata);
       this.router.navigateByUrl('/menu/first');
-      console.log(this.userdata);
     }, (err) => {
       console.error(err);
     });
   }
 
   private saveData(data: any): void {
-    this.storage.set('wa-data', data);
-   
+    this.storage.ready().then(() => {
+      this.storage.set('wa-data', data);
+    });
   }
 
 }

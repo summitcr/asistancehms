@@ -31,9 +31,7 @@ selectedPath='';
   }
 
   ngOnInit() {
-    this.storage.get('wa-data').then((val) => {
-      this.person = val;
-    });
+    
   }
 
   logout(){

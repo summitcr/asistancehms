@@ -25,19 +25,26 @@ export class Tab1Page implements OnInit, AfterViewInit {
   zone: any;
   mapwizeMap: any;
   person: any;
+  interval: any;
 
   constructor(private storage: Storage, private service: CrudService, public beaconService: BeaconService, public platform: Platform, public events: Events, public services: UtilsService) {
 
-
     //Mapwize.apiKey("439578d65ac560a55bb586feaa299bf7");
     this.zone = new NgZone({ enableLongStackTrace: false });
+
   }
 
   ngOnInit() {
-    this.storage.get('wa-data').then((val) => {
-      this.person = val;
+    //this.getStorage();
+  }
+
+  getStorage(){
+      this.storage.get('wa-data').then((val) => {
+        this.person = val;
+        console.log(this.person);
     });
   }
+
   setVibration(){
     navigator.vibrate([500, 500, 500]);
     
@@ -45,6 +52,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
     console.log(this.person.identifier);
     console.log(this.person.personasocieted);
   }
+
   setRoute() {
     var dir  = { 
         "from": { "placeId": "5d7448f0ce095b0051f9aa3d" }, 
@@ -60,27 +68,24 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-
-   MapwizeUI.map({
-      apiKey: '439578d65ac560a55bb586feaa299bf7',
-      hideMenu: true,
-      centerOnVenue: '5d7420b31a255c0050e14fc5'
-
-    }).then(instance => {
-      this.mapwizeMap = instance;
-      
-      this.personLocation();
-      
-    });
+      setTimeout(() => {
+        this.getStorage();
+        MapwizeUI.map({
+          apiKey: '439578d65ac560a55bb586feaa299bf7',
+          hideMenu: true,
+          centerOnVenue: '5d7420b31a255c0050e14fc5'
+    
+        }).then(instance => {
+          this.mapwizeMap = instance;
+          
+          this.personLocation();
+          
+        });
+      }, 1000);
     
   }//fin de after
 
   personLocation(){
-    /*this.mapwizeMap.addMarker({
-      latitude: 9.975285088159453,
-      longitude: -84.74990448755439,
-      floor: 0
-    });*/
     let el = document.createElement('div');
     el.className = 'marker';
     
