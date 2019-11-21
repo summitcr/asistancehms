@@ -82,7 +82,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
         this.mapwizeMap = instance;
       
         this.personLocation();
-        this.seePeople.peopleLocation();
+      
       });
     }, 1000);
     

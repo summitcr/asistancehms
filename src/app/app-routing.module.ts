@@ -7,6 +7,7 @@ const routes: Routes = [
   { path: 'menu', loadChildren: './menu/menu.module#MenuPageModule' },
   
   { path: 'see-people', loadChildren: './see-people/see-people.module#SeePeoplePageModule' },  { path: 'modal-page', loadChildren: './modal-page/modal-page.module#ModalPagePageModule' },
+  { path: 'modal-notification', loadChildren: './modal-notification/modal-notification.module#ModalNotificationPageModule' },
 
  
 ];

@@ -22,10 +22,11 @@ import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { ModalPagePage } from './modal-page/modal-page.page';
 import { SeePeoplePage } from './see-people/see-people.page';
 import { NotificationsComponent } from './notifications/notifications.component';
+import { ModalNotificationPage } from './modal-notification/modal-notification.page';
 
 @NgModule({
-  declarations: [AppComponent, ModalPagePage,NotificationsComponent],
-  entryComponents: [ModalPagePage,NotificationsComponent],
+  declarations: [AppComponent, ModalPagePage,NotificationsComponent, ModalNotificationPage],
+  entryComponents: [ModalPagePage,NotificationsComponent, ModalNotificationPage],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,HttpClientModule,AutoCompleteModule,IonicStorageModule.forRoot()],
   providers: [
     StatusBar,

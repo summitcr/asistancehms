@@ -52,11 +52,14 @@ export class SeePeoplePage implements AfterViewInit {
     this.platform.ready().then(() => {
       this.localNotificactions.on('click').subscribe(res => {
         let msg = res.data ? res.mydata : '';
-        this.showAlert(res.title, res.text, msg);
+        this.setVibration();
+       
       });
       this.localNotificactions.on('trigger').subscribe(res => {
         let msg = res.data ? res.mydata : '';
+        this.setVibration();
         this.showAlert(res.title, res.text, msg);
+       
       });
     });
   }
@@ -138,10 +141,11 @@ export class SeePeoplePage implements AfterViewInit {
       title: 'Attention',
       text: 'Jairo Notification',
       data: { mydata: 'My hidden message this is' },
+      vibrate: true,
       trigger: { in: 5, unit: ELocalNotificationTriggerUnit.SECOND },
 
     });
-    this.setVibration();
+   
   }
   setVibration() {
     navigator.vibrate([500, 500, 500]);
@@ -153,20 +157,22 @@ export class SeePeoplePage implements AfterViewInit {
       id: 22,
       title: 'Recurring',
       text: 'Jairo Notification',
+      vibrate: true,
       trigger: { every: ELocalNotificationTriggerUnit.MINUTE },
 
     });
-    this.setVibration();
+   
   }
   repeatDaily() {
     this.localNotificactions.schedule({
       id: 42,
       title: 'Good Morning',
       text: 'Jairo Notification',
+      vibrate: true,
       trigger: { every: { hour: 11, minute: 50 } },
 
     });
-    this.setVibration();
+ 
   }
   getAll() {
     this.localNotificactions.getAll().then(res => {
