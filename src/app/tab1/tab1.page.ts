@@ -7,6 +7,8 @@ import { IBeacon } from '@ionic-native/ibeacon/ngx';
 import { CrudService } from '../services/crud.service';
 import { Vibration } from '@ionic-native/vibration/ngx';
 import { Storage } from '@ionic/storage';
+import { StorageService } from '../services/storage.service';
+import { UtilStorageService } from '../services/util-storage.service';
 import mapboxgl from 'mapbox-gl';
 import { SeePeoplePage } from '../see-people/see-people.page';
 import { NotificationsComponent } from './../notifications/notifications.component';
@@ -30,22 +32,42 @@ export class Tab1Page implements OnInit, AfterViewInit {
   alertAmount: any;
 
 
-  constructor(private storage: Storage, private service: CrudService, public beaconService: BeaconService, public platform: Platform, public events: Events, public services: UtilsService, private seePeople: SeePeoplePage,private modalController:ModalController) {
-
+  constructor(private storage: Storage,
+    private storeService: StorageService, 
+    private localParam: UtilStorageService,
+    private service: CrudService, 
+    public beaconService: BeaconService, 
+    public platform: Platform, 
+    public events: Events, 
+    public services: UtilsService, 
+    private seePeople: SeePeoplePage,
+    private modalController:ModalController) {
 
     //Mapwize.apiKey("439578d65ac560a55bb586feaa299bf7");
     this.zone = new NgZone({ enableLongStackTrace: false });
+
   }
 
   ngOnInit() {
    
   }
-  getStorage(){
-    this.storage.get('wa-data').then((val) => {
-      this.person = val;
-      console.log(this.person);
-  });
-}
+  getUserLogged(){
+    this.storeService.localGet(this.localParam.localParam.userLogged).then((resp) => {
+      this.person = resp;
+
+    }, (err) => {
+      console.error(err);
+    });
+  }
+
+  getAlertAmount(){
+    this.storeService.localGet(this.localParam.localParam.alerts).then((resp) => {
+      this.alertAmount = resp;
+
+    }, (err) => {
+      console.error(err);
+    });
+  }
 
   setVibration(){
     navigator.vibrate([500, 500, 500]);
@@ -54,6 +76,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
     console.log(this.person.identifier);
     console.log(this.person.personasocieted);
   }
+
   setRoute() {
     var dir  = { 
         "from": { "placeId": "5d7448f0ce095b0051f9aa3d" }, 
@@ -71,7 +94,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   ngAfterViewInit() {
 
     setTimeout(() => {
-      this.getStorage();
+      this.getUserLogged();
       this.getAlertAmount();
       MapwizeUI.map({
         apiKey: '439578d65ac560a55bb586feaa299bf7',
@@ -89,11 +112,6 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }//fin de after
 
   personLocation(){
-    /*this.mapwizeMap.addMarker({
-      latitude: 9.975285088159453,
-      longitude: -84.74990448755439,
-      floor: 0
-    });*/
     let el = document.createElement('div');
     el.className = 'marker';
     
@@ -149,10 +167,5 @@ export class Tab1Page implements OnInit, AfterViewInit {
     });
     return await modal.present();
 }
-getAlertAmount(){
-  this.storage.get('alert-amount').then((val) => {
-    this.alertAmount = val;
-    console.log(this.alertAmount);
-  });
-}
+
 }// fin
