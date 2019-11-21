@@ -22,6 +22,8 @@ import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { ModalPagePage } from './modal-page/modal-page.page';
 import { SeePeoplePage } from './see-people/see-people.page';
 import { NotificationsComponent } from './notifications/notifications.component';
+import { StorageService } from './services/storage.service';
+import { UtilStorageService } from './services/util-storage.service';
 
 @NgModule({
   declarations: [AppComponent, ModalPagePage,NotificationsComponent],
@@ -32,7 +34,7 @@ import { NotificationsComponent } from './notifications/notifications.component'
     SplashScreen,
     
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    CrudService,UtilsService, BeaconService,IBeacon, BLE, Toast, QRScanner, LocalNotifications,SeePeoplePage,
+    CrudService,UtilsService, StorageService, UtilStorageService, BeaconService,IBeacon, BLE, Toast, QRScanner, LocalNotifications,SeePeoplePage,
   ],
   bootstrap: [AppComponent]
 })

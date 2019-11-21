@@ -3,6 +3,8 @@ import { NavController, NavParams } from '@ionic/angular';
 import { CrudService } from '../services/crud.service';
 import { Storage } from '@ionic/storage';
 import { UtilsService } from '../services/utils.service';
+import { StorageService } from '../services/storage.service';
+import { UtilStorageService } from '../services/util-storage.service';
 import { Router } from '@angular/router';
 import { Toast } from '@ionic-native/toast/ngx';
 
@@ -18,10 +20,19 @@ export class LoginPage implements OnInit {
     },
   ];
 
+  pdata: any;
   cedula: any;
   userdata: any;
 
-  constructor(private storage: Storage, private service: CrudService, private params: UtilsService, private router: Router,private toast: Toast) { }
+  constructor(private storage: Storage, 
+    private storeService: StorageService, 
+    private localParam: UtilStorageService, 
+    private service: CrudService, 
+    private params: UtilsService, 
+    private router: Router,
+    private toast: Toast) {
+
+    }
 
   ngOnInit() {
   }
@@ -33,14 +44,13 @@ export class LoginPage implements OnInit {
     );    
   }
   login(){
-    
     this.alert("Está en linea 36");
     this.service.get(this.params.params.staffurl + "/cid/" + this.cedula).subscribe((resp) => {
       this.alert("Está en linea 38");
       this.userdata = resp;
       this.alert("Está en linea 38");
-      this.saveData(this.userdata);
-      this.alertAmount();
+      this.storeService.localSave(this.localParam.localParam.userLogged, this.userdata);
+      this.storeService.localSave(this.localParam.localParam.alerts, 10);
       this.alert("Está en linea 40");
       this.router.navigateByUrl('/menu/first');
       this.alert("Está en linea 42");
@@ -48,18 +58,6 @@ export class LoginPage implements OnInit {
     }, (err) => {
       console.error(err);
       this.alert(JSON.stringify(err));
-    });
-  }
-
-  private saveData(data: any): void {
-    this.storage.ready().then(() => {
-      this.storage.set('wa-data', data);
-    });
-   
-  }
-  private alertAmount(){
-    this.storage.ready().then(() => {
-      this.storage.set('alert-amount', 10);
     });
   }
 }// fin de la class

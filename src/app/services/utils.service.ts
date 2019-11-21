@@ -55,7 +55,7 @@ export class UtilsService {
       searchdirection:""
    }
   constructor() { 
-    var newserverURL = 'https://34.70.117.247/summit/api/';
+    var newserverURL = 'http://34.70.117.247/summit/api/';
     this.params.serverurl = newserverURL;
     this.params.registerurl = newserverURL+"register";
     this.params.loginurl = newserverURL+"users/login";
