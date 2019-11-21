@@ -33,17 +33,21 @@ export class LoginPage implements OnInit {
     );    
   }
   login(){
+    
     this.alert("Está en linea 36");
     this.service.get(this.params.params.staffurl + "/cid/" + this.cedula).subscribe((resp) => {
+      this.alert("Está en linea 38");
       this.userdata = resp;
       this.alert("Está en linea 38");
       this.saveData(this.userdata);
+      this.alertAmount();
       this.alert("Está en linea 40");
       this.router.navigateByUrl('/menu/first');
       this.alert("Está en linea 42");
       console.log(this.userdata);
     }, (err) => {
       console.error(err);
+      this.alert(JSON.stringify(err));
     });
   }
 
@@ -53,5 +57,9 @@ export class LoginPage implements OnInit {
     });
    
   }
-
-}
+  private alertAmount(){
+    this.storage.ready().then(() => {
+      this.storage.set('alert-amount', 10);
+    });
+  }
+}// fin de la class
