@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import { Router } from '@angular/router';
 
 export interface iStorage {
   saveData();
@@ -12,7 +13,7 @@ export interface iStorage {
 
 export class StorageService {
 
-  constructor(private storage: Storage) {
+  constructor(private storage: Storage, private router: Router) {
 
   }
 
@@ -20,10 +21,20 @@ export class StorageService {
     this.storage.ready().then(() => {
       this.storage.set(key, data);
       console.log(data);
+    },(err) => {
+      this.storage.clear();
+      this.router.navigateByUrl('/login');
+      console.error(err);
     });
   }
 
   localGet(key){
-    return this.storage.get(key);
+    if(key){
+      return this.storage.get(key);
+    }
+    else{
+      this.storage.clear();
+      this.router.navigateByUrl('/login');
+    }
   }
 }

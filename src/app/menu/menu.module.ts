@@ -16,11 +16,18 @@ const routes: Routes = [
       path: 'first',
       loadChildren: '../tabs/tabs.module#TabsPageModule'
     },
+    /*{
+      path: 'firts/notifications',
+      loadChildren: '../notification/notification.module#NotificationPageModule' 
+    },*/
     {
       path:'seconds',
       loadChildren: '../see-people/see-people.module#SeePeoplePageModule' 
     },
-   
+    {
+      path:'third',
+      loadChildren: '../notification/notification.module#NotificationPageModule'
+    },
   ]
   }
 ];

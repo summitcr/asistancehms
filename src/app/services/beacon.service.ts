@@ -59,8 +59,17 @@ export class BeaconService {
         
         /* setup a beacon region – remove any special characters or else the plugin will not work.
           https://www.beautifyconverter.com/uuid-validator.php
+
+
+          beacons de tavo: f7826da6-4fa2-4e98-8024-bC5b71e0893e
+
+          posible beacons: 00002A00-0000-1000-8000-00805F9B34FB
+
+          segundo posible beacons: 00112233-4455-6677-8899-AABBCCDDEEFF
+
+          tercer posible 01120011-2233-4455-6677-8899aabbccdd
         */
-        this.region = this.ibeacon.BeaconRegion('deskBeacon', 'f7826da6-4fa2-4e98-8024-bC5b71e0893e');
+        this.region = this.ibeacon.BeaconRegion('deskBeacon', '00002A00-0000-1000-8000-00805F9B34FB');
         
         this.alert(`Scanning has started`);
 

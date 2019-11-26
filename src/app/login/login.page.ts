@@ -14,9 +14,10 @@ import { Toast } from '@ionic-native/toast/ngx';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  pages=[
-    { title: 'Home',
-      url:'/menu/first'
+  pages = [
+    {
+      title: 'Home',
+      url: '/menu/first/tabs/tab1'
     },
   ];
 
@@ -24,36 +25,36 @@ export class LoginPage implements OnInit {
   cedula: any;
   userdata: any;
 
-  constructor(private storage: Storage, 
-    private storeService: StorageService, 
-    private localParam: UtilStorageService, 
-    private service: CrudService, 
-    private params: UtilsService, 
+  constructor(private storage: Storage,
+    private storeService: StorageService,
+    private localParam: UtilStorageService,
+    private service: CrudService,
+    private params: UtilsService,
     private router: Router,
     private toast: Toast) {
 
-    }
+  }
 
   ngOnInit() {
   }
-  alert(msg: string){
+  alert(msg: string) {
     this.toast.show(msg, '5000', 'center').subscribe(
       toast => {
         console.log(toast);
       }
-    );    
+    );
   }
-  login(){
-    this.alert("Está en linea 36");
+  login() {
+
     this.service.get(this.params.params.staffurl + "/cid/" + this.cedula).subscribe((resp) => {
-      this.alert("Está en linea 38");
+
       this.userdata = resp;
-      this.alert("Está en linea 38");
+
       this.storeService.localSave(this.localParam.localParam.userLogged, this.userdata);
       this.storeService.localSave(this.localParam.localParam.alerts, 10);
-      this.alert("Está en linea 40");
-      this.router.navigateByUrl('/menu/first');
-      this.alert("Está en linea 42");
+
+      this.router.navigateByUrl('/menu/first/tabs/tab1/' + '0');
+
       console.log(this.userdata);
     }, (err) => {
       console.error(err);

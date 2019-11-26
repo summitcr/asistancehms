@@ -14,14 +14,17 @@ const routes: Routes = [
     children:[
    
       {
-        path:'tab1',
+        path:'tab1/:id',
         loadChildren: '../tab1/tab1.module#Tab1PageModule'
       },
       {
         path:'tab2',
         loadChildren: '../tab2/tab2.module#Tab2PageModule'
       },
-   
+      {
+        path: 'tab1/notifications',
+        loadChildren: '../notification/notification.module#NotificationPageModule' 
+      },
       
     ]
   },

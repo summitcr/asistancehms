@@ -10,7 +10,7 @@ export class UtilStorageService {
   }
 
   constructor() { 
-    this.localParam.userLogged = "wa-data";
+    this.localParam.userLogged = "user-logged";
     this.localParam.alerts = "alert-amount";
   }
 }

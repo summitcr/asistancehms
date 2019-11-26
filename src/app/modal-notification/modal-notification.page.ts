@@ -1,6 +1,8 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+
 declare var MapwizeUI: any;
+
 @Component({
   selector: 'app-modal-notification',
   templateUrl: './modal-notification.page.html',
@@ -12,12 +14,9 @@ export class ModalNotificationPage implements OnInit, AfterViewInit {
   mapwizeMap: any;
   constructor(private modalController:ModalController) { }
 
-  ngOnInit() {
-  }
+  
 
   ngAfterViewInit() {
-   
-     
       MapwizeUI.map({
         apiKey: '439578d65ac560a55bb586feaa299bf7',
         hideMenu: true,
@@ -26,9 +25,11 @@ export class ModalNotificationPage implements OnInit, AfterViewInit {
       }).then(instance => {
         this.mapwizeMap = instance;
       
-       
       });
+  
     
+  }
+  ngOnInit() {
   }
   closeModal(){
     this.modalController.dismiss();

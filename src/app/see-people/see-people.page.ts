@@ -210,8 +210,8 @@ export class SeePeoplePage implements AfterViewInit {
   }
   go() {
    
-    this.router.navigateByUrl('/menu/first');
-    this.peopleLocation();
+    this.router.navigateByUrl('/menu/first/tabs/tab1/'+'1');
+    
    
   }
   async openModal(){

@@ -11,7 +11,7 @@ import { StorageService } from '../services/storage.service';
 import { UtilStorageService } from '../services/util-storage.service';
 import mapboxgl from 'mapbox-gl';
 import { SeePeoplePage } from '../see-people/see-people.page';
-import { NotificationsComponent } from './../notifications/notifications.component';
+import { Router, ActivatedRoute } from '@angular/router';
 
 //declare var require:any;
 //const Mapwize = require('mapwize');
@@ -24,13 +24,18 @@ declare var MapwizeUI: any;
   styleUrls: ['./tab1.page.scss'],
 })
 export class Tab1Page implements OnInit, AfterViewInit {
+  pages=[
+    { title: 'Home',
+  url:'/menu/third'
+  },];
 
   beacons: BeaconModel[] = [];
   zone: any;
   mapwizeMap: any;
   person: any;
   alertAmount: any;
-
+isTest: boolean=true;
+  urlId: any;
 
   constructor(private storage: Storage,
     private storeService: StorageService, 
@@ -41,7 +46,9 @@ export class Tab1Page implements OnInit, AfterViewInit {
     public events: Events, 
     public services: UtilsService, 
     private seePeople: SeePeoplePage,
-    private modalController:ModalController) {
+    private modalController:ModalController,
+    private router: Router,
+    private route: ActivatedRoute,) {
 
     //Mapwize.apiKey("439578d65ac560a55bb586feaa299bf7");
     this.zone = new NgZone({ enableLongStackTrace: false });
@@ -49,7 +56,20 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-   
+    this.urlId = this.route.snapshot.paramMap.get("id");
+    console.log("EL ID DE LA RUTA ES: "+this.urlId);
+  }
+ 
+
+ubicacion() {
+
+    if (this.isTest == true) {
+     this.setRoute();
+      
+    } else {
+     
+     
+    }
   }
   getUserLogged(){
     this.storeService.localGet(this.localParam.localParam.userLogged).then((resp) => {
@@ -159,13 +179,8 @@ export class Tab1Page implements OnInit, AfterViewInit {
         console.error(err);
       });
   }
-  async notifications(ev: any) {
-    const modal= await this.modalController.create({
-        component: NotificationsComponent,
-        animated: true,
-        showBackdrop: true
-    });
-    return await modal.present();
-}
 
+go(){
+  this.router.navigateByUrl('/menu/third');
+}
 }// fin

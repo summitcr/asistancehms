@@ -13,7 +13,7 @@
 
 
     
-     <!--<ion-list>
+     <ion-list>
       <ion-card-content ion-item *ngFor="let device of devices">
         <p>{{device.name || 'Unnamed'}}</p>
         <p>{{device.id}}</p>
@@ -39,11 +39,11 @@
           </ion-row>
         </ion-grid>
       </ion-item>
-    </ion-list>-->
-    <ion-button expand="block" (click)="scheduleNotification()" color="primary" >schedule</ion-button>
+    </ion-list>
+  <!--  <ion-button expand="block" (click)="scheduleNotification()" color="primary" >schedule</ion-button>
     <ion-button expand="block" (click)="recurringNotification()" color="primary" >Every Minute</ion-button>
     <ion-button expand="block" (click)="repeatDaily()" color="primary" >Daily</ion-button>
-    <ion-button expand="block" (click)="getAll()" color="primary" >get All</ion-button>
+    <ion-button expand="block" (click)="getAll()" color="primary" >get All</ion-button>-->
     <ion-list>
        
      
@@ -56,7 +56,7 @@
           <ion-label>Nose:</ion-label>
         
       </ion-card-content>
-      <ion-button class="btnGO" slot="end" color="primary"  (click)="openModal()">Go</ion-button>
+      <ion-button class="btnGO" slot="end" color="primary"  (click)="go()">Go</ion-button>
     </ion-item>
     
     </ion-card>
