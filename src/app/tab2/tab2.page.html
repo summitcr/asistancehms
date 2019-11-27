@@ -11,29 +11,40 @@
 
   
   <ion-content padding>
-    <!--<ion-title>Información de Tickets</ion-title>
-      <br>
-        <ion-list class="line-input">
-            <ion-item> 
-                <ion-label>N# de tickets</ion-label> 
-                <ion-input class="ion-text-right"></ion-input> 
-              </ion-item> 
-              <br>
-              <ion-item> 
-                  <ion-label>Nombre:</ion-label> 
-                  <ion-input class="ion-text-right"></ion-input> 
-                </ion-item> 
-                <br>
-                <ion-item> 
-                    <ion-label>Ubiacicón:</ion-label> 
-                    <ion-input class="ion-text-right"></ion-input> 
-                  </ion-item> 
-                  <br>
-                  <ion-item> 
-                      <ion-label>Destino:</ion-label> 
-                      <ion-input class="ion-text-right"></ion-input> 
-                      <ion-button>Go</ion-button>
-                    </ion-item> 
-        </ion-list>-->
-        <ion-button color="primary" (click)="QR()">scanner</ion-button>
+      <ion-card-content>
+          <ion-title class="title">Información de Tickets</ion-title>
+          <br>
+          <ion-list class="line-input">
+            <ion-item>
+                <ion-icon name="pricetag" slot="end"></ion-icon>
+              <ion-label>N# de tickets</ion-label>
+              
+            </ion-item>
+            <br>
+            <ion-item>
+                <ion-icon name="person" slot="end"></ion-icon>
+              <ion-label>Nombre</ion-label>
+            
+            </ion-item>
+            <br>
+            <ion-item>
+             
+              <ion-icon name="pin" slot="end"></ion-icon>
+              <ion-label>Ubiración</ion-label>
+            
+            </ion-item>
+            <br>
+            <ion-item>
+              <ion-label>Destino</ion-label>
+            
+        
+              <ion-button> <ion-icon name="paper-plane" slot="icon-only"></ion-icon></ion-button>
+            </ion-item>
+            <br>
+        
+          </ion-list>
+        </ion-card-content>
+        
+         
+          <!--<ion-button color="primary" (click)="QR()">scanner</ion-button>-->
     </ion-content>

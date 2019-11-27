@@ -46,7 +46,7 @@ export class LoginPage implements OnInit {
   }
   login() {
 
-    this.service.get(this.params.params.staffurl + "/cid/" + this.cedula).subscribe((resp) => {
+    this.service.get(this.params.params.staffurl + "/asocieted/cid/" + this.cedula).subscribe((resp) => {
 
       this.userdata = resp;
 

@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaulthref=""></ion-back-button>
     </ion-buttons> 
-    <ion-title>Notificaciones hH</ion-title>
+    <ion-title>Notificaciones</ion-title>
 
   </ion-toolbar>
 </ion-header>
@@ -11,28 +11,30 @@
 <ion-content>
   <ion-list no-padding no-margin>
    
-    <ion-item color="primary" class="text-10" >
-      <ion-icon name="mail" color="light"></ion-icon>
-      <ion-label>jairo notificaiones</ion-label>
-      <ion-button class="btnGO" slot="end" color="primary" (click)="go()"  >Go</ion-button>
-    </ion-item>
-  
-    <ion-item color="light" class="text-10" >
-      <ion-icon name="mail-open" color="primary"></ion-icon>
-      <ion-label>jairo notificaiones by month!</ion-label>
-      <ion-button class="btnGO" slot="end" color="primary" (click)="openModal()">Go</ion-button>
-    </ion-item>
-  
-    <ion-item color="light" class="text-10" >
-      <ion-icon name="mail-open" color="primary"></ion-icon>
-      <ion-label>jairo notificaiones by month!</ion-label>
-      <ion-button class="btnGO" slot="end" color="primary" (click)="openModal()" >Go</ion-button>
-    </ion-item>
-  
-    <ion-item color="primary" class="text-10" >
-      <ion-icon name="mail" color="light"></ion-icon>
-      <ion-label>jairo notificaiones</ion-label>
-      <ion-button class="btnGO" slot="end" color="primary" (click)="openModal()" >Go</ion-button>
-    </ion-item>
+      <ion-card>  
+          <ion-item color="light" class="text-10" >
+            <ion-icon name="mail" color="primary"></ion-icon>
+            <ion-label> notificaciones 1</ion-label>
+            <ion-button class="btnGO" slot="end" color="primary" [routerLink]="'/menu/first/tabs/tab1/' + '2'"  ><ion-icon name="paper-plane" slot="icon-only"></ion-icon></ion-button>
+          </ion-item>
+        <br>
+          <ion-item color="light" class="text-10" >
+            <ion-icon name="mail-open" color="primary"></ion-icon>
+            <ion-label>notificaciones 2</ion-label>
+            <ion-button class="btnGO" slot="end" color="primary" (click)="openModal()"><ion-icon name="paper-plane" slot="icon-only"></ion-icon></ion-button>
+          </ion-item>
+        <br>
+          <ion-item color="light" class="text-10" >
+            <ion-icon name="mail-open" color="primary"></ion-icon>
+            <ion-label>notificaciones 3</ion-label>
+            <ion-button class="btnGO" slot="end" color="primary" (click)="openModal()" ><ion-icon name="paper-plane" slot="icon-only"></ion-icon></ion-button>
+          </ion-item>
+        <br>
+          <ion-item color="light" class="text-10" >
+            <ion-icon name="mail" color="primary"></ion-icon>
+            <ion-label>notificaciones 3</ion-label>
+            <ion-button class="btnGO" slot="end" color="primary" (click)="openModal()" ><ion-icon name="paper-plane" slot="icon-only"></ion-icon></ion-button>
+          </ion-item>
+        </ion-card> 
   </ion-list>
 </ion-content>
