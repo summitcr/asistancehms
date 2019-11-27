@@ -34,13 +34,16 @@ export class Tab1Page implements OnInit, AfterViewInit {
   mapwizeMap: any;
   person: any;
   alertAmount: any;
-isTest: boolean=true;
+  isTest: boolean=true;
   urlId: any;
+  trackerPerson: any;
+  interval: any;
 
   constructor(private storage: Storage,
     private storeService: StorageService, 
     private localParam: UtilStorageService,
     private service: CrudService, 
+    private params: UtilsService,
     public beaconService: BeaconService, 
     public platform: Platform, 
     public events: Events, 
@@ -59,13 +62,73 @@ isTest: boolean=true;
     this.urlId = this.route.snapshot.paramMap.get("id");
     console.log("EL ID DE LA RUTA ES: "+this.urlId);
   }
+
+  asociatedPersonLocation(){
+    if(this.urlId != 0){
+      this.service.get(this.params.params.beaconurl+"/tracker/person/"+this.urlId).subscribe((resp) => {
+        this.trackerPerson = resp;
+        console.log(this.trackerPerson);
+        var lat = Number(this.trackerPerson.Point.lat);
+        var lon = Number(this.trackerPerson.Point.lon);
+        var desc = this.trackerPerson.Point.description;
+        this.setAsociatedPersonPoint(lat, lon, desc);
+      }, (err) => {
+        console.error(err);
+      });
+    }
+  }
+
+  setAsociatedPersonPoint(lat, lon, desc){
+    const myCustomMarker = new mapboxgl.Marker({color: 'blue'});
+      myCustomMarker.setPopup(new mapboxgl.Popup({
+        closeOnClick: false, 
+        closeButton: false
+      }).setText(desc));
+      
+      this.mapwizeMap.on('mapwize:markerclick', e => {
+        alert('marker: ' + e.marker);
+      });
+      this.mapwizeMap.addMarker({
+        latitude: lat,
+        longitude: lon,
+        floor: 0,
+      }, myCustomMarker).then((marker => {
+
+        var s = "";
+      }));
+
+      var dir  = { 
+        "from": {  "lat": 9.975285088159453,
+        "lon": -84.74990448755439,
+        "placeId": "5d7448f0ce095b0051f9aa3d" }, 
+        "to": {
+          "lat": lat,
+          "lon": lon,
+        "placeId": "5d7448022ea497002c7a94a9" },
+        "options": { "isAccessible": false } };
+
+    this.service.save(this.services.mapwizeParams.searchdirection, dir).subscribe((response) => {
+      this.mapwizeMap.setDirection(response);
+    }, (err) => {
+
+      console.error(err);
+    });
+  }
+
+  timer() {
+    this.interval = setInterval(() => {
+      if (this.urlId != null) {
+        this.asociatedPersonLocation();
+      }
+    }, 15000);
+  }
  
 
 
   getUserLogged(){
     this.storeService.localGet(this.localParam.localParam.userLogged).then((resp) => {
       this.person = resp;
-
+      
     }, (err) => {
       console.error(err);
     });
@@ -103,7 +166,6 @@ isTest: boolean=true;
   }
 
   ngAfterViewInit() {
-
     setTimeout(() => {
       this.getUserLogged();
       this.getAlertAmount();
@@ -116,6 +178,7 @@ isTest: boolean=true;
         this.mapwizeMap = instance;
       
         this.personLocation();
+        this.asociatedPersonLocation();
       
       });
     }, 1000);
@@ -127,7 +190,10 @@ isTest: boolean=true;
     el.className = 'marker';
     
     const myCustomMarker = new mapboxgl.Marker({color: 'red'});
-      myCustomMarker.setPopup(new mapboxgl.Popup({closeOnClick: false, closeButton: false}).setText(this.person.name));
+      myCustomMarker.setPopup(new mapboxgl.Popup({
+        closeOnClick: false, 
+        closeButton: false
+      }).setText(this.person.person.name));
       
       this.mapwizeMap.on('mapwize:markerclick', e => {
         alert('marker: ' + e.marker);

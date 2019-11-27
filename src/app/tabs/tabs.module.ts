@@ -21,10 +21,6 @@ const routes: Routes = [
         path:'tab2',
         loadChildren: '../tab2/tab2.module#Tab2PageModule'
       },
-      {
-        path: 'tab1/notifications',
-        loadChildren: '../notification/notification.module#NotificationPageModule' 
-      },
       
     ]
   },

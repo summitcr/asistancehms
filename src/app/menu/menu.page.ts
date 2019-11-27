@@ -12,10 +12,13 @@ import { Storage } from '@ionic/storage';
 export class MenuPage implements OnInit {
 pages=[
   { title: 'Home',
-url:'/menu/first'
+url:'/menu/first/tabs/tab1/'+'0'
 },
 { title: 'Personas Asociadas',
 url:'/menu/seconds'
+},
+{ title: 'Notificaciones',
+url:'/menu/third'
 },
 
 ];

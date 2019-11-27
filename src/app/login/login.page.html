@@ -10,13 +10,27 @@
         <img src="../../assets/img/summitmini.png" alt="" > 
           
       </div>
+      <!--<div>
+          <div padding>
+              <ion-segment [(ngModel)]="opt"  color="dark">
+                <ion-segment-button value="signin">
+                  Sign In
+                </ion-segment-button>
+                <ion-segment-button value="signup">
+                  Sign Up
+                </ion-segment-button>
+              </ion-segment>
+            </div>
+       </div>
+       <div>-->
     <ion-list class="line-input"> 
       
         <ion-item> 
+          <ion-icon name="person" slot="end"></ion-icon>
           <ion-label>Cédula</ion-label> 
           <ion-input class="ion-text-right" [(ngModel)]="cedula"></ion-input> 
         </ion-item> 
       </ion-list>
   <!--<button ion-button full (click)="doLogin()">Login</button>-->
-  <ion-button expand="block" (click) ="login()">Login</ion-button>
+  <ion-button expand="block" (click) ="login()">Login<ion-icon name="log-in"></ion-icon></ion-button>
 </ion-content>

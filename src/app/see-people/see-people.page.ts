@@ -9,6 +9,8 @@ import { LocalNotifications, ELocalNotificationTriggerUnit } from '@ionic-native
 import mapboxgl from 'mapbox-gl';
 import { Router } from '@angular/router';
 import { ModalPagePage } from '../modal-page/modal-page.page';
+import { StorageService } from '../services/storage.service';
+import { UtilStorageService } from '../services/util-storage.service';
 declare var MapwizeUI: any;
 
 @Component({
@@ -33,7 +35,9 @@ export class SeePeoplePage implements AfterViewInit {
   zone: any;
   rssi: any;
   tracker: string = "Personas Asociadas";
-  persons: any;
+  person: any;
+  asociatedPerson: string= "Personas asignadas";
+
   constructor(
     private ble: BLE,
     private ngZone: NgZone,
@@ -46,7 +50,9 @@ export class SeePeoplePage implements AfterViewInit {
     private localNotificactions: LocalNotifications,
     private alertCtrl: AlertController,
     private router: Router,
-    private modalController:ModalController) {
+    private modalController:ModalController,
+    private storeService: StorageService,
+    private localParam: UtilStorageService) {
 
     this.zone = new NgZone({ enableLongStackTrace: false });
     this.platform.ready().then(() => {
@@ -64,13 +70,25 @@ export class SeePeoplePage implements AfterViewInit {
     });
   }
 
-
-
   ngAfterViewInit() {
     //this.Scan();
-
+    this.getUserAsociatedPerson();
     this.ionViewDidLoad();
   }
+
+  getUserAsociatedPerson(){
+    this.storeService.localGet(this.localParam.localParam.userLogged).then((resp) => {
+      this.person = resp;
+      this.person = this.person.asocietedpeople;
+      console.log(this.person);
+      if(this.person.length == 0){
+        this.asociatedPerson = "No tiene personas asociadas";
+      }
+    }, (err) => {
+      console.error(err);
+    });
+  }
+
   Scan() {
     this.devices = [];
     this.ble.startScan(this.serviceUUID).subscribe(
@@ -80,8 +98,6 @@ export class SeePeoplePage implements AfterViewInit {
     );
 
   }
-
-
 
   onDeviceDiscovered(device) {
 
@@ -123,16 +139,6 @@ export class SeePeoplePage implements AfterViewInit {
       });
 
     });
-  }
-  //get de personas
-
-  getPersons() {
-
-    this.services.get(this.params.params.staffurl).subscribe((resp) => {
-      this.persons = resp;
-    }, (err) => {
-      console.error(err);
-    });;
   }
 
   scheduleNotification() {
@@ -208,11 +214,8 @@ export class SeePeoplePage implements AfterViewInit {
       var s = "";
     }));
   }
-  go() {
-   
-    this.router.navigateByUrl('/menu/first/tabs/tab1/'+'1');
-    
-   
+  go(id){
+    this.router.navigateByUrl('/menu/first/tabs/tab1/'+id);
   }
   async openModal(){
     const modal= await this.modalController.create({
