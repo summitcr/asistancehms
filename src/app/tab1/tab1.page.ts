@@ -38,6 +38,11 @@ export class Tab1Page implements OnInit, AfterViewInit {
   urlId: any;
   trackerPerson: any;
   interval: any;
+  personAlerts: any;
+  personInfo: any;
+  trackerLogged: any;
+  asocietedName: any;
+  asociatedAlerts = "No hay alertas";
 
   constructor(private storage: Storage,
     private storeService: StorageService, 
@@ -59,45 +64,74 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    //Obtener el id de la url
     this.urlId = this.route.snapshot.paramMap.get("id");
-    console.log("EL ID DE LA RUTA ES: "+this.urlId);
+    //console.log("EL ID DE LA RUTA ES: "+this.urlId);
   }
 
+  //Metodo que busca el id de la persona asociada para obtener su informacion
   asociatedPersonLocation(){
-    if(this.urlId != 0){
-      this.service.get(this.params.params.beaconurl+"/tracker/person/"+this.urlId).subscribe((resp) => {
+    //if(this.urlId != 0){
+      this.service.get(this.params.params.beaconurl+"/tracker/person/alert/"+this.urlId).subscribe((resp) => {
         this.trackerPerson = resp;
-        console.log(this.trackerPerson);
-        var lat = Number(this.trackerPerson.Point.lat);
-        var lon = Number(this.trackerPerson.Point.lon);
-        var desc = this.trackerPerson.Point.description;
-        this.setAsociatedPersonPoint(lat, lon, desc);
+        this.personAlerts = this.trackerPerson.alerts;
+        this.personInfo = this.trackerPerson.summary;
+        //console.log(this.personAlerts);
+        var lat = Number(this.personInfo.Point.lat);
+        var lon = Number(this.personInfo.Point.lon);
+        var desc = this.personInfo.Point.description;
+        var time = this.transform(this.personInfo.secondsspended);
+        this.setAsociatedPersonPoint(lat, lon, desc, time);
       }, (err) => {
         console.error(err);
       });
+    //}
+  }
+
+  //Metodo que revisa si la persona asociada tiene alertas
+  haveAlerts(){
+    if(this.personAlerts.length < 1){
+      for(let i = 0; i < this.trackerPerson.alerts.length; i++){
+        if(this.personAlerts[i].isResolved == false){
+          this.asociatedAlerts = "Hay alertas que revisar";
+        }
+      }
+    }else if(this.personAlerts.isResolved == false){
+      this.asociatedAlerts = "Hay alertas que revisar";
     }
   }
 
-  setAsociatedPersonPoint(lat, lon, desc){
+  //Metodo que pone el punto de la persona asociada en el mapa
+  setAsociatedPersonPoint(lat, lon, desc, time){
+    for(let i = 0; i < this.person.asocietedpeople.length; i++){
+      if(this.person.asocietedpeople[i].id == this.urlId){
+        this.asocietedName = this.person.asocietedpeople[i].name;
+      }
+    }
+
+    //Metodo que revisa si la persona asociada tiene alertas
+    this.haveAlerts();
+
     const myCustomMarker = new mapboxgl.Marker({color: 'blue'});
       myCustomMarker.setPopup(new mapboxgl.Popup({
         closeOnClick: false, 
         closeButton: false
-      }).setText(desc));
+      }).setHTML('<h4>' + this.asocietedName + '</h4><p>' + "Punto: " + desc + 
+      '<br>' + "Tiempo: "+ time + '<br>' + "Alertas: " + this.asociatedAlerts + '</p>'));
       
       this.mapwizeMap.on('mapwize:markerclick', e => {
         alert('marker: ' + e.marker);
       });
       this.mapwizeMap.addMarker({
-        latitude: lat,
-        longitude: lon,
+        latitude: 9.974563,
+        longitude: -84.749900,
         floor: 0,
       }, myCustomMarker).then((marker => {
 
         var s = "";
       }));
 
-      var dir  = { 
+      /*var dir  = { 
         "from": {  "lat": 9.975285088159453,
         "lon": -84.74990448755439,
         "placeId": "5d7448f0ce095b0051f9aa3d" }, 
@@ -112,15 +146,30 @@ export class Tab1Page implements OnInit, AfterViewInit {
     }, (err) => {
 
       console.error(err);
-    });
+    });*/
   }
 
+  //Metodo que busca el id de la persona loggeada para obtener la informacion.
+  personLoggedLocation(){
+    this.service.get(this.params.params.beaconurl+"/tracker/person/alert/"+this.person.person.id).subscribe((resp) => {
+        this.trackerLogged = resp;
+        this.trackerLogged = this.trackerLogged.summary;
+        //console.log(this.trackerLogged);
+        var secondSpended = this.transform(this.trackerLogged.secondsspended);
+        var desc = this.trackerLogged.Point.description;
+        this.personLocation(secondSpended, desc);
+      }, (err) => {
+        console.error(err);
+      });
+  }
+
+  //metodo para actualizar la ubicacion de la persona asociada
   timer() {
     this.interval = setInterval(() => {
       if (this.urlId != null) {
         this.asociatedPersonLocation();
       }
-    }, 15000);
+    }, 40000);
   }
  
 
@@ -134,15 +183,18 @@ ubicacion() {
      
     }
   }
+
+  //Metodo para obtener el usuario loggeado desde el Storage local
   getUserLogged(){
     this.storeService.localGet(this.localParam.localParam.userLogged).then((resp) => {
       this.person = resp;
-      
+      //console.log(this.person);
     }, (err) => {
       console.error(err);
     });
   }
 
+  //Metodo para obtener las alertas desde el Storage local
   getAlertAmount(){
     this.storeService.localGet(this.localParam.localParam.alerts).then((resp) => {
       this.alertAmount = resp;
@@ -186,23 +238,21 @@ ubicacion() {
       }).then(instance => {
         this.mapwizeMap = instance;
       
-        this.personLocation();
+        //this.personLocation();
+        this.personLoggedLocation();
         this.asociatedPersonLocation();
-      
       });
     }, 1000);
     
   }//fin de after
 
-  personLocation(){
-    let el = document.createElement('div');
-    el.className = 'marker';
-    
+  //Metodo que coloca el marcador y el popup de la persona loggeada
+  personLocation(secondSpended, desc){
     const myCustomMarker = new mapboxgl.Marker({color: 'red'});
       myCustomMarker.setPopup(new mapboxgl.Popup({
         closeOnClick: false, 
         closeButton: false
-      }).setText(this.person.person.name));
+      }).setHTML('<h4>' + this.person.person.name + '</h4><p>' + "Punto: " + desc + '<br>' + "Tiempo: " + secondSpended +'</p>'));
       
       this.mapwizeMap.on('mapwize:markerclick', e => {
         alert('marker: ' + e.marker);
@@ -219,7 +269,10 @@ ubicacion() {
 
   assignedPersonLocation(){
     const myCustomMarker = new mapboxgl.Marker({color: 'yellow'});
-      myCustomMarker.setPopup(new mapboxgl.Popup({closeOnClick: false, closeButton: false}).setText('Nombre persona asignada'));
+      myCustomMarker.setPopup(new mapboxgl.Popup({
+        closeOnClick: false,
+        closeButton: false
+      }).setText('Nombre persona asignada'));
       
     this.mapwizeMap.on('mapwize:markerclick', e => {
       alert('marker: ' + e.marker);
@@ -246,7 +299,36 @@ ubicacion() {
       });
   }
 
-go(){
-  this.router.navigateByUrl('/menu/third');
-}
+  go(){
+    this.router.navigateByUrl('/menu/third');
+  }
+
+  times = {
+    year: 31557600,
+    mes: 2629746,
+    dia: 86400,
+    h: 3600,
+    m: 60,
+    s: 1
+  }
+
+  transform(seconds) {
+    let time_string: string = '';
+    let plural: string = '';
+    for (var key in this.times) {
+      if (Math.floor(seconds / this.times[key]) > 0) {
+        if (Math.floor(seconds / this.times[key]) > 1) {
+          plural = 's';
+        }
+        else {
+          plural = '';
+        }
+
+        time_string += Math.floor(seconds / this.times[key]).toString() + ' ' + key.toString() + plural + ' ';
+        seconds = seconds - this.times[key] * Math.floor(seconds / this.times[key]);
+
+      }
+    }
+    return time_string;
+  }
 }// fin
