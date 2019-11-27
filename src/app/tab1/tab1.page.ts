@@ -61,16 +61,7 @@ isTest: boolean=true;
   }
  
 
-ubicacion() {
 
-    if (this.isTest == true) {
-     this.setRoute();
-      
-    } else {
-     
-     
-    }
-  }
   getUserLogged(){
     this.storeService.localGet(this.localParam.localParam.userLogged).then((resp) => {
       this.person = resp;
