@@ -35,24 +35,24 @@ export class BeaconService {
     );    
   }
   initialise(): any {
-    this.alert("Entro al ini");
+    //this.alert("Entro al ini");
     let promise = new Promise((resolve, reject) => {
-      this.alert("Entro al promise");
+      //this.alert("Entro al promise");
       /* we need to be running on a device */
       if (this.platform.is('cordova')) {    
-        this.alert("Entro al if linea 42");
+        //this.alert("Entro al if linea 42");
         /* Request permission to use location on iOS */
         this.ibeacon.requestAlwaysAuthorization();
-        this.alert("Entro la linea 46"+this.ibeacon);
+        //this.alert("Entro la linea 46"+this.ibeacon);
         /* create a new delegate and register it with the native layer */
         this.delegate = this.ibeacon.Delegate();
-        this.alert("Entro la linea 49");
+        //this.alert("Entro la linea 49");
         /* Subscribe to some of the delegate's event handlers */
         this.delegate.didRangeBeaconsInRegion().subscribe( data => {
           console.log("Ranging result: "+JSON.stringify(data));
-          this.alert("Entro la linea 52");
+          //this.alert("Entro la linea 52");
           this.events.publish('didRangeBeaconsInRegion', data);
-          this.alert("Entro la linea 55");
+          //this.alert("Entro la linea 55");
         }, error => 
           this.alert(error)
         );
@@ -75,7 +75,7 @@ export class BeaconService {
 
         /* start ranging */
         this.ibeacon.startRangingBeaconsInRegion(this.region).then(() => {
-          this.alert("Entro la linea 69");
+          //this.alert("Entro la linea 69");
           resolve(true);
         }, error => {
           this.alert(`Failed to begin monitoring: ${error}`);

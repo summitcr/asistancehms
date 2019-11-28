@@ -59,13 +59,13 @@ export class SeePeoplePage implements AfterViewInit {
       this.localNotificactions.on('click').subscribe(res => {
         let msg = res.data ? res.mydata : '';
         this.setVibration();
-       
+
       });
       this.localNotificactions.on('trigger').subscribe(res => {
         let msg = res.data ? res.mydata : '';
         this.setVibration();
         this.showAlert(res.title, res.text, msg);
-       
+
       });
     });
   }
@@ -74,14 +74,43 @@ export class SeePeoplePage implements AfterViewInit {
     //this.Scan();
     this.getUserAsociatedPerson();
     this.ionViewDidLoad();
+
+    let notification = {
+      id: new Date().getTime(),
+      title: 'Tienes una notificación!',
+      text: 'Order Placement.',
+      badge: 1,
+      trigger: {
+        count: 1,
+        every: { minute: 2, seconds: 0 }
+      },
+      launch: true,
+      lockscreen: true,
+      data: 'Kindly place your Order today.',
+      vibrate: true
+    };
+
+    if (this.platform.is('cordova') && (this.platform.is('android') || this.platform.is('ios'))) {
+      // alert('I am an Android/ios device!');
+      this.localNotificactions.cancelAll().then(() => {
+        // alert("Scheduling notification");
+        this.localNotificactions.schedule(notification);
+      });
+
+      this.localNotificactions.on('click')
+        .subscribe(notification => {
+          let msg = notification.data ? notification.data : '';
+          alert(notification.data);
+        });
+    }
   }
 
-  getUserAsociatedPerson(){
+  getUserAsociatedPerson() {
     this.storeService.localGet(this.localParam.localParam.userLogged).then((resp) => {
       this.person = resp;
       this.person = this.person.asocietedpeople;
       console.log(this.person);
-      if(this.person.length == 0){
+      if (this.person.length == 0) {
         this.asociatedPerson = "No tiene personas asociadas";
       }
     }, (err) => {
@@ -107,15 +136,12 @@ export class SeePeoplePage implements AfterViewInit {
       console.log(device)
     })
   }
-
+  //lectura de beacons
   ionViewDidLoad() {
-    this.tracker = "ionviweDiaload";
+
     this.platform.ready().then(() => {
-      this.tracker = "ionviweDiaload-then01";
       this.beaconService.initialise().then((isInitialised) => {
-        this.tracker = "ionviweDiaload-then02";
         if (isInitialised) {
-          this.tracker = "ionviweDiaload-ini";
           this.listenToBeaconEvents();
         }
       });
@@ -124,12 +150,9 @@ export class SeePeoplePage implements AfterViewInit {
 
   listenToBeaconEvents() {
     this.events.subscribe('didRangeBeaconsInRegion', (data) => {
-
       // update the UI with the beacon list
       this.zone.run(() => {
-        this.tracker = "ionviweDiaload-run";
         this.beacons = [];
-
         let beaconList = data.beacons;
         beaconList.forEach((beacon) => {
           let beaconObject = new BeaconModel(beacon);
@@ -140,7 +163,16 @@ export class SeePeoplePage implements AfterViewInit {
 
     });
   }
+  //fin de la lectura de beacons
+  // vibración
+  setVibration() {
+    navigator.vibrate([500, 500, 500]);
 
+
+  }
+  //fin de vibración
+
+  //inicio de notificaciones
   scheduleNotification() {
     this.localNotificactions.schedule({
       id: 1,
@@ -151,13 +183,9 @@ export class SeePeoplePage implements AfterViewInit {
       trigger: { in: 5, unit: ELocalNotificationTriggerUnit.SECOND },
 
     });
-   
-  }
-  setVibration() {
-    navigator.vibrate([500, 500, 500]);
-
 
   }
+
   recurringNotification() {
     this.localNotificactions.schedule({
       id: 22,
@@ -165,9 +193,15 @@ export class SeePeoplePage implements AfterViewInit {
       text: 'Jairo Notification',
       vibrate: true,
       trigger: { every: ELocalNotificationTriggerUnit.MINUTE },
+      launch: true,
+      lockscreen: true,
+      actions: [
+        { id: 'yes', title: 'Yes' },
+        { id: 'no',  title: 'No' }
+    ]
 
     });
-   
+
   }
   repeatDaily() {
     this.localNotificactions.schedule({
@@ -178,7 +212,7 @@ export class SeePeoplePage implements AfterViewInit {
       trigger: { every: { hour: 11, minute: 50 } },
 
     });
- 
+
   }
   getAll() {
     this.localNotificactions.getAll().then(res => {
@@ -194,32 +228,32 @@ export class SeePeoplePage implements AfterViewInit {
       buttons: ['OK']
     }).then(alert => alert.present());
   }
-
+  // fin de notificaciones
 
   peopleLocation() {
-  
+
 
     const myCustomMarker = new mapboxgl.Marker({ color: 'green' });
- 
+
 
     this.mapwizeMap.on('mapwize:markerclick', e => {
       alert('marker: ' + e.marker);
     });
     this.mapwizeMap.addMarker({
       latitude: 9.974562999019767,
-      longitude:-84.74976922280277,
+      longitude: -84.74976922280277,
       floor: 0,
     }, myCustomMarker).then((marker => {
 
       var s = "";
     }));
   }
-  go(id){
-    this.router.navigateByUrl('/menu/first/tabs/tab1/'+id);
+  go(id) {
+    this.router.navigateByUrl('/menu/first/tabs/tab1/' + id);
   }
-  async openModal(){
-    const modal= await this.modalController.create({
-  component: ModalPagePage,
+  async openModal() {
+    const modal = await this.modalController.create({
+      component: ModalPagePage,
     });
     modal.present();
   }

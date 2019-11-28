@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
 import { ModalNotificationPage } from '../modal-notification/modal-notification.page';
 import { Router } from '@angular/router';
 
@@ -15,7 +15,7 @@ export class NotificationPage implements OnInit {
     url: '/menu/first/tabs/tab1'
     },
   ];
-  constructor(private modalController: ModalController, private router: Router) { }
+  constructor(private modalController: ModalController, private router: Router, private navCrtl: NavController) { }
 
   ngOnInit() {
   }
@@ -25,7 +25,8 @@ export class NotificationPage implements OnInit {
     });
     modal.present();
   }
-  go(){
-    this.router.navigateByUrl('/menu/first/tabs/tab1/'+'2');
+  go(id) {
+    this.router.navigateByUrl('/menu/first/tabs/tab1/' + id);
   }
+  
 }//fin de la class
