@@ -43,6 +43,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   trackerLogged: any;
   asocietedName: any;
   asociatedAlerts = "No hay alertas";
+  alertsQuantity: any;
 
   constructor(private storage: Storage,
     private storeService: StorageService, 
@@ -71,7 +72,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
   //Metodo que busca el id de la persona asociada para obtener su informacion
   asociatedPersonLocation(){
-    //if(this.urlId != 0){
+    if(this.urlId != 0){
       this.service.get(this.params.params.beaconurl+"/tracker/person/alert/"+this.urlId).subscribe((resp) => {
         this.trackerPerson = resp;
         this.personAlerts = this.trackerPerson.alerts;
@@ -85,7 +86,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
       }, (err) => {
         console.error(err);
       });
-    //}
+    }
   }
 
   //Metodo que revisa si la persona asociada tiene alertas
@@ -153,6 +154,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   personLoggedLocation(){
     this.service.get(this.params.params.beaconurl+"/tracker/person/alert/"+this.person.person.id).subscribe((resp) => {
         this.trackerLogged = resp;
+        //console.log(this.trackerLogged);
         this.trackerLogged = this.trackerLogged.summary;
         //console.log(this.trackerLogged);
         var secondSpended = this.transform(this.trackerLogged.secondsspended);
@@ -196,6 +198,7 @@ ubicacion() {
 
   //Metodo para obtener las alertas desde el Storage local
   getAlertAmount(){
+    this.storeService.localSave(this.localParam.localParam.alerts, this.alertsQuantity);
     this.storeService.localGet(this.localParam.localParam.alerts).then((resp) => {
       this.alertAmount = resp;
 
