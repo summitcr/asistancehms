@@ -251,6 +251,9 @@ export class SeePeoplePage implements AfterViewInit {
   go(id) {
     this.router.navigateByUrl('/menu/first/tabs/tab1/' + id);
   }
+  heartmonitor() {
+    this.router.navigateByUrl('/heart-rate');
+  }
   async openModal() {
     const modal = await this.modalController.create({
       component: ModalPagePage,

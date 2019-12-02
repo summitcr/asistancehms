@@ -24,11 +24,14 @@ import { SeePeoplePage } from './see-people/see-people.page';
 import { StorageService } from './services/storage.service';
 import { UtilStorageService } from './services/util-storage.service';
 import { ModalNotificationPage } from './modal-notification/modal-notification.page';
+import { HeartrateComponent } from './heartrate/heartrate.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
-  declarations: [AppComponent, ModalPagePage, ModalNotificationPage],
+  declarations: [AppComponent, ModalPagePage, ModalNotificationPage,HeartrateComponent],
   entryComponents: [ModalPagePage,ModalNotificationPage],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,HttpClientModule,AutoCompleteModule,IonicStorageModule.forRoot()],
+  imports: [BrowserModule,BrowserAnimationsModule, IonicModule.forRoot(), NgxChartsModule, AppRoutingModule,HttpClientModule,AutoCompleteModule,IonicStorageModule.forRoot()],
   providers: [
     StatusBar,
     SplashScreen,

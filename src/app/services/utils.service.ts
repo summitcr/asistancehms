@@ -46,8 +46,8 @@ export class UtilsService {
     permissions:"",
     priority:"",
     personalert:"",
-    assetalert:""
-
+    assetalert:"",
+    heartrate:""
 
    };
 
@@ -98,6 +98,7 @@ export class UtilsService {
     this.params.priority = newserverURL+"priorities";
     this.params.personalert = newserverURL+"person_alert";
     this.params.assetalert = newserverURL+"asset_alert";
+    this.params.heartrate = newserverURL+"heartratehistories";
 
     var mapwizeurl = "https://api.mapwize.io/v1/";
     var apikey= "?api_key=439578d65ac560a55bb586feaa299bf7";

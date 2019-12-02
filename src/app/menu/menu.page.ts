@@ -20,6 +20,9 @@ url:'/menu/seconds'
 { title: 'Notificaciones',
 url:'/menu/third'
 },
+{ title: 'Signos',
+url:'/heart-rate'
+}
 
 ];
 selectedPath='';
