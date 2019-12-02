@@ -37,6 +37,9 @@ export class SeePeoplePage implements AfterViewInit {
   tracker: string = "Personas Asociadas";
   person: any;
   asociatedPerson: string= "Personas asignadas";
+  asociatedId: any;
+  asociatedIdAlert: any;
+  bellAlert: number = 0;
 
   constructor(
     private ble: BLE,
@@ -73,7 +76,11 @@ export class SeePeoplePage implements AfterViewInit {
   ngAfterViewInit() {
     //this.Scan();
     this.getUserAsociatedPerson();
+    this.getAsociatedId();
     this.ionViewDidLoad();
+    setTimeout(() => {
+      this.getAsociatedAlerts();
+    }, 1000);
 
     let notification = {
       id: new Date().getTime(),
@@ -113,6 +120,14 @@ export class SeePeoplePage implements AfterViewInit {
       if (this.person.length == 0) {
         this.asociatedPerson = "No tiene personas asociadas";
       }
+    }, (err) => {
+      console.error(err);
+    });
+  }
+
+  getAsociatedId(){
+    this.storeService.localGet(this.localParam.localParam.alertsId).then((resp) => {
+      this.asociatedId = resp;
     }, (err) => {
       console.error(err);
     });
@@ -260,4 +275,31 @@ export class SeePeoplePage implements AfterViewInit {
     });
     modal.present();
   }
+
+  getAsociatedAlerts(){
+    //let asociatedId = [];
+    let id;
+    for(let i = 0; i < this.asociatedId.length; i++){
+      id = this.asociatedId[i];
+      //asociatedId.push(id);
+      this.services.get(this.params.params.beaconurl+"/tracker/person/alert/"+id).subscribe((resp) => {
+        this.asociatedIdAlert = resp;
+        if(this.asociatedIdAlert.alerts.length < 1){
+          for(let x = 0; x < this.asociatedIdAlert.alerts.length; x++){
+            if(this.asociatedIdAlert.alerts[i].isResolved == false){
+              this.bellAlert ++;
+              this.storeService.localSave(this.localParam.localParam.alerts, this.bellAlert);
+            }
+          }
+        }else if(this.asociatedIdAlert.alerts.isResolved == false){
+          this.bellAlert ++;
+          this.storeService.localSave(this.localParam.localParam.alerts, this.bellAlert);
+        }
+        //this.storeService.localSave(this.localParam.localParam.alertsId, asociatedId);
+      }, (err) => {
+        console.error(err);
+      });
+    }
+  }
+
 }//fin de la class

@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CrudService } from '../services/crud.service';
 import { UtilsService } from '../services/utils.service';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 import { Platform } from '@ionic/angular';
 import { Toast } from '@ionic-native/toast/ngx';
+import { StorageService } from '../services/storage.service';
+import { UtilStorageService } from '../services/util-storage.service';
 
 
 
@@ -12,11 +14,21 @@ import { Toast } from '@ionic-native/toast/ngx';
   templateUrl: './tab2.page.html',
   styleUrls: ['./tab2.page.scss'],
 })
-export class Tab2Page implements OnInit {
+export class Tab2Page implements OnInit, AfterViewInit {
+
   points: any;
   platfrom: any;
   scanSub: any;
-  constructor(private services: CrudService, private params: UtilsService, private qrScanner: QRScanner,private toast: Toast)
+  asociatedId: any;
+  asociatedIdAlert: any;
+  bellAlert: number = 0;
+
+  constructor(private services: CrudService,
+    private params: UtilsService,
+    private storeService: StorageService,
+    private localParam: UtilStorageService, 
+    private qrScanner: QRScanner,
+    private toast: Toast)
    {
 
    }
@@ -24,6 +36,48 @@ export class Tab2Page implements OnInit {
   ngOnInit() {
     //this.getPoints();
   }
+
+  ngAfterViewInit(){
+    this.getAsociatedId();
+    setTimeout(() => {
+      this.getAsociatedAlerts();
+    }, 1000);
+  }
+
+  getAsociatedId(){
+    this.storeService.localGet(this.localParam.localParam.alertsId).then((resp) => {
+      this.asociatedId = resp;
+    }, (err) => {
+      console.error(err);
+    });
+  }
+
+  getAsociatedAlerts(){
+    //let asociatedId = [];
+    let id;
+    for(let i = 0; i < this.asociatedId.length; i++){
+      id = this.asociatedId[i];
+      //asociatedId.push(id);
+      this.services.get(this.params.params.beaconurl+"/tracker/person/alert/"+id).subscribe((resp) => {
+        this.asociatedIdAlert = resp;
+        if(this.asociatedIdAlert.alerts.length < 1){
+          for(let x = 0; x < this.asociatedIdAlert.alerts.length; x++){
+            if(this.asociatedIdAlert.alerts[i].isResolved == false){
+              this.bellAlert ++;
+              this.storeService.localSave(this.localParam.localParam.alerts, this.bellAlert);
+            }
+          }
+        }else if(this.asociatedIdAlert.alerts.isResolved == false){
+          this.bellAlert ++;
+          this.storeService.localSave(this.localParam.localParam.alerts, this.bellAlert);
+        }
+        //this.storeService.localSave(this.localParam.localParam.alertsId, asociatedId);
+      }, (err) => {
+        console.error(err);
+      });
+    }
+  }
+
   alert(msg: string){
     this.toast.show(msg, '5000', 'center').subscribe(
       toast => {

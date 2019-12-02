@@ -187,7 +187,6 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
   //Metodo para obtener las alertas desde el Storage local
   getAlertAmount(){
-    this.storeService.localSave(this.localParam.localParam.alerts, this.alertsQuantity);
     this.storeService.localGet(this.localParam.localParam.alerts).then((resp) => {
       this.alertAmount = resp;
 
