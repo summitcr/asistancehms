@@ -25,8 +25,8 @@ export class NotificationPage implements OnInit {
     });
     modal.present();
   }
-  go(id) {
-    this.router.navigateByUrl('/menu/first/tabs/tab1/' + id);
+  go() {
+    this.router.navigateByUrl('/menu/first/tabs/tab1/'+'2');
   }
   
 }//fin de la class

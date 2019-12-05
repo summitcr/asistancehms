@@ -11,7 +11,11 @@ const routes: Routes = [
   {
     path: '',
     component: Tab1Page
-  }
+  },
+  {
+    path:'notification/third',
+    loadChildren: '../notification/notification.module#NotificationPageModule'
+  },
 ];
 
 @NgModule({

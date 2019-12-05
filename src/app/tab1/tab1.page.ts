@@ -25,8 +25,8 @@ declare var MapwizeUI: any;
 })
 export class Tab1Page implements OnInit, AfterViewInit {
   pages=[
-    { title: 'Home',
-  url:'/menu/third'
+    { title: 'Notificacion',
+      url:'notification/third'
   },];
 
   beacons: BeaconModel[] = [];
@@ -224,7 +224,8 @@ export class Tab1Page implements OnInit, AfterViewInit {
       MapwizeUI.map({
         apiKey: '439578d65ac560a55bb586feaa299bf7',
         hideMenu: true,
-        centerOnVenue: '5d7420b31a255c0050e14fc5'
+        floor: 0,
+        centerOnVenue: '5de813dcc85b5500169609d6'
   
       }).then(instance => {
         this.mapwizeMap = instance;
