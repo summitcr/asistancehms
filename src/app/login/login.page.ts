@@ -7,6 +7,7 @@ import { StorageService } from '../services/storage.service';
 import { UtilStorageService } from '../services/util-storage.service';
 import { Router } from '@angular/router';
 import { Toast } from '@ionic-native/toast/ngx';
+import { FormGroup, FormBuilder, Validators,ReactiveFormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -27,6 +28,7 @@ export class LoginPage implements OnInit {
   person: any;
   personAlert: any;
   bellAlert: number = 0;
+  public loginForm: FormGroup;
 
   constructor(private storage: Storage,
     private storeService: StorageService,
@@ -34,8 +36,13 @@ export class LoginPage implements OnInit {
     private service: CrudService,
     private params: UtilsService,
     private router: Router,
-    private toast: Toast) {
-
+    private toast: Toast,
+    public formBuilder: FormBuilder)
+     {
+      this.loginForm = formBuilder.group({
+        cedula: ['', Validators.required]
+        
+    });
   }
 
   ngOnInit() {

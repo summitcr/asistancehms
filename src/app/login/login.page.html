@@ -24,11 +24,10 @@
        </div>
        <div>-->
     <ion-list class="line-input"> 
-      
         <ion-item> 
           <ion-icon name="person" slot="end"></ion-icon>
           <ion-label>Cédula</ion-label> 
-          <ion-input class="ion-text-right" [(ngModel)]="cedula"></ion-input> 
+          <ion-input formControlName="username" [(ngModel)]="cedula"></ion-input> 
         </ion-item> 
       </ion-list>
   <!--<button ion-button full (click)="doLogin()">Login</button>-->

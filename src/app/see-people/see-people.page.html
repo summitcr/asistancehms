@@ -20,7 +20,7 @@
       <ion-item *ngFor="let p of person">
         <ion-icon name="person" slot="start"></ion-icon>
         <ion-card-content>
-          <ion-label>{{p.name}}</ion-label>
+          <ion-label class="boldName">{{p.name}}</ion-label>
           <ion-label>{{p.identifier}}</ion-label>
         </ion-card-content>
         <ion-button class="btnGO" slot="end" color="primary" (click)="heartmonitor()">
