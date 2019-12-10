@@ -37,12 +37,12 @@ export class LoginPage implements OnInit {
     private params: UtilsService,
     private router: Router,
     private toast: Toast,
-    public formBuilder: FormBuilder)
+    /*public formBuilder: FormBuilder*/)
      {
-      this.loginForm = formBuilder.group({
+      /*this.loginForm = formBuilder.group({
         cedula: ['', Validators.required]
         
-    });
+    });*/
   }
 
   ngOnInit() {

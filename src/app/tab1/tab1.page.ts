@@ -124,22 +124,22 @@ export class Tab1Page implements OnInit, AfterViewInit {
         alert('marker: ' + e.marker);
       });
       this.mapwizeMap.addMarker({
-        latitude: 9.974563,
-        longitude: -84.749900,
+        latitude: 9.9751006,
+        longitude: -84.7496383,
         floor: 0,
       }, myCustomMarker).then((marker => {
 
         var s = "";
       }));
 
-      /*var dir  = { 
-        "from": {  "lat": 9.975285088159453,
-        "lon": -84.74990448755439,
-        "placeId": "5d7448f0ce095b0051f9aa3d" }, 
+      var dir  = { 
+        "from": {  "lat": 9.9757186,
+        "lon": -84.7498683,
+        "placeId": "5de82349390b2e001638576f" }, 
         "to": {
           "lat": lat,
           "lon": lon,
-        "placeId": "5d7448022ea497002c7a94a9" },
+        "placeId": "5de824f4dd3e2d00164eb892" },
         "options": { "isAccessible": false } };
 
     this.service.save(this.services.mapwizeParams.searchdirection, dir).subscribe((response) => {
@@ -147,7 +147,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
     }, (err) => {
 
       console.error(err);
-    });*/
+    });
   }
 
   //Metodo que busca el id de la persona loggeada para obtener la informacion.
@@ -250,8 +250,8 @@ export class Tab1Page implements OnInit, AfterViewInit {
         alert('marker: ' + e.marker);
       });
       this.mapwizeMap.addMarker({
-        latitude: 9.975285088159453,
-        longitude: -84.74990448755439,
+        latitude: 9.9756753,
+        longitude: -84.7498622,
         floor: 0,
       }, myCustomMarker).then((marker => {
 

@@ -6,7 +6,7 @@ import { Platform } from '@ionic/angular';
 import { Toast } from '@ionic-native/toast/ngx';
 import { StorageService } from '../services/storage.service';
 import { UtilStorageService } from '../services/util-storage.service';
-
+import {HttpClient, HttpHeaders } from '@angular/common/http';
 
 
 @Component({
@@ -34,7 +34,7 @@ export class Tab2Page implements OnInit, AfterViewInit {
    }
 
   ngOnInit() {
-    //this.getPoints();
+    this.getInfoTickets();
   }
 
   ngAfterViewInit(){
@@ -85,13 +85,13 @@ export class Tab2Page implements OnInit, AfterViewInit {
       }
     );    
   }
-  getPoints() {
 
-    this.services.get(this.params.params.pointsurl).subscribe((resp) => {
+  //Metodo de prueba del api de los tiquetes
+  getInfoTickets() {
+    this.services.getTicket('http://35.184.70.184:9090/MobileTicket/branches/1/services').subscribe((resp) => {
       this.points = resp;
       console.log(this.points);
     }, (err) => {
-      alert("error");
       console.error(err);
     });
   }

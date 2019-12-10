@@ -3,7 +3,7 @@ import {HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 const endpoint = 'https://34.70.117.247/summit/api/';
-const httpOptions = {
+/*const httpOptions = {
   headers: new HttpHeaders({
     "Content-Type": "application/x-www-form-urlencoded; charset=utf-8", 
     'Accept': 'application/json, text/plain',
@@ -13,7 +13,14 @@ const httpOptions = {
     "Access-Control-Allow-Credentials" : "true",
     "Access-Control-Allow-Methods" : "GET, POST, DELETE, PUT, OPTIONS, TRACE, PATCH, CONNECT",
   })
-};
+};*/
+/*const httpOptions = {
+  headers: new HttpHeaders({
+    'Auth-token': 'd0516eee-a32d-11e5-bf7f-feff819cdc9f',
+    'Authorization': 'Basic c3VwZXJhZG1pbjp1bGFu',
+    'Content-Type':  'application/json'
+  })
+};*/
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +34,22 @@ export class CrudService {
   get(url){
 
     return this.http.get(url);
+  }
+  //Metodo get con header para probar los tiquetes
+  getTicket(url){
+    const headers = new HttpHeaders({
+      'Content-Type':'application/json',
+      'Auth-token':'d0516eee-a32d-11e5-bf7f-feff819cdc9f',
+      'Authorization':'Basic c3VwZXJhZG1pbjp1bGFu'
+    });
+    /*const httpOptions = {
+      headers: new HttpHeaders({
+        'Auth-token': 'd0516eee-a32d-11e5-bf7f-feff819cdc9f',
+        'Authorization': 'Basic c3VwZXJhZG1pbjp1bGFu',
+        'Content-Type':  'application/json'
+      })
+    };*/
+    return this.http.get(url, { headers: headers });
   }
   save(url,data:any){
     return  this.http.post(url,data, { headers: { }});
