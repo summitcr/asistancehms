@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, NgZone } from '@angular/core';
-import { AlertController, NavController, Platform, Events, ModalController } from '@ionic/angular';
+import { AlertController, NavController, Platform, Events, ModalController, ActionSheetController } from '@ionic/angular';
 import { from } from 'rxjs';
 import { BeaconService, BeaconModel } from '../services/beacon.service';
 import { UtilsService } from '../services/utils.service';
@@ -38,12 +38,18 @@ export class Tab1Page implements OnInit, AfterViewInit {
   urlId: any;
   trackerPerson: any;
   interval: any;
+  loggedPersonAlert: any;
+  loggedPersonInfor: any;
   personAlerts: any;
   personInfo: any;
   trackerLogged: any;
   asocietedName: any;
   asociatedAlerts = "No hay alertas";
   alertsQuantity: any;
+  loggedLatitude: any;
+  loggedLongitude: any;
+  loggedPlaceId: string;
+  asociatedPersonTime: any;
 
   constructor(private storage: Storage,
     private storeService: StorageService, 
@@ -57,7 +63,8 @@ export class Tab1Page implements OnInit, AfterViewInit {
     private seePeople: SeePeoplePage,
     private modalController:ModalController,
     private router: Router,
-    private route: ActivatedRoute,) {
+    private route: ActivatedRoute,
+    public actionSheetController: ActionSheetController) {
 
     //Mapwize.apiKey("439578d65ac560a55bb586feaa299bf7");
     this.zone = new NgZone({ enableLongStackTrace: false });
@@ -70,6 +77,24 @@ export class Tab1Page implements OnInit, AfterViewInit {
     //console.log("EL ID DE LA RUTA ES: "+this.urlId);
   }
 
+  //Metodo que busca el id de la persona loggeada para obtener la informacion.
+  personLoggedLocation(){
+    this.service.get(this.params.params.beaconurl+"/tracker/person/alert/"+this.person.person.id).subscribe((resp) => {
+        this.trackerLogged = resp;
+        this.loggedPersonAlert = this.trackerLogged.alerts;
+        this.loggedPersonInfor = this.trackerLogged.summary;
+        this.loggedLatitude = Number(this.loggedPersonInfor.Point.lat);
+        this.loggedLongitude = Number(this.loggedPersonInfor.Point.lon);
+        this.loggedPlaceId = this.loggedPersonInfor.Point.externalid;
+        console.log(this.loggedPlaceId);
+        let secondSpended = this.transform(this.loggedPersonInfor.secondsspended);
+        let desc = this.loggedPersonInfor.Point.description;
+        this.personLocation(secondSpended, desc);
+      }, (err) => {
+        console.error(err);
+      });
+  }
+
   //Metodo que busca el id de la persona asociada para obtener su informacion
   asociatedPersonLocation(){
     if(this.urlId != 0){
@@ -77,12 +102,14 @@ export class Tab1Page implements OnInit, AfterViewInit {
         this.trackerPerson = resp;
         this.personAlerts = this.trackerPerson.alerts;
         this.personInfo = this.trackerPerson.summary;
-        //console.log(this.personAlerts);
-        var lat = Number(this.personInfo.Point.lat);
-        var lon = Number(this.personInfo.Point.lon);
-        var desc = this.personInfo.Point.description;
-        var time = this.transform(this.personInfo.secondsspended);
-        this.setAsociatedPersonPoint(lat, lon, desc, time);
+        let lat = Number(this.personInfo.Point.lat);
+        let lon = Number(this.personInfo.Point.lon);
+        let desc = this.personInfo.Point.description;
+        let place = String(this.personInfo.Point.externalid);
+        console.log(place);
+        console.log(this.trackerPerson);
+        this.asociatedPersonTime = this.transform(this.personInfo.secondsspended);
+        this.setAsociatedPersonPoint(lat, lon, desc, place);
       }, (err) => {
         console.error(err);
       });
@@ -91,7 +118,10 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
   //Metodo que revisa si la persona asociada tiene alertas
   haveAlerts(){
-    if(this.personAlerts.length < 1){
+    if(this.personAlerts === null){
+      this.asociatedAlerts = "No hay alertas que revisar";
+    }
+    else if(this.personAlerts.length < 1){
       for(let i = 0; i < this.trackerPerson.alerts.length; i++){
         if(this.personAlerts[i].isResolved == false){
           this.asociatedAlerts = "Hay alertas que revisar";
@@ -103,7 +133,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }
 
   //Metodo que pone el punto de la persona asociada en el mapa
-  setAsociatedPersonPoint(lat, lon, desc, time){
+  setAsociatedPersonPoint(lat, lon, desc, place: string){
     for(let i = 0; i < this.person.asocietedpeople.length; i++){
       if(this.person.asocietedpeople[i].id == this.urlId){
         this.asocietedName = this.person.asocietedpeople[i].name;
@@ -118,51 +148,57 @@ export class Tab1Page implements OnInit, AfterViewInit {
         closeOnClick: false, 
         closeButton: false
       }).setHTML('<h4>' + this.asocietedName + '</h4><p>' + "Punto: " + desc + 
-      '<br>' + "Tiempo: "+ time + '<br>' + "Alertas: " + this.asociatedAlerts + '</p>'));
+      '<br>' + "Tiempo: "+ this.asociatedPersonTime + '<br>' + "Alertas: " + this.asociatedAlerts + '</p>'));
       
       this.mapwizeMap.on('mapwize:markerclick', e => {
         alert('marker: ' + e.marker);
       });
       this.mapwizeMap.addMarker({
-        latitude: 9.9751006,
-        longitude: -84.7496383,
+        latitude: lat,
+        longitude: lon,
         floor: 0,
       }, myCustomMarker).then((marker => {
 
         var s = "";
       }));
 
-      var dir  = { 
-        "from": {  "lat": 9.9757186,
-        "lon": -84.7498683,
-        "placeId": "5de82349390b2e001638576f" }, 
-        "to": {
-          "lat": lat,
-          "lon": lon,
-        "placeId": "5de824f4dd3e2d00164eb892" },
-        "options": { "isAccessible": false } };
-
-    this.service.save(this.services.mapwizeParams.searchdirection, dir).subscribe((response) => {
-      this.mapwizeMap.setDirection(response);
-    }, (err) => {
-
-      console.error(err);
-    });
+/////////Se asegura de que placeId no sea 0, si es así muestra un popup///////////
+      if(this.loggedPlaceId != "0" && place != "0"){
+        var dir  = { 
+          "from": {  "lat": this.loggedLatitude,
+          "lon": this.loggedLongitude,
+          "placeId": this.loggedPlaceId }, 
+          "to": {
+            "lat": lat,
+            "lon": lon,
+          "placeId": place },
+          "options": { "isAccessible": false } };
+  
+        this.service.save(this.services.mapwizeParams.searchdirection, dir).subscribe((response) => {
+          this.mapwizeMap.setDirection(response);
+        }, (err) => {
+    
+          console.error(err);
+        });
+      }else{
+        this.presentActionSheet();
+      }
   }
 
-  //Metodo que busca el id de la persona loggeada para obtener la informacion.
-  personLoggedLocation(){
-    this.service.get(this.params.params.beaconurl+"/tracker/person/alert/"+this.person.person.id).subscribe((resp) => {
-        this.trackerLogged = resp;
-        //console.log(this.trackerLogged);
-        this.trackerLogged = this.trackerLogged.summary;
-        //console.log(this.trackerLogged);
-        var secondSpended = this.transform(this.trackerLogged.secondsspended);
-        var desc = this.trackerLogged.Point.description;
-        this.personLocation(secondSpended, desc);
-      }, (err) => {
-        console.error(err);
-      });
+  //Popup cuando la persona asociada no tiene registros
+  async presentActionSheet() {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Persona asociada no presenta registros',
+      buttons: [{
+        text: 'La persona asociada no presenta registro desde: '+this.asociatedPersonTime,
+        icon: 'close',
+        role: 'cancel',
+        handler: () => {
+          console.log('Cancel clicked');
+        }
+      }]
+    });
+    await actionSheet.present();
   }
 
   //metodo para actualizar la ubicacion de la persona asociada
@@ -250,8 +286,8 @@ export class Tab1Page implements OnInit, AfterViewInit {
         alert('marker: ' + e.marker);
       });
       this.mapwizeMap.addMarker({
-        latitude: 9.9756753,
-        longitude: -84.7498622,
+        latitude: this.loggedLatitude,
+        longitude: this.loggedLongitude,
         floor: 0,
       }, myCustomMarker).then((marker => {
 

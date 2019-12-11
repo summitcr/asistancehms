@@ -90,6 +90,7 @@ export class LoginPage implements OnInit {
     });
   }
 
+  //Metodo que saca las alertas, si sale null es porque alguno no tiene alertas y viene null
   getAsociatedAlerts(){
     let asociatedId = [];
     let id;

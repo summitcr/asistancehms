@@ -116,7 +116,6 @@ export class SeePeoplePage implements AfterViewInit {
     this.storeService.localGet(this.localParam.localParam.userLogged).then((resp) => {
       this.person = resp;
       this.person = this.person.asocietedpeople;
-      console.log(this.person);
       if (this.person.length == 0) {
         this.asociatedPerson = "No tiene personas asociadas";
       }
@@ -276,12 +275,11 @@ export class SeePeoplePage implements AfterViewInit {
     modal.present();
   }
 
+  //Busca las alertas de las personas asociadas, si sale null es porque no encontró alerta en alguno
   getAsociatedAlerts(){
-    //let asociatedId = [];
     let id;
     for(let i = 0; i < this.asociatedId.length; i++){
       id = this.asociatedId[i];
-      //asociatedId.push(id);
       this.services.get(this.params.params.beaconurl+"/tracker/person/alert/"+id).subscribe((resp) => {
         this.asociatedIdAlert = resp;
         if(this.asociatedIdAlert.alerts.length < 1){
