@@ -81,35 +81,6 @@ export class SeePeoplePage implements AfterViewInit {
     setTimeout(() => {
       this.getAsociatedAlerts();
     }, 1000);
-
-    let notification = {
-      id: new Date().getTime(),
-      title: 'Tienes una notificación!',
-      text: 'Order Placement.',
-      badge: 1,
-      trigger: {
-        count: 1,
-        every: { minute: 2, seconds: 0 }
-      },
-      launch: true,
-      lockscreen: true,
-      data: 'Kindly place your Order today.',
-      vibrate: true
-    };
-
-    if (this.platform.is('cordova') && (this.platform.is('android') || this.platform.is('ios'))) {
-      // alert('I am an Android/ios device!');
-      this.localNotificactions.cancelAll().then(() => {
-        // alert("Scheduling notification");
-        this.localNotificactions.schedule(notification);
-      });
-
-      this.localNotificactions.on('click')
-        .subscribe(notification => {
-          let msg = notification.data ? notification.data : '';
-          alert(notification.data);
-        });
-    }
   }
 
   getUserAsociatedPerson() {

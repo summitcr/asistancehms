@@ -50,6 +50,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   loggedLongitude: any;
   loggedPlaceId: string;
   asociatedPersonTime: any;
+  asociatedPlaceId: string;
 
   constructor(private storage: Storage,
     private storeService: StorageService, 
@@ -90,6 +91,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
         let secondSpended = this.transform(this.loggedPersonInfor.secondsspended);
         let desc = this.loggedPersonInfor.Point.description;
         this.personLocation(secondSpended, desc);
+        this.asociatedPersonLocation();
       }, (err) => {
         console.error(err);
       });
@@ -105,11 +107,11 @@ export class Tab1Page implements OnInit, AfterViewInit {
         let lat = Number(this.personInfo.Point.lat);
         let lon = Number(this.personInfo.Point.lon);
         let desc = this.personInfo.Point.description;
-        let place = String(this.personInfo.Point.externalid);
-        console.log(place);
+        this.asociatedPlaceId = String(this.personInfo.Point.externalid);
+        console.log(this.asociatedPlaceId);
         console.log(this.trackerPerson);
         this.asociatedPersonTime = this.transform(this.personInfo.secondsspended);
-        this.setAsociatedPersonPoint(lat, lon, desc, place);
+        this.setAsociatedPersonPoint(lat, lon, desc);
       }, (err) => {
         console.error(err);
       });
@@ -133,7 +135,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }
 
   //Metodo que pone el punto de la persona asociada en el mapa
-  setAsociatedPersonPoint(lat, lon, desc, place: string){
+  setAsociatedPersonPoint(lat, lon, desc){
     for(let i = 0; i < this.person.asocietedpeople.length; i++){
       if(this.person.asocietedpeople[i].id == this.urlId){
         this.asocietedName = this.person.asocietedpeople[i].name;
@@ -163,7 +165,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
       }));
 
 /////////Se asegura de que placeId no sea 0, si es así muestra un popup///////////
-      if(this.loggedPlaceId != "0" && place != "0"){
+      if(this.loggedPlaceId != "0" && this.asociatedPlaceId != "0"){
         var dir  = { 
           "from": {  "lat": this.loggedLatitude,
           "lon": this.loggedLongitude,
@@ -171,7 +173,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
           "to": {
             "lat": lat,
             "lon": lon,
-          "placeId": place },
+          "placeId": this.asociatedPlaceId },
           "options": { "isAccessible": false } };
   
         this.service.save(this.services.mapwizeParams.searchdirection, dir).subscribe((response) => {
@@ -188,9 +190,9 @@ export class Tab1Page implements OnInit, AfterViewInit {
   //Popup cuando la persona asociada no tiene registros
   async presentActionSheet() {
     const actionSheet = await this.actionSheetController.create({
-      header: 'Persona asociada no presenta registros',
+      header: 'La persona asociada no presenta registros:',
       buttons: [{
-        text: 'La persona asociada no presenta registro desde: '+this.asociatedPersonTime,
+        text: 'No hay registro desde: '+this.asociatedPersonTime+'. Por favor inténtelo de nuevo',
         icon: 'close',
         role: 'cancel',
         handler: () => {
@@ -268,7 +270,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
       
         //this.personLocation();
         this.personLoggedLocation();
-        this.asociatedPersonLocation();
+        //this.asociatedPersonLocation();
       });
     }, 1000);
     
