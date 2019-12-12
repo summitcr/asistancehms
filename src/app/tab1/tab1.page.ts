@@ -205,11 +205,13 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
   //metodo para actualizar la ubicacion de la persona asociada
   timer() {
+    this.personLoggedLocation();
     this.interval = setInterval(() => {
       if (this.urlId != null) {
-        this.asociatedPersonLocation();
+        this.mapwizeMap.removeMarkers();
+        this.personLoggedLocation();
       }
-    }, 40000);
+    }, 30000);
   }
  
 
@@ -269,8 +271,9 @@ export class Tab1Page implements OnInit, AfterViewInit {
         this.mapwizeMap = instance;
       
         //this.personLocation();
-        this.personLoggedLocation();
+        //this.personLoggedLocation();
         //this.asociatedPersonLocation();
+        this.timer();
       });
     }, 1000);
     
