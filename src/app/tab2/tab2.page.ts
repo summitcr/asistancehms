@@ -7,6 +7,7 @@ import { Toast } from '@ionic-native/toast/ngx';
 import { StorageService } from '../services/storage.service';
 import { UtilStorageService } from '../services/util-storage.service';
 import {HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -17,24 +18,28 @@ import {HttpClient, HttpHeaders } from '@angular/common/http';
 export class Tab2Page implements OnInit, AfterViewInit {
 
   points: any;
+  tickets: any;
   platfrom: any;
   scanSub: any;
   asociatedId: any;
   asociatedIdAlert: any;
   bellAlert: number = 0;
+  ticketNumber: string = "v777";
 
   constructor(private services: CrudService,
     private params: UtilsService,
     private storeService: StorageService,
     private localParam: UtilStorageService, 
     private qrScanner: QRScanner,
-    private toast: Toast)
+    private toast: Toast,
+    private router: Router)
    {
 
    }
 
   ngOnInit() {
-    this.getInfoTickets();
+    //this.getInfoTickets();
+    this.getTicketInfo();
   }
 
   ngAfterViewInit(){
@@ -42,6 +47,21 @@ export class Tab2Page implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.getAsociatedAlerts();
     }, 1000);
+  }
+
+  getTicketInfo(){
+    if(this.ticketNumber != ""){
+      this.setVibration();
+    }
+  }
+
+  setVibration(){
+    navigator.vibrate([500, 500, 500]);
+    console.log("Esta vibrando");
+  }
+
+  go(id) {
+    this.router.navigateByUrl('/menu/first/tabs/tab1/'+'3');
   }
 
   getAsociatedId(){
@@ -52,6 +72,7 @@ export class Tab2Page implements OnInit, AfterViewInit {
     });
   }
 
+  //Metodo que saca las alertas, si sale null es porque alguno no tiene alertas y viene null
   getAsociatedAlerts(){
     //let asociatedId = [];
     let id;
@@ -89,8 +110,8 @@ export class Tab2Page implements OnInit, AfterViewInit {
   //Metodo de prueba del api de los tiquetes
   getInfoTickets() {
     this.services.getTicket('http://35.184.70.184:9090/MobileTicket/branches/1/services').subscribe((resp) => {
-      this.points = resp;
-      console.log(this.points);
+      this.tickets = resp;
+      console.log(this.tickets);
     }, (err) => {
       console.error(err);
     });
