@@ -51,6 +51,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   loggedPlaceId: string;
   asociatedPersonTime: any;
   asociatedPlaceId: string;
+  stopPopUp = false;
 
   constructor(private storage: Storage,
     private storeService: StorageService, 
@@ -183,7 +184,10 @@ export class Tab1Page implements OnInit, AfterViewInit {
           console.error(err);
         });
       }else{
-        this.presentActionSheet();
+        if(!this.stopPopUp){
+          this.stopPopUp = true;
+          this.presentActionSheet();
+        }
       }
   }
 

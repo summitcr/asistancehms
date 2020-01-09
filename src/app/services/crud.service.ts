@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const endpoint = 'https://34.70.117.247/summit/api/';
+const endpoint = 'http://35.184.147.166/summit/api/';
 /*const httpOptions = {
   headers: new HttpHeaders({
     "Content-Type": "application/x-www-form-urlencoded; charset=utf-8", 
