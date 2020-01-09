@@ -27,19 +27,19 @@
             <br>
             <ion-item>
                 <ion-icon name="person" slot="end"></ion-icon>
-              <ion-label>Nombre</ion-label>
-            
+             
+              <ion-input [(ngModel)]="ticketName" readonly="true"></ion-input>
             </ion-item>
             <br>
             <ion-item>
              
               <ion-icon name="pin" slot="end"></ion-icon>
-              <ion-label>Ubiración</ion-label>
+              <ion-input [(ngModel)]="ticketUbi" readonly="true"></ion-input>
             
             </ion-item>
             <br>
             <ion-item>
-              <ion-label>Destino</ion-label>
+              <ion-input [(ngModel)]="ticketDesti" readonly="true"></ion-input>
               <ion-button (click)="go()"> <ion-icon name="paper-plane" slot="icon-only"></ion-icon></ion-button>
             </ion-item>
             <br>

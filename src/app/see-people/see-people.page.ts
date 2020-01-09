@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { ModalPagePage } from '../modal-page/modal-page.page';
 import { StorageService } from '../services/storage.service';
 import { UtilStorageService } from '../services/util-storage.service';
+import { Toast } from '@ionic-native/toast/ngx';
 declare var MapwizeUI: any;
 
 @Component({
@@ -31,12 +32,13 @@ export class SeePeoplePage implements AfterViewInit {
   scheduled = [];
   devices: any[] = [];
   beacons: BeaconModel[] = [];
-  serviceUUID = ["C2:46:F9:66:19:CD", "C8:D6:32:BF:C5:F6"];
+  serviceUUID = "C2:46:F9:66:19:CD";
+  serviceUUID2 = "C8:D6:32:BF:C5:F6";
   zone: any;
   rssi: any;
   tracker: string = "Personas Asociadas";
   person: any;
-  asociatedPerson: string= "Personas asignadas";
+  asociatedPerson: string = "Personas asignadas";
   asociatedId: any;
   asociatedIdAlert: any;
   bellAlert: number = 0;
@@ -53,9 +55,10 @@ export class SeePeoplePage implements AfterViewInit {
     private localNotificactions: LocalNotifications,
     private alertCtrl: AlertController,
     private router: Router,
-    private modalController:ModalController,
+    private modalController: ModalController,
     private storeService: StorageService,
-    private localParam: UtilStorageService) {
+    private localParam: UtilStorageService,
+    private toast: Toast) {
 
     this.zone = new NgZone({ enableLongStackTrace: false });
     this.platform.ready().then(() => {
@@ -74,7 +77,7 @@ export class SeePeoplePage implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    //this.Scan();
+    this.ScanAll();
     this.getUserAsociatedPerson();
     this.getAsociatedId();
     this.ionViewDidLoad();
@@ -95,22 +98,56 @@ export class SeePeoplePage implements AfterViewInit {
     });
   }
 
-  getAsociatedId(){
+  getAsociatedId() {
     this.storeService.localGet(this.localParam.localParam.alertsId).then((resp) => {
       this.asociatedId = resp;
     }, (err) => {
       console.error(err);
     });
   }
-
+ScanAll(){
+  this.devices=[];
+  this.ble.scan([],15).subscribe(
+    device=> this.onDeviceDiscovered(device)
+  );
+}
   Scan() {
     this.devices = [];
-    this.ble.startScan(this.serviceUUID).subscribe(
+    this.ble.connect(this.serviceUUID).subscribe(
       device => this.onDeviceDiscovered(device)
-
-
     );
+  }
+  readRSSI() {
+    var rssiSample;
+    this.Scan();
+    this.alert(`ACA`);
+    rssiSample = setInterval(function () {
+      this.ble.readRSSI(this.serviceUUID, function (rssi) {
+       console.log('read RSSI', rssi, 'with device', this.serviceUUID);
+      }, function (err) {
+        console.error('unable to read RSSI', err);
+        clearInterval(rssiSample);
+      })
+    }, 5000),
 
+    function () { console.error('error connecting to device'); }
+  }
+
+  scan2() {
+    this.devices = [];
+    this.ble.startScan([]).subscribe(
+      device => this.onDeviceDiscovered(device));
+  }
+  s() {
+    this.ble.startScan([]).subscribe(device => {
+      console.log(JSON.stringify(device));
+    });
+
+    setTimeout(this.ble.stopScan,
+      5000,
+      function () { console.log("Scan complete"); },
+      function () { console.log("stopScan failed"); }
+    );
   }
 
   onDeviceDiscovered(device) {
@@ -182,8 +219,8 @@ export class SeePeoplePage implements AfterViewInit {
       lockscreen: true,
       actions: [
         { id: 'yes', title: 'Yes' },
-        { id: 'no',  title: 'No' }
-    ]
+        { id: 'no', title: 'No' }
+      ]
 
     });
 
@@ -247,21 +284,21 @@ export class SeePeoplePage implements AfterViewInit {
   }
 
   //Busca las alertas de las personas asociadas, si sale null es porque no encontró alerta en alguno
-  getAsociatedAlerts(){
+  getAsociatedAlerts() {
     let id;
-    for(let i = 0; i < this.asociatedId.length; i++){
+    for (let i = 0; i < this.asociatedId.length; i++) {
       id = this.asociatedId[i];
-      this.services.get(this.params.params.beaconurl+"/tracker/person/alert/"+id).subscribe((resp) => {
+      this.services.get(this.params.params.beaconurl + "/tracker/person/alert/" + id).subscribe((resp) => {
         this.asociatedIdAlert = resp;
-        if(this.asociatedIdAlert.alerts.length < 1){
-          for(let x = 0; x < this.asociatedIdAlert.alerts.length; x++){
-            if(this.asociatedIdAlert.alerts[i].isResolved == false){
-              this.bellAlert ++;
+        if (this.asociatedIdAlert.alerts.length < 1) {
+          for (let x = 0; x < this.asociatedIdAlert.alerts.length; x++) {
+            if (this.asociatedIdAlert.alerts[i].isResolved == false) {
+              this.bellAlert++;
               this.storeService.localSave(this.localParam.localParam.alerts, this.bellAlert);
             }
           }
-        }else if(this.asociatedIdAlert.alerts.isResolved == false){
-          this.bellAlert ++;
+        } else if (this.asociatedIdAlert.alerts.isResolved == false) {
+          this.bellAlert++;
           this.storeService.localSave(this.localParam.localParam.alerts, this.bellAlert);
         }
         //this.storeService.localSave(this.localParam.localParam.alertsId, asociatedId);
@@ -270,5 +307,11 @@ export class SeePeoplePage implements AfterViewInit {
       });
     }
   }
-
+  alert(msg: string){
+    this.toast.show(msg, '5000', 'center').subscribe(
+      toast => {
+        console.log(toast);
+      }
+    );    
+  }
 }//fin de la class

@@ -25,6 +25,9 @@ export class Tab2Page implements OnInit, AfterViewInit {
   asociatedIdAlert: any;
   bellAlert: number = 0;
   ticketNumber: string = "v777";
+  ticketName: string= "Jairo García";
+  ticketUbi: string= "Entrada Principal";
+  ticketDesti: string= "Pasillo Mujeres Norte";
 
   constructor(private services: CrudService,
     private params: UtilsService,
@@ -40,6 +43,9 @@ export class Tab2Page implements OnInit, AfterViewInit {
   ngOnInit() {
     //this.getInfoTickets();
     this.getTicketInfo();
+    this. getTicketName();
+    this. getTicketUbi();
+    this.getTicketDesti();
   }
 
   ngAfterViewInit(){
@@ -51,6 +57,21 @@ export class Tab2Page implements OnInit, AfterViewInit {
 
   getTicketInfo(){
     if(this.ticketNumber != ""){
+      this.setVibration();
+    }
+  }
+  getTicketName(){
+    if(this.ticketName != ""){
+      this.setVibration();
+    }
+  }
+  getTicketUbi(){
+    if(this.ticketUbi != ""){
+      this.setVibration();
+    }
+  }
+  getTicketDesti(){
+    if(this.ticketDesti != ""){
       this.setVibration();
     }
   }
