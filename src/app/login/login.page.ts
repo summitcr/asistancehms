@@ -21,7 +21,7 @@ export class LoginPage implements OnInit {
       url: '/menu/first/tabs/tab1'
     },
   ];
-
+  beaconsPoints: any;
   pdata: any;
   cedula: any;
   userdata: any;
@@ -29,6 +29,7 @@ export class LoginPage implements OnInit {
   personAlert: any;
   bellAlert: number = 0;
   public loginForm: FormGroup;
+  
 
   constructor(private storage: Storage,
     private storeService: StorageService,
@@ -71,7 +72,7 @@ export class LoginPage implements OnInit {
       this.storeService.localSave(this.localParam.localParam.userLogged, this.userdata);
       //this.storeService.localSave(this.localParam.localParam.alerts, 10);
       this.getAsociatedAlerts();
-
+      this.getBeconsPoints();
       this.router.navigateByUrl('/menu/first/tabs/tab1/' + '0');
 
       console.log(this.userdata);
@@ -117,4 +118,20 @@ export class LoginPage implements OnInit {
       
     }
   }
+
+  //Extrae todos los beacons relacionados al un punto
+
+  getBeconsPoints() {
+
+    this.service.get(this.params.params.gatewaybeacons).subscribe((resp) => {
+      this.beaconsPoints= resp;
+      this.storeService.localSave(this.localParam.localParam.gatewaybeacons, this.beaconsPoints);
+      console.log(this.beaconsPoints);
+    }, (err) => {
+      this.alert( "Error:Contacte al adminstrador del sistema");
+      console.error(err);
+    });
+  }
+  
+
 }// fin de la class

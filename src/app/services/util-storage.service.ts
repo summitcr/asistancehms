@@ -8,11 +8,13 @@ export class UtilStorageService {
     userLogged:"",
     alerts:"",
     alertsId:"",
+    gatewaybeacons:"",
   }
 
   constructor() { 
     this.localParam.userLogged = "user-logged";
     this.localParam.alerts = "alert-amount";
     this.localParam.alertsId = "alerts-id";
+    this.localParam.gatewaybeacons = "gatewaybeacons";
   }
 }

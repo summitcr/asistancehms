@@ -47,7 +47,8 @@ export class UtilsService {
     priority:"",
     personalert:"",
     assetalert:"",
-    heartrate:""
+    heartrate:"",
+    gatewaybeacons:""
 
    };
 
@@ -99,7 +100,7 @@ export class UtilsService {
     this.params.personalert = newserverURL+"person_alert";
     this.params.assetalert = newserverURL+"asset_alert";
     this.params.heartrate = newserverURL+"heartratehistories";
-
+    this.params.gatewaybeacons = newserverURL+"gatewaybeacons";
     var mapwizeurl = "https://api.mapwize.io/v1/";
     var apikey= "?api_key=439578d65ac560a55bb586feaa299bf7";
     this.mapwizeParams.searchdirection = mapwizeurl+ "directions"+apikey;

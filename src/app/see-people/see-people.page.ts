@@ -42,6 +42,7 @@ export class SeePeoplePage implements AfterViewInit {
   asociatedId: any;
   asociatedIdAlert: any;
   bellAlert: number = 0;
+  beaconsPoints: any;
 
   constructor(
     private ble: BLE,
@@ -77,7 +78,7 @@ export class SeePeoplePage implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.ScanAll();
+    //this.ScanAll();
     this.getUserAsociatedPerson();
     this.getAsociatedId();
     this.ionViewDidLoad();
@@ -105,12 +106,12 @@ export class SeePeoplePage implements AfterViewInit {
       console.error(err);
     });
   }
-ScanAll(){
-  this.devices=[];
-  this.ble.scan([],15).subscribe(
-    device=> this.onDeviceDiscovered(device)
-  );
-}
+  ScanAll() {
+    this.devices = [];
+    this.ble.scan([], 15).subscribe(
+      device => this.onDeviceDiscovered(device)
+    );
+  }
   Scan() {
     this.devices = [];
     this.ble.connect(this.serviceUUID).subscribe(
@@ -123,14 +124,14 @@ ScanAll(){
     this.alert(`ACA`);
     rssiSample = setInterval(function () {
       this.ble.readRSSI(this.serviceUUID, function (rssi) {
-       console.log('read RSSI', rssi, 'with device', this.serviceUUID);
+        console.log('read RSSI', rssi, 'with device', this.serviceUUID);
       }, function (err) {
         console.error('unable to read RSSI', err);
         clearInterval(rssiSample);
       })
     }, 5000),
 
-    function () { console.error('error connecting to device'); }
+      function () { console.error('error connecting to device'); }
   }
 
   scan2() {
@@ -155,6 +156,16 @@ ScanAll(){
     console.log('Discovered' + JSON.stringify(device, null, 2));
     this.ngZone.run(() => {
       this.devices.push(device)
+      for (let i = 0; i < this.devices.length; i++) {
+        for (let j = 0; j < this.devices.length; j++) {
+          if (this.devices[i].device.rssi > this.devices[j].device.rssi) {
+            this.ble.connect(this.devices[i].id).subscribe(
+              device => this.onDeviceDiscovered(device)
+            );
+            console.log(this.devices[i].device.rssi);
+          }
+        }
+      }
       console.log(device)
     })
   }
@@ -307,11 +318,41 @@ ScanAll(){
       });
     }
   }
-  alert(msg: string){
+  alert(msg: string) {
     this.toast.show(msg, '5000', 'center').subscribe(
       toast => {
         console.log(toast);
       }
-    );    
+    );
   }
+  getBeaconsPointLocal() {
+    this.storeService.localGet(this.localParam.localParam.gatewaybeacons).then((resp) => {
+      this.beaconsPoints = resp;
+    }, (err) => {
+      console.error(err);
+    });
+  }
+  binarySearch(items, value){
+    items=this.beaconsPoints.externalid;
+    value=this.devices;
+    var startIndex  = 0,
+        stopIndex   = items.length - 1,
+        middle      = Math.floor((stopIndex + startIndex)/2);
+ 
+    while(items[middle] != value && startIndex < stopIndex){
+ 
+        //adjust search area
+        if (value < items[middle]){
+            stopIndex = middle - 1;
+        } else if (value > items[middle]){
+            startIndex = middle + 1;
+        }
+ 
+        //recalculate middle
+        middle = Math.floor((stopIndex + startIndex)/2);
+    }
+ 
+    //make sure it's the right value
+    return (items[middle] != value) ? -1 : middle;
+}
 }//fin de la class
