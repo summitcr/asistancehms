@@ -37,8 +37,7 @@
         <p>{{device.name || 'Unnamed'}}</p>
         <p>{{device.id}}</p>
         <p> RSSI: {{device.rssi}}</p>
-        <p> Distance: {{device.distance}}</p>
-        <p> TXT: {{device.txPower}}</p>
+       
       
       </ion-card-content>
   
@@ -47,7 +46,7 @@
   <ion-button class="btnGO" expand="block" color="primary" (click)="wea()">
     scan
   </ion-button>
-  <ion-button class="btnGO" expand="block" color="primary" (click)="ScanAll()">
+  <ion-button class="btnGO" expand="block" color="primary" (click)=" ScanBeaconsAll()">
     scanAll
   </ion-button>
   <ion-button class="btnGO" expand="block" color="primary" (click)="doBinary()">

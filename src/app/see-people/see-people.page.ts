@@ -44,6 +44,7 @@ export class SeePeoplePage implements AfterViewInit {
   bellAlert: number = 0;
   beaconsPoints: any;
   lastBeacon: any;
+  interval: any;
 
   constructor(
     private ble: BLE,
@@ -79,7 +80,7 @@ export class SeePeoplePage implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    //this.ScanAll();
+
     this.getLastBeacon();
     this.getBeaconsPointLocal();
     this.getUserAsociatedPerson();
@@ -88,6 +89,7 @@ export class SeePeoplePage implements AfterViewInit {
     setTimeout(() => {
       this.getAsociatedAlerts();
     }, 1000);
+    //this.timer();
   }
 
   getUserAsociatedPerson() {
@@ -109,15 +111,21 @@ export class SeePeoplePage implements AfterViewInit {
       console.error(err);
     });
   }
-  
-  ScanAll() {
+  //se está actualizando cada cierto tiempo
+  timer() {
+    this.interval = setInterval(() => {
+      this.ScanBeaconsAll();
+    }, 10000);
+  }
+  //scanea todos los bluetooth de baja carga con los rssi
+  ScanBeaconsAll() {
     this.devices = [];
     this.ble.scan([], 15).subscribe(
       device => this.onDeviceDiscovered(device)
     );
   }
 
-  getLastBeacon(){
+  getLastBeacon() {
     this.storeService.localGet(this.localParam.localParam.lastBeacon).then((resp) => {
       this.lastBeacon = resp;
     }, (err) => {
@@ -129,15 +137,6 @@ export class SeePeoplePage implements AfterViewInit {
     console.log('Discovered' + JSON.stringify(device, null, 2));
     this.ngZone.run(() => {
       this.devices.push(device)
-      for(let i = 0; i < this.devices.length; i++) {
-        for(let j = 0; j < this.devices.length; j++) {
-          if(this.devices[i].device.rssi > this.devices[j].device.rssi) {
-            this.ble.connect(this.devices[i].id);
-            this.storeService.localSave(this.localParam.localParam.lastBeacon, this.devices[i]);
-            console.log(this.devices[i].device.rssi);
-          }
-        }
-      }
       console.log(device)
     })
   }
@@ -157,14 +156,14 @@ export class SeePeoplePage implements AfterViewInit {
         rssi: 75
       },
     ];
-      for(let i = 0; i < beacon.length; i++) {
-        if(beacon[i].rssi > 70){
-          this.ble.connect(beacon[i].id);
-          this.storeService.localSave(this.localParam.localParam.lastBeacon, beacon[i]);
-          console.log("entra al if del getLastBeacon");
-        }
+    for (let i = 0; i < beacon.length; i++) {
+      if (beacon[i].rssi > 70) {
+        this.ble.connect(beacon[i].id);
+        this.storeService.localSave(this.localParam.localParam.lastBeacon, beacon[i]);
+        console.log("entra al if del getLastBeacon");
       }
-      //console.log(device)
+    }
+    //console.log(device)
   }
 
   //lectura de beacons
@@ -331,38 +330,75 @@ export class SeePeoplePage implements AfterViewInit {
     });
   }
 
-  binarySearch(items, value){
+  binarySearch(items, value) {
     let startIndex = 0,
-        stopIndex = items.length - 1,
-        middle = Math.floor((stopIndex + startIndex)/2);
- 
-    while(items[middle] != value && startIndex < stopIndex){
- 
-        //adjust search area
-        if (value < items[middle]){
-            stopIndex = middle - 1;
-        } else if (value > items[middle]){
-            startIndex = middle + 1;
-        }
- 
-        //recalculate middle
-        middle = Math.floor((stopIndex + startIndex)/2);
+      stopIndex = items.length - 1,
+      middle = Math.floor((stopIndex + startIndex) / 2);
+
+    while (items[middle] != value && startIndex < stopIndex) {
+
+      //adjust search area
+      if (value < items[middle]) {
+        stopIndex = middle - 1;
+      } else if (value > items[middle]) {
+        startIndex = middle + 1;
+      }
+
+      //recalculate middle
+      middle = Math.floor((stopIndex + startIndex) / 2);
     }
- 
+
     //make sure it's the right value
     return (items[middle] != value) ? -1 : middle;
   }
 
-  doBinary(){
+  doBinary() {
     let items = [];
-    for(let i = 0; i < this.beaconsPoints.length; i++){
-      items.push(this.beaconsPoints[i].externalid);
+    for (let i = 0; i < this.beaconsPoints.length; i++) {
+      items.push(this.beaconsPoints[i].shortid);
     }
     console.log(items);
     //let items = ["aguacate", "adriel", "tavo", "jairazo"];
-    let value= "C246F96619CD";
-    let index = this.binarySearch(items, value);
+    //console.log(this.devices[0].id);
+
+    let beaconsId = [];
+    let value = [];
+    let lastFive = [];
+    let index;
+    let bdataArray = [];
+let sorted;
+    for (let i = 0; i < this.devices.length; i++) {
+      beaconsId.push(this.devices[i].id);
+      value.push(beaconsId[i].replace(/:/g, ""));
+      lastFive.push(value[i].substr(value[i].length - 5));
+      index = this.binarySearch(items, lastFive[i]);
+      if (index > -1) {
+
+        var bdata = {
+          id: this.devices[i].id,
+          rssi: this.devices[i].rssi
+
+        }
+        bdataArray.push(bdata);
+        let entries = Object.entries(bdataArray); 
+         sorted = entries.sort((a, b) => a[1] - b[1]);
+        
+        //sorted.reverse();
+      }//fin de if
+    }
+    console.log(beaconsId);
+    //let value = beaconsId[0].replace(/:/g, "");
+    console.log(value);
+    // let lastFive =value.substr(value.length - 4);
+    // let index = this.binarySearch(items, value);
+    //>
+    //<
 
     console.log(index);
+    console.log(lastFive);
+    console.log(bdataArray);
+    console.log(sorted);
+
   }
+
 }//fin de la class
