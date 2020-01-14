@@ -43,6 +43,7 @@ export class SeePeoplePage implements AfterViewInit {
   asociatedIdAlert: any;
   bellAlert: number = 0;
   beaconsPoints: any;
+  lastBeacon: any;
 
   constructor(
     private ble: BLE,
@@ -79,6 +80,8 @@ export class SeePeoplePage implements AfterViewInit {
 
   ngAfterViewInit() {
     //this.ScanAll();
+    this.getLastBeacon();
+    this.getBeaconsPointLocal();
     this.getUserAsociatedPerson();
     this.getAsociatedId();
     this.ionViewDidLoad();
@@ -106,62 +109,31 @@ export class SeePeoplePage implements AfterViewInit {
       console.error(err);
     });
   }
+  
   ScanAll() {
     this.devices = [];
     this.ble.scan([], 15).subscribe(
       device => this.onDeviceDiscovered(device)
     );
   }
-  Scan() {
-    this.devices = [];
-    this.ble.connect(this.serviceUUID).subscribe(
-      device => this.onDeviceDiscovered(device)
-    );
-  }
-  readRSSI() {
-    var rssiSample;
-    this.Scan();
-    this.alert(`ACA`);
-    rssiSample = setInterval(function () {
-      this.ble.readRSSI(this.serviceUUID, function (rssi) {
-        console.log('read RSSI', rssi, 'with device', this.serviceUUID);
-      }, function (err) {
-        console.error('unable to read RSSI', err);
-        clearInterval(rssiSample);
-      })
-    }, 5000),
 
-      function () { console.error('error connecting to device'); }
-  }
-
-  scan2() {
-    this.devices = [];
-    this.ble.startScan([]).subscribe(
-      device => this.onDeviceDiscovered(device));
-  }
-  s() {
-    this.ble.startScan([]).subscribe(device => {
-      console.log(JSON.stringify(device));
+  getLastBeacon(){
+    this.storeService.localGet(this.localParam.localParam.lastBeacon).then((resp) => {
+      this.lastBeacon = resp;
+    }, (err) => {
+      console.error(err);
     });
-
-    setTimeout(this.ble.stopScan,
-      5000,
-      function () { console.log("Scan complete"); },
-      function () { console.log("stopScan failed"); }
-    );
   }
 
   onDeviceDiscovered(device) {
-
     console.log('Discovered' + JSON.stringify(device, null, 2));
     this.ngZone.run(() => {
       this.devices.push(device)
-      for (let i = 0; i < this.devices.length; i++) {
-        for (let j = 0; j < this.devices.length; j++) {
-          if (this.devices[i].device.rssi > this.devices[j].device.rssi) {
-            this.ble.connect(this.devices[i].id).subscribe(
-              device => this.onDeviceDiscovered(device)
-            );
+      for(let i = 0; i < this.devices.length; i++) {
+        for(let j = 0; j < this.devices.length; j++) {
+          if(this.devices[i].device.rssi > this.devices[j].device.rssi) {
+            this.ble.connect(this.devices[i].id);
+            this.storeService.localSave(this.localParam.localParam.lastBeacon, this.devices[i]);
             console.log(this.devices[i].device.rssi);
           }
         }
@@ -169,6 +141,32 @@ export class SeePeoplePage implements AfterViewInit {
       console.log(device)
     })
   }
+  //Metodo para probar la conexion de los beacons
+  wea() {
+    let beacon = [
+      {
+        id: '15',
+        rssi: 70
+      },
+      {
+        id: '16',
+        rssi: 65
+      },
+      {
+        id: '17',
+        rssi: 75
+      },
+    ];
+      for(let i = 0; i < beacon.length; i++) {
+        if(beacon[i].rssi > 70){
+          this.ble.connect(beacon[i].id);
+          this.storeService.localSave(this.localParam.localParam.lastBeacon, beacon[i]);
+          console.log("entra al if del getLastBeacon");
+        }
+      }
+      //console.log(device)
+  }
+
   //lectura de beacons
   ionViewDidLoad() {
 
@@ -332,12 +330,11 @@ export class SeePeoplePage implements AfterViewInit {
       console.error(err);
     });
   }
+
   binarySearch(items, value){
-    items=this.beaconsPoints.externalid;
-    value=this.devices;
-    var startIndex  = 0,
-        stopIndex   = items.length - 1,
-        middle      = Math.floor((stopIndex + startIndex)/2);
+    let startIndex = 0,
+        stopIndex = items.length - 1,
+        middle = Math.floor((stopIndex + startIndex)/2);
  
     while(items[middle] != value && startIndex < stopIndex){
  
@@ -354,5 +351,18 @@ export class SeePeoplePage implements AfterViewInit {
  
     //make sure it's the right value
     return (items[middle] != value) ? -1 : middle;
-}
+  }
+
+  doBinary(){
+    let items = [];
+    for(let i = 0; i < this.beaconsPoints.length; i++){
+      items.push(this.beaconsPoints[i].externalid);
+    }
+    console.log(items);
+    //let items = ["aguacate", "adriel", "tavo", "jairazo"];
+    let value= "C246F96619CD";
+    let index = this.binarySearch(items, value);
+
+    console.log(index);
+  }
 }//fin de la class
