@@ -123,7 +123,7 @@ export class LoginPage implements OnInit {
 
   getBeconsPoints() {
 
-    this.service.get(this.params.params.gatewaybeacons).subscribe((resp) => {
+    this.service.get(this.params.params.gatewaybeacons+"/shortid").subscribe((resp) => {
       this.beaconsPoints= resp;
       this.storeService.localSave(this.localParam.localParam.gatewaybeacons, this.beaconsPoints);
       console.log(this.beaconsPoints);
