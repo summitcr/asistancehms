@@ -111,19 +111,19 @@ export class SeePeoplePage implements AfterViewInit {
       console.error(err);
     });
   }
-  //se está actualizando cada cierto tiempo
+  //se está actualizando cada cierto tiempo X
   timer() {
     this.interval = setInterval(() => {
       this.ScanBeaconsAll();
     }, 10000);
   }
-  //scanea todos los bluetooth de baja carga con los rssi
+  //scanea todos los bluetooth de baja carga con los rssi X
   ScanBeaconsAll() {
     this.devices = [];
     this.ble.scan([], 15).subscribe(
       device => this.onDeviceDiscovered(device)
     );
-  }
+  }//fin del metodo scan
 
   getLastBeacon() {
     this.storeService.localGet(this.localParam.localParam.lastBeacon).then((resp) => {
@@ -166,7 +166,7 @@ export class SeePeoplePage implements AfterViewInit {
     //console.log(device)
   }
 
-  //lectura de beacons
+  //lectura de beacons por medio del ibeacons
   ionViewDidLoad() {
 
     this.platform.ready().then(() => {
@@ -260,24 +260,7 @@ export class SeePeoplePage implements AfterViewInit {
   }
   // fin de notificaciones
 
-  peopleLocation() {
 
-
-    const myCustomMarker = new mapboxgl.Marker({ color: 'green' });
-
-
-    this.mapwizeMap.on('mapwize:markerclick', e => {
-      alert('marker: ' + e.marker);
-    });
-    this.mapwizeMap.addMarker({
-      latitude: 9.974562999019767,
-      longitude: -84.74976922280277,
-      floor: 0,
-    }, myCustomMarker).then((marker => {
-
-      var s = "";
-    }));
-  }
   go(id) {
     this.router.navigateByUrl('/menu/first/tabs/tab1/' + id);
   }
@@ -322,6 +305,7 @@ export class SeePeoplePage implements AfterViewInit {
       }
     );
   }
+  //hay q pasarlos
   getBeaconsPointLocal() {
     this.storeService.localGet(this.localParam.localParam.gatewaybeacons).then((resp) => {
       this.beaconsPoints = resp;
@@ -366,7 +350,7 @@ export class SeePeoplePage implements AfterViewInit {
     let lastFive = [];
     let index;
     let bdataArray = [];
-let sorted;
+
     for (let i = 0; i < this.devices.length; i++) {
       beaconsId.push(this.devices[i].id);
       value.push(beaconsId[i].replace(/:/g, ""));
@@ -380,25 +364,34 @@ let sorted;
 
         }
         bdataArray.push(bdata);
-        let entries = Object.entries(bdataArray); 
-         sorted = entries.sort((a, b) => a[1] - b[1]);
-        
+
+
         //sorted.reverse();
       }//fin de if
     }
+    bdataArray.sort((a, b) => a.rssi - b.rssi);
+    bdataArray.reverse();
+
     console.log(beaconsId);
-    //let value = beaconsId[0].replace(/:/g, "");
     console.log(value);
+    console.log(index);
+    console.log(lastFive);
+    console.log(bdataArray);
+
+    this.ble.connect(bdataArray[0].id);
+    this.storeService.localSave(this.localParam.localParam.lastBeacon, bdataArray[0]);
+    console.log("entra al if del getLastBeacon");
+
+    //let value = beaconsId[0].replace(/:/g, "");
+
     // let lastFive =value.substr(value.length - 4);
     // let index = this.binarySearch(items, value);
     //>
     //<
 
-    console.log(index);
-    console.log(lastFive);
-    console.log(bdataArray);
-    console.log(sorted);
 
-  }
+
+
+  }//fin del dobinary
 
 }//fin de la class
