@@ -25,17 +25,18 @@ declare var MapwizeUI: any;
   styleUrls: ['./tab1.page.scss'],
 })
 export class Tab1Page implements OnInit, AfterViewInit {
-  pages=[
-    { title: 'Notificacion',
-      url:'notification/third'
-  },];
+  pages = [
+    {
+      title: 'Notificacion',
+      url: 'notification/third'
+    },];
 
   beacons: BeaconModel[] = [];
   zone: any;
   mapwizeMap: any;
   person: any;
   alertAmount: any;
-  isTest: boolean=true;
+  isTest: boolean = true;
   urlId: any;
   trackerPerson: any;
   interval: any;
@@ -54,23 +55,27 @@ export class Tab1Page implements OnInit, AfterViewInit {
   asociatedPlaceId: string;
   stopPopUp = false;
   devices: any[] = [];
-  lastBeacon :any;
+  lastBeacon: any;
+  beaconsPoints: any;
+  lastBeaconsLat: any;
+  lastBeaconsLong: any;
+
   constructor(private storage: Storage,
-    private storeService: StorageService, 
+    private storeService: StorageService,
     private localParam: UtilStorageService,
-    private service: CrudService, 
+    private service: CrudService,
     private params: UtilsService,
-    public beaconService: BeaconService, 
-    public platform: Platform, 
-    public events: Events, 
-    public services: UtilsService, 
+    public beaconService: BeaconService,
+    public platform: Platform,
+    public events: Events,
+    public services: UtilsService,
     private seePeople: SeePeoplePage,
-    private modalController:ModalController,
+    private modalController: ModalController,
     private router: Router,
     private route: ActivatedRoute,
     public actionSheetController: ActionSheetController,
     private ble: BLE,
-    private ngZone: NgZone,) {
+    private ngZone: NgZone, ) {
 
     //Mapwize.apiKey("439578d65ac560a55bb586feaa299bf7");
     this.zone = new NgZone({ enableLongStackTrace: false });
@@ -84,28 +89,28 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }
 
   //Metodo que busca el id de la persona loggeada para obtener la informacion.
-  personLoggedLocation(){
-    this.service.get(this.params.params.beaconurl+"/tracker/person/alert/"+this.person.person.id).subscribe((resp) => {
-        this.trackerLogged = resp;
-        this.loggedPersonAlert = this.trackerLogged.alerts;
-        this.loggedPersonInfor = this.trackerLogged.summary;
-        this.loggedLatitude = Number(this.loggedPersonInfor.Point.lat);
-        this.loggedLongitude = Number(this.loggedPersonInfor.Point.lon);
-        this.loggedPlaceId = this.loggedPersonInfor.Point.externalid;
-        console.log(this.loggedPlaceId);
-        let secondSpended = this.transform(this.loggedPersonInfor.secondsspended);
-        let desc = this.loggedPersonInfor.Point.description;
-        this.personLocation(secondSpended, desc);
-        this.asociatedPersonLocation();
-      }, (err) => {
-        console.error(err);
-      });
+  personLoggedLocation() {
+    this.service.get(this.params.params.beaconurl + "/tracker/person/alert/" + this.person.person.id).subscribe((resp) => {
+      this.trackerLogged = resp;
+      this.loggedPersonAlert = this.trackerLogged.alerts;
+      this.loggedPersonInfor = this.trackerLogged.summary;
+      this.loggedLatitude = Number(this.loggedPersonInfor.Point.lat);
+      this.loggedLongitude = Number(this.loggedPersonInfor.Point.lon);
+      this.loggedPlaceId = this.loggedPersonInfor.Point.externalid;
+      console.log(this.loggedPlaceId);
+      let secondSpended = this.transform(this.loggedPersonInfor.secondsspended);
+      let desc = this.loggedPersonInfor.Point.description;
+      this.personLocation(secondSpended, desc);
+      this.asociatedPersonLocation();
+    }, (err) => {
+      console.error(err);
+    });
   }
 
   //Metodo que busca el id de la persona asociada para obtener su informacion
-  asociatedPersonLocation(){
-    if(this.urlId != 0){
-      this.service.get(this.params.params.beaconurl+"/tracker/person/alert/"+this.urlId).subscribe((resp) => {
+  asociatedPersonLocation() {
+    if (this.urlId != 0) {
+      this.service.get(this.params.params.beaconurl + "/tracker/person/alert/" + this.urlId).subscribe((resp) => {
         this.trackerPerson = resp;
         this.personAlerts = this.trackerPerson.alerts;
         this.personInfo = this.trackerPerson.summary;
@@ -124,25 +129,25 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }
 
   //Metodo que revisa si la persona asociada tiene alertas
-  haveAlerts(){
-    if(this.personAlerts === null){
+  haveAlerts() {
+    if (this.personAlerts === null) {
       this.asociatedAlerts = "No hay alertas que revisar";
     }
-    else if(this.personAlerts.length < 1){
-      for(let i = 0; i < this.trackerPerson.alerts.length; i++){
-        if(this.personAlerts[i].isResolved == false){
+    else if (this.personAlerts.length < 1) {
+      for (let i = 0; i < this.trackerPerson.alerts.length; i++) {
+        if (this.personAlerts[i].isResolved == false) {
           this.asociatedAlerts = "Hay alertas que revisar";
         }
       }
-    }else if(this.personAlerts.isResolved == false){
+    } else if (this.personAlerts.isResolved == false) {
       this.asociatedAlerts = "Hay alertas que revisar";
     }
   }
 
   //Metodo que pone el punto de la persona asociada en el mapa
-  setAsociatedPersonPoint(lat, lon, desc){
-    for(let i = 0; i < this.person.asocietedpeople.length; i++){
-      if(this.person.asocietedpeople[i].id == this.urlId){
+  setAsociatedPersonPoint(lat, lon, desc) {
+    for (let i = 0; i < this.person.asocietedpeople.length; i++) {
+      if (this.person.asocietedpeople[i].id == this.urlId) {
         this.asocietedName = this.person.asocietedpeople[i].name;
       }
     }
@@ -150,49 +155,53 @@ export class Tab1Page implements OnInit, AfterViewInit {
     //Metodo que revisa si la persona asociada tiene alertas
     this.haveAlerts();
 
-    const myCustomMarker = new mapboxgl.Marker({color: 'blue'});
-      myCustomMarker.setPopup(new mapboxgl.Popup({
-        closeOnClick: false, 
-        closeButton: false
-      }).setHTML('<h4>' + this.asocietedName + '</h4><p>' + "Punto: " + desc + 
-      '<br>' + "Tiempo: "+ this.asociatedPersonTime + '<br>' + "Alertas: " + this.asociatedAlerts + '</p>'));
-      
-      this.mapwizeMap.on('mapwize:markerclick', e => {
-        alert('marker: ' + e.marker);
-      });
-      this.mapwizeMap.addMarker({
-        latitude: lat,
-        longitude: lon,
-        floor: 0,
-      }, myCustomMarker).then((marker => {
+    const myCustomMarker = new mapboxgl.Marker({ color: 'blue' });
+    myCustomMarker.setPopup(new mapboxgl.Popup({
+      closeOnClick: false,
+      closeButton: false
+    }).setHTML('<h4>' + this.asocietedName + '</h4><p>' + "Punto: " + desc +
+      '<br>' + "Tiempo: " + this.asociatedPersonTime + '<br>' + "Alertas: " + this.asociatedAlerts + '</p>'));
 
-        var s = "";
-      }));
+    this.mapwizeMap.on('mapwize:markerclick', e => {
+      alert('marker: ' + e.marker);
+    });
+    this.mapwizeMap.addMarker({
+      latitude: lat,
+      longitude: lon,
+      floor: 0,
+    }, myCustomMarker).then((marker => {
 
-/////////Se asegura de que placeId no sea 0, si es así muestra un popup///////////
-      if(this.loggedPlaceId != "0" && this.asociatedPlaceId != "0"){
-        var dir  = { 
-          "from": {  "lat": this.loggedLatitude,
+      var s = "";
+    }));
+
+    /////////Se asegura de que placeId no sea 0, si es así muestra un popup///////////
+    if (this.loggedPlaceId != "0" && this.asociatedPlaceId != "0") {
+      var dir = {
+        "from": {
+          "lat": this.loggedLatitude,
           "lon": this.loggedLongitude,
-          "placeId": this.loggedPlaceId }, 
-          "to": {
-            "lat": lat,
-            "lon": lon,
-          "placeId": this.asociatedPlaceId },
-          "options": { "isAccessible": false } };
-  
-        this.service.save(this.services.mapwizeParams.searchdirection, dir).subscribe((response) => {
-          this.mapwizeMap.setDirection(response);
-        }, (err) => {
-    
-          console.error(err);
-        });
-      }else{
-        if(!this.stopPopUp){
-          this.stopPopUp = true;
-          this.presentActionSheet();
-        }
+          "placeId": this.loggedPlaceId
+        },
+        "to": {
+          "lat": lat,
+          "lon": lon,
+          "placeId": this.asociatedPlaceId
+        },
+        "options": { "isAccessible": false }
+      };
+
+      this.service.save(this.services.mapwizeParams.searchdirection, dir).subscribe((response) => {
+        this.mapwizeMap.setDirection(response);
+      }, (err) => {
+
+        console.error(err);
+      });
+    } else {
+      if (!this.stopPopUp) {
+        this.stopPopUp = true;
+        this.presentActionSheet();
       }
+    }
   }
 
   //Popup cuando la persona asociada no tiene registros
@@ -200,7 +209,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
     const actionSheet = await this.actionSheetController.create({
       header: 'La persona asociada no presenta registros:',
       buttons: [{
-        text: 'No hay registro desde: '+this.asociatedPersonTime+'. Por favor inténtelo de nuevo',
+        text: 'No hay registro desde: ' + this.asociatedPersonTime + '. Por favor inténtelo de nuevo',
         icon: 'close',
         role: 'cancel',
         handler: () => {
@@ -221,10 +230,10 @@ export class Tab1Page implements OnInit, AfterViewInit {
       }
     }, 30000);
   }
- 
 
 
-  getUserLogged(){
+
+  getUserLogged() {
     this.storeService.localGet(this.localParam.localParam.userLogged).then((resp) => {
       this.person = resp;
       //console.log(this.person);
@@ -234,7 +243,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }
 
   //Metodo para obtener las alertas desde el Storage local
-  getAlertAmount(){
+  getAlertAmount() {
     this.storeService.localGet(this.localParam.localParam.alerts).then((resp) => {
       this.alertAmount = resp;
 
@@ -243,19 +252,20 @@ export class Tab1Page implements OnInit, AfterViewInit {
     });
   }
 
-  setVibration(){
+  setVibration() {
     navigator.vibrate([500, 500, 500]);
-    
+
     console.log(this.person.name);
     console.log(this.person.identifier);
     console.log(this.person.personasocieted);
   }
 
   setRoute() {
-    var dir  = { 
-        "from": { "placeId": "5d7448f0ce095b0051f9aa3d" }, 
-        "to": { "placeId": "5d8e6bb4478407002c9ff811" },
-        "options": { "isAccessible": false } };
+    var dir = {
+      "from": { "placeId": "5d7448f0ce095b0051f9aa3d" },
+      "to": { "placeId": "5d8e6bb4478407002c9ff811" },
+      "options": { "isAccessible": false }
+    };
 
     this.service.save(this.services.mapwizeParams.searchdirection, dir).subscribe((response) => {
       this.mapwizeMap.setDirection(response);
@@ -266,6 +276,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+
     setTimeout(() => {
       this.getUserLogged();
       this.getAlertAmount();
@@ -274,47 +285,49 @@ export class Tab1Page implements OnInit, AfterViewInit {
         hideMenu: true,
         floor: 0,
         centerOnVenue: '5de813dcc85b5500169609d6'
-  
+
       }).then(instance => {
         this.mapwizeMap = instance;
-      
+
         //this.personLocation();
         //this.personLoggedLocation();
         //this.asociatedPersonLocation();
         this.timer();
       });
     }, 1000);
-    
+
+    this.getBeaconsPointLocal();
+
   }//fin de after
 
   //Metodo que coloca el marcador y el popup de la persona loggeada
-  personLocation(secondSpended, desc){
-    const myCustomMarker = new mapboxgl.Marker({color: 'red'});
-      myCustomMarker.setPopup(new mapboxgl.Popup({
-        closeOnClick: false, 
-        closeButton: false
-      }).setHTML('<h4>' + this.person.person.name + '</h4><p>' + "Punto: " + desc + '<br>' + "Tiempo: " + secondSpended +'</p>'));
-      
-      this.mapwizeMap.on('mapwize:markerclick', e => {
-        alert('marker: ' + e.marker);
-      });
-      this.mapwizeMap.addMarker({
-        latitude: this.loggedLatitude,
-        longitude: this.loggedLongitude,
-        floor: 0,
-      }, myCustomMarker).then((marker => {
+  personLocation(secondSpended, desc) {
+    const myCustomMarker = new mapboxgl.Marker({ color: 'red' });
+    myCustomMarker.setPopup(new mapboxgl.Popup({
+      closeOnClick: false,
+      closeButton: false
+    }).setHTML('<h4>' + this.person.person.name + '</h4><p>' + "Punto: " + desc + '<br>' + "Tiempo: " + secondSpended + '</p>'));
 
-        var s = "";
-      }));
+    this.mapwizeMap.on('mapwize:markerclick', e => {
+      alert('marker: ' + e.marker);
+    });
+    this.mapwizeMap.addMarker({
+      latitude: this.lastBeaconsLat,
+      longitude: this.lastBeaconsLong,
+      floor: 0,
+    }, myCustomMarker).then((marker => {
+
+      var s = "";
+    }));
   }
 
-  assignedPersonLocation(){
-    const myCustomMarker = new mapboxgl.Marker({color: 'yellow'});
-      myCustomMarker.setPopup(new mapboxgl.Popup({
-        closeOnClick: false,
-        closeButton: false
-      }).setText('Nombre persona asignada'));
-      
+  assignedPersonLocation() {
+    const myCustomMarker = new mapboxgl.Marker({ color: 'yellow' });
+    myCustomMarker.setPopup(new mapboxgl.Popup({
+      closeOnClick: false,
+      closeButton: false
+    }).setText('Nombre persona asignada'));
+
     this.mapwizeMap.on('mapwize:markerclick', e => {
       alert('marker: ' + e.marker);
     });
@@ -327,20 +340,21 @@ export class Tab1Page implements OnInit, AfterViewInit {
       var s = "";
     }));
 
-    var dir  = { 
-      "from": { "placeId": "5d7448f0ce095b0051f9aa3d" }, 
+    var dir = {
+      "from": { "placeId": "5d7448f0ce095b0051f9aa3d" },
       "to": { "placeId": "5d74287f731b47002c23c6e9" },
-      "options": { "isAccessible": false } };
+      "options": { "isAccessible": false }
+    };
 
-      this.service.save(this.services.mapwizeParams.searchdirection, dir).subscribe((response) => {
-        this.mapwizeMap.setDirection(response);
-      }, (err) => {
+    this.service.save(this.services.mapwizeParams.searchdirection, dir).subscribe((response) => {
+      this.mapwizeMap.setDirection(response);
+    }, (err) => {
 
-        console.error(err);
-      });
+      console.error(err);
+    });
   }
 
-  go(){
+  go() {
     this.router.navigateByUrl('/menu/third');
   }
 
@@ -374,34 +388,146 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }
   //inicia metodos relacionados a la lectura de beacons
 
-//se está actualizando cada cierto tiempo
-timerBeacons() {
-  this.interval = setInterval(() => {
-    this.ScanBeaconsAll();
-  }, 10000);
-}
-//scanea todos los bluetooth de baja carga con los rssi
-ScanBeaconsAll() {
-  this.devices = [];
-  this.ble.scan([], 15).subscribe(
-    device => this.onDeviceDiscovered(device)
-  );
-}//fin del metodo scan
+  //se está actualizando cada cierto tiempo
+  timerBeacons() {
+    this.interval = setInterval(() => {
+      this.ScanBeaconsAll();
+    }, 10000);
+  }
+  //scanea todos los bluetooth de baja carga con los rssi
+  ScanBeaconsAll() {
+    this.devices = [];
+    this.ble.scan([], 15).subscribe(
+      device => this.onDeviceDiscovered(device)
+    );
+  }//fin del metodo scan
 
-getLastBeacon() {
-  this.storeService.localGet(this.localParam.localParam.lastBeacon).then((resp) => {
-    this.lastBeacon = resp;
-  }, (err) => {
-    console.error(err);
-  });
-}
+  getLastBeacon() {
+    this.storeService.localGet(this.localParam.localParam.lastBeacon).then((resp) => {
+      this.lastBeacon = resp;
+    }, (err) => {
+      console.error(err);
+    });
+  }
 
-onDeviceDiscovered(device) {
-  console.log('Discovered' + JSON.stringify(device, null, 2));
-  this.ngZone.run(() => {
-    this.devices.push(device)
-    console.log(device)
-  })
-}
+  onDeviceDiscovered(device) {
+    console.log('Discovered' + JSON.stringify(device, null, 2));
+    this.ngZone.run(() => {
+      this.devices.push(device)
+      console.log(device)
+    })
+  }
+  getBeaconsPointLocal() {
+    this.storeService.localGet(this.localParam.localParam.gatewaybeacons).then((resp) => {
+      this.beaconsPoints = resp;
+    }, (err) => {
+      console.error(err);
+    });
+  }
+
+  binarySearch(items, value) {
+    let startIndex = 0,
+      stopIndex = items.length - 1,
+      middle = Math.floor((stopIndex + startIndex) / 2);
+
+    while (items[middle] != value && startIndex < stopIndex) {
+
+      //adjust search area
+      if (value < items[middle]) {
+        stopIndex = middle - 1;
+      } else if (value > items[middle]) {
+        startIndex = middle + 1;
+      }
+
+      //recalculate middle
+      middle = Math.floor((stopIndex + startIndex) / 2);
+    }
+
+    //make sure it's the right value
+    return (items[middle] != value) ? -1 : middle;
+  }
+
+  doBinary() {
+    let items = [];
+    for (let i = 0; i < this.beaconsPoints.length; i++) {
+      items.push(this.beaconsPoints[i].shortid);
+    }
+    console.log(items);
+    //let items = ["aguacate", "adriel", "tavo", "jairazo"];
+    //console.log(this.devices[0].id);
+
+    let beaconsId = [];
+    let value = [];
+    let lastFive = [];
+    let index;
+    let bdataArray = [];
+
+    for (let i = 0; i < this.devices.length; i++) {
+      beaconsId.push(this.devices[i].id);
+      value.push(beaconsId[i].replace(/:/g, ""));
+      lastFive.push(value[i].substr(value[i].length - 5));
+      index = this.binarySearch(items, lastFive[i]);
+      if (index > -1) {
+
+        var bdata = {
+          id: this.devices[i].id,
+          rssi: this.devices[i].rssi
+
+        }
+        bdataArray.push(bdata);
+
+
+        //sorted.reverse();
+      }//fin de if
+    }
+    bdataArray.sort((a, b) => a.rssi - b.rssi);
+    bdataArray.reverse();
+
+    console.log(beaconsId);
+    console.log(value);
+    console.log(index);
+    console.log(lastFive);
+    console.log(bdataArray);
+
+
+    this.storeService.localSave(this.localParam.localParam.lastBeacon, bdataArray[0]);
+    console.log("entra al if del getLastBeacon");
+
+    //let value = beaconsId[0].replace(/:/g, "");
+
+    // let lastFive =value.substr(value.length - 4);
+    // let index = this.binarySearch(items, value);
+    //>
+    //<
+
+
+
+
+  }//fin del dobinary
+  testWayFinding() {
+    this.getLastBeacon();
+    let point;
+    let beaconMac;
+    let index;
+    let value;
+    let items = [];
+    let shortMac;
+    console.log(this.lastBeacon);
+    for (let i = 0; i < this.beaconsPoints.length; i++) {
+      items.push(this.beaconsPoints[i].shortid);
+    }
+    beaconMac = this.lastBeacon.id;
+    shortMac = beaconMac.replace(/:/g, "");
+    value = shortMac.substr(shortMac.length - 5);
+    index = this.binarySearch(items, value);
+    console.log(value);
+    console.log(index);
+
+    if (index > -1) {
+      this.lastBeaconsLat = this.beaconsPoints[index].point.lat;
+      this.lastBeaconsLong = this.beaconsPoints[index].point.lon;
+
+    }
+  }
   //Fin de los metodos de la lectura de beacons
 }// fin
