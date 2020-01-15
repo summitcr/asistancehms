@@ -32,8 +32,6 @@ export class SeePeoplePage implements AfterViewInit {
   scheduled = [];
   devices: any[] = [];
   beacons: BeaconModel[] = [];
-  serviceUUID = "C2:46:F9:66:19:CD";
-  serviceUUID2 = "C8:D6:32:BF:C5:F6";
   zone: any;
   rssi: any;
   tracker: string = "Personas Asociadas";
@@ -109,7 +107,7 @@ export class SeePeoplePage implements AfterViewInit {
       console.error(err);
     });
   }
-  
+
   ScanAll() {
     this.devices = [];
     this.ble.scan([], 15).subscribe(
@@ -131,10 +129,10 @@ export class SeePeoplePage implements AfterViewInit {
       this.devices.push(device)
       for(let i = 0; i < this.devices.length; i++) {
         for(let j = 0; j < this.devices.length; j++) {
-          if(this.devices[i].device.rssi > this.devices[j].device.rssi) {
+          if(this.devices[i].rssi > this.devices[j].rssi) {
             this.ble.connect(this.devices[i].id);
             this.storeService.localSave(this.localParam.localParam.lastBeacon, this.devices[i]);
-            console.log(this.devices[i].device.rssi);
+            console.log(this.devices[i].rssi);
           }
         }
       }
@@ -261,24 +259,6 @@ export class SeePeoplePage implements AfterViewInit {
   }
   // fin de notificaciones
 
-  peopleLocation() {
-
-
-    const myCustomMarker = new mapboxgl.Marker({ color: 'green' });
-
-
-    this.mapwizeMap.on('mapwize:markerclick', e => {
-      alert('marker: ' + e.marker);
-    });
-    this.mapwizeMap.addMarker({
-      latitude: 9.974562999019767,
-      longitude: -84.74976922280277,
-      floor: 0,
-    }, myCustomMarker).then((marker => {
-
-      var s = "";
-    }));
-  }
   go(id) {
     this.router.navigateByUrl('/menu/first/tabs/tab1/' + id);
   }
@@ -354,13 +334,18 @@ export class SeePeoplePage implements AfterViewInit {
   }
 
   doBinary(){
-    let items = [];
+    /*let items = [];
     for(let i = 0; i < this.beaconsPoints.length; i++){
       items.push(this.beaconsPoints[i].externalid);
     }
-    console.log(items);
-    //let items = ["aguacate", "adriel", "tavo", "jairazo"];
-    let value= "C246F96619CD";
+    console.log(items);*/
+    let beaconsId;
+    for(let i = 0; i < this.devices.length; i++){
+      beaconsId = this.devices[i].id;
+    }
+    let items = ["A54SSA", "C21510", "PA5454", "SA54AS"];
+    let value = beaconsId.replace(/:/g, "");
+    console.log(value);
     let index = this.binarySearch(items, value);
 
     console.log(index);
