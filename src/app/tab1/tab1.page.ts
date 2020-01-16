@@ -59,6 +59,10 @@ export class Tab1Page implements OnInit, AfterViewInit {
   beaconsPoints: any;
   lastBeaconsLat: any;
   lastBeaconsLong: any;
+  secondSpended: any;
+  desc: any;
+  pointDesc: any;
+  trackBeacons: any;
 
   constructor(private storage: Storage,
     private storeService: StorageService,
@@ -98,9 +102,9 @@ export class Tab1Page implements OnInit, AfterViewInit {
       this.loggedLongitude = Number(this.loggedPersonInfor.Point.lon);
       this.loggedPlaceId = this.loggedPersonInfor.Point.externalid;
       console.log(this.loggedPlaceId);
-      let secondSpended = this.transform(this.loggedPersonInfor.secondsspended);
-      let desc = this.loggedPersonInfor.Point.description;
-      this.personLocation(secondSpended, desc);
+      this.secondSpended = this.transform(this.loggedPersonInfor.secondsspended);
+      this.desc = this.loggedPersonInfor.Point.description;
+      //this.personLocation();
       this.asociatedPersonLocation();
     }, (err) => {
       console.error(err);
@@ -175,12 +179,12 @@ export class Tab1Page implements OnInit, AfterViewInit {
     }));
 
     /////////Se asegura de que placeId no sea 0, si es así muestra un popup///////////
-    if (this.loggedPlaceId != "0" && this.asociatedPlaceId != "0") {
+    if (this.trackBeacons != "0" && this.asociatedPlaceId != "0") {
       var dir = {
         "from": {
           "lat": this.loggedLatitude,
           "lon": this.loggedLongitude,
-          "placeId": this.loggedPlaceId
+          "placeId": this.trackBeacons
         },
         "to": {
           "lat": lat,
@@ -228,7 +232,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
         this.mapwizeMap.removeMarkers();
         this.personLoggedLocation();
       }
-    }, 30000);
+    }, 15000);
   }
 
 
@@ -293,6 +297,9 @@ export class Tab1Page implements OnInit, AfterViewInit {
         //this.personLoggedLocation();
         //this.asociatedPersonLocation();
         this.timer();
+        this.timerBeacons();
+        //this.timerDoBinary();
+        this.timerWayFinding();
       });
     }, 1000);
 
@@ -301,12 +308,13 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }//fin de after
 
   //Metodo que coloca el marcador y el popup de la persona loggeada
-  personLocation(secondSpended, desc) {
-    const myCustomMarker = new mapboxgl.Marker({ color: 'red' });
+  personLocation() {
+    this.mapwizeMap.removeMarkers();
+    const myCustomMarker = new mapboxgl.Marker({ color: '#C51586' });
     myCustomMarker.setPopup(new mapboxgl.Popup({
       closeOnClick: false,
       closeButton: false
-    }).setHTML('<h4>' + this.person.person.name + '</h4><p>' + "Punto: " + desc + '<br>' + "Tiempo: " + secondSpended + '</p>'));
+    }).setHTML('<h4>' + this.person.person.name + '</h4><p>' + "Punto: " + this.pointDesc + '<br>' + "Tiempo: " + this.secondSpended + '</p>'));
 
     this.mapwizeMap.on('mapwize:markerclick', e => {
       alert('marker: ' + e.marker);
@@ -392,14 +400,30 @@ export class Tab1Page implements OnInit, AfterViewInit {
   timerBeacons() {
     this.interval = setInterval(() => {
       this.ScanBeaconsAll();
+
     }, 10000);
+  }
+  timerDoBinary() {
+    setTimeout(() => {
+      this.interval = setInterval(() => {
+
+        this.doBinary();
+      }, 11000);
+    }, 3000);
+  }
+  timerWayFinding() {
+    this.interval = setInterval(() => {
+      this.testWayFinding();
+    }, 12000);
   }
   //scanea todos los bluetooth de baja carga con los rssi
   ScanBeaconsAll() {
     this.devices = [];
     this.ble.scan([], 15).subscribe(
       device => this.onDeviceDiscovered(device)
+
     );
+
   }//fin del metodo scan
 
   getLastBeacon() {
@@ -413,9 +437,11 @@ export class Tab1Page implements OnInit, AfterViewInit {
   onDeviceDiscovered(device) {
     console.log('Discovered' + JSON.stringify(device, null, 2));
     this.ngZone.run(() => {
-      this.devices.push(device)
-      console.log(device)
+      this.devices.push(device);
+      console.log(device);
+      this.doBinary();
     })
+
   }
   getBeaconsPointLocal() {
     this.storeService.localGet(this.localParam.localParam.gatewaybeacons).then((resp) => {
@@ -448,6 +474,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }
 
   doBinary() {
+
     let items = [];
     for (let i = 0; i < this.beaconsPoints.length; i++) {
       items.push(this.beaconsPoints[i].shortid);
@@ -505,6 +532,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
   }//fin del dobinary
   testWayFinding() {
+
     this.getLastBeacon();
     let point;
     let beaconMac;
@@ -524,10 +552,14 @@ export class Tab1Page implements OnInit, AfterViewInit {
     console.log(index);
 
     if (index > -1) {
-      this.lastBeaconsLat = this.beaconsPoints[index].point.lat;
-      this.lastBeaconsLong = this.beaconsPoints[index].point.lon;
-
+      this.pointDesc = this.beaconsPoints[index].point.description;
+      this.trackBeacons=this.beaconsPoints[index].point.externalid;
+      this.lastBeaconsLat = Number(this.beaconsPoints[index].point.lat);
+      this.lastBeaconsLong = Number(this.beaconsPoints[index].point.lon);
+      this.personLocation();
     }
+    //this.personLocation();
+
   }
   //Fin de los metodos de la lectura de beacons
 }// fin
