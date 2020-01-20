@@ -4,6 +4,16 @@
             <ion-menu-button></ion-menu-button>
           </ion-buttons>
       <ion-title>Summit</ion-title>
+      <!--  <ion-button class="btnGO"  color="primary" (click)=" ScanBeaconsAll()">
+        scanAll
+      </ion-button>
+      <ion-button class="btnGO"  color="primary" (click)="doBinary()">
+        scanDoBinary
+      </ion-button>
+      <ion-button class="btnGO"  color="primary" (click)="testWayFinding()">
+        scanTest 
+      </ion-button>-->
+     
       <ng-container *ngFor="let p of pages" item-content>
       <ion-button [routerLink]="p.url" routerDirection="root" slot="end" color="ligth" size="small" shape="round">
         <ion-icon  name="notifications"></ion-icon>
