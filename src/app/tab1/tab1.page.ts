@@ -12,6 +12,7 @@ import { UtilStorageService } from '../services/util-storage.service';
 import mapboxgl from 'mapbox-gl';
 import { SeePeoplePage } from '../see-people/see-people.page';
 import { Router, ActivatedRoute } from '@angular/router';
+import { BLE } from '@ionic-native/ble/ngx';
 
 //declare var require:any;
 //const Mapwize = require('mapwize');
@@ -52,7 +53,8 @@ export class Tab1Page implements OnInit, AfterViewInit {
   asociatedPersonTime: any;
   asociatedPlaceId: string;
   stopPopUp = false;
-
+  devices: any[] = [];
+  lastBeacon :any;
   constructor(private storage: Storage,
     private storeService: StorageService, 
     private localParam: UtilStorageService,
@@ -66,7 +68,9 @@ export class Tab1Page implements OnInit, AfterViewInit {
     private modalController:ModalController,
     private router: Router,
     private route: ActivatedRoute,
-    public actionSheetController: ActionSheetController) {
+    public actionSheetController: ActionSheetController,
+    private ble: BLE,
+    private ngZone: NgZone,) {
 
     //Mapwize.apiKey("439578d65ac560a55bb586feaa299bf7");
     this.zone = new NgZone({ enableLongStackTrace: false });
@@ -368,4 +372,36 @@ export class Tab1Page implements OnInit, AfterViewInit {
     }
     return time_string;
   }
+  //inicia metodos relacionados a la lectura de beacons
+
+//se está actualizando cada cierto tiempo
+timerBeacons() {
+  this.interval = setInterval(() => {
+    this.ScanBeaconsAll();
+  }, 10000);
+}
+//scanea todos los bluetooth de baja carga con los rssi
+ScanBeaconsAll() {
+  this.devices = [];
+  this.ble.scan([], 15).subscribe(
+    device => this.onDeviceDiscovered(device)
+  );
+}//fin del metodo scan
+
+getLastBeacon() {
+  this.storeService.localGet(this.localParam.localParam.lastBeacon).then((resp) => {
+    this.lastBeacon = resp;
+  }, (err) => {
+    console.error(err);
+  });
+}
+
+onDeviceDiscovered(device) {
+  console.log('Discovered' + JSON.stringify(device, null, 2));
+  this.ngZone.run(() => {
+    this.devices.push(device)
+    console.log(device)
+  })
+}
+  //Fin de los metodos de la lectura de beacons
 }// fin
