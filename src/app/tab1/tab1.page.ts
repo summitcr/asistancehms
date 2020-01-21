@@ -63,6 +63,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   desc: any;
   pointDesc: any;
   trackBeacons: any;
+  actionSheet: any = null;
 
   constructor(private storage: Storage,
     private storeService: StorageService,
@@ -122,7 +123,6 @@ export class Tab1Page implements OnInit, AfterViewInit {
         let lon = Number(this.personInfo.Point.lon);
         let desc = this.personInfo.Point.description;
         this.asociatedPlaceId = String(this.personInfo.Point.externalid);
-        console.log(this.asociatedPlaceId);
         console.log(this.trackerPerson);
         this.asociatedPersonTime = this.transform(this.personInfo.secondsspended);
         this.setAsociatedPersonPoint(lat, lon, desc);
@@ -202,15 +202,23 @@ export class Tab1Page implements OnInit, AfterViewInit {
       });
     } else {
       if (!this.stopPopUp) {
-        this.stopPopUp = true;
-        this.presentActionSheet();
+        //this.stopPopUp = true;
+        if(this.actionSheet == null){
+          this.presentActionSheet();
+        }else if(this.actionSheet != null){
+          this.actionSheet.dismiss();
+          this.presentActionSheet();
+        }
+        else{
+          this.actionSheet.buttons[0].text = "Por favor, inténtelo de nuevo.";
+        }
       }
     }
   }
 
   //Popup cuando la persona asociada no tiene registros
   async presentActionSheet() {
-    const actionSheet = await this.actionSheetController.create({
+    this.actionSheet = await this.actionSheetController.create({
       header: 'La persona asociada no presenta registros:',
       buttons: [{
         text: 'No hay registro desde: ' + this.asociatedPersonTime + '. Por favor inténtelo de nuevo',
@@ -218,10 +226,11 @@ export class Tab1Page implements OnInit, AfterViewInit {
         role: 'cancel',
         handler: () => {
           console.log('Cancel clicked');
+          this.stopPopUp = true;
         }
       }]
     });
-    await actionSheet.present();
+    await this.actionSheet.present();
   }
 
   //metodo para actualizar la ubicacion de la persona asociada
