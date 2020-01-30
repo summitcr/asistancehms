@@ -262,6 +262,11 @@ export class SeePeoplePage implements AfterViewInit {
   go(id) {
     this.router.navigateByUrl('/menu/first/tabs/tab1/' + id);
   }
+
+  goNotification() {
+    this.router.navigateByUrl('menu/third');
+  }
+
   heartmonitor() {
     this.router.navigateByUrl('/heart-rate');
   }

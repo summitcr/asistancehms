@@ -114,7 +114,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
   //Metodo que busca el id de la persona asociada para obtener su informacion
   asociatedPersonLocation() {
-    if (this.urlId != 0) {
+    if (this.urlId != 0 && this.urlId.length <= 10) {
       this.service.get(this.params.params.beaconurl + "/tracker/person/alert/" + this.urlId).subscribe((resp) => {
         this.trackerPerson = resp;
         this.personAlerts = this.trackerPerson.alerts;
@@ -274,18 +274,21 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }
 
   setRoute() {
-    var dir = {
-      "from": { "placeId": "5d7448f0ce095b0051f9aa3d" },
-      "to": { "placeId": "5d8e6bb4478407002c9ff811" },
-      "options": { "isAccessible": false }
-    };
-
-    this.service.save(this.services.mapwizeParams.searchdirection, dir).subscribe((response) => {
-      this.mapwizeMap.setDirection(response);
-    }, (err) => {
-
-      console.error(err);
-    });
+    //el from placeId es el this.trackBeacons, por el momento esta alambrado para probar los tiquetes
+    if (this.urlId != 0 && this.urlId.length >= 10){
+      var dir = {
+        "from": { "placeId": "5df0831fc03d5f0016312c3a" },
+        "to": { "placeId": this.urlId },
+        "options": { "isAccessible": false }
+      };
+  
+      this.service.save(this.services.mapwizeParams.searchdirection, dir).subscribe((response) => {
+        this.mapwizeMap.setDirection(response);
+      }, (err) => {
+  
+        console.error(err);
+      });
+    }
   }
 
   ngAfterViewInit() {
@@ -309,6 +312,9 @@ export class Tab1Page implements OnInit, AfterViewInit {
         this.timerBeacons();
         //this.timerDoBinary();
         this.timerWayFinding();
+
+        //Metodo de prueba para las rutas de los tiquetes...
+        this.setRoute();
       });
     }, 1000);
 

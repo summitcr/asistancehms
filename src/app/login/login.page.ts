@@ -50,7 +50,7 @@ export class LoginPage implements OnInit {
     this.getUserLogged();
     setTimeout(() => {
       if(this.person.person != null){
-        this.router.navigateByUrl('/menu/first/tabs/tab1/'+'0');
+        this.router.navigateByUrl('/menu/first/tabs/tab2');
       }
     }, 1000);
   }
@@ -73,7 +73,7 @@ export class LoginPage implements OnInit {
       //this.storeService.localSave(this.localParam.localParam.alerts, 10);
       this.getAsociatedAlerts();
       this.getBeconsPoints();
-      this.router.navigateByUrl('/menu/first/tabs/tab1/' + '0');
+      this.router.navigateByUrl('/menu/first/tabs/tab2');
 
       console.log(this.userdata);
     }, (err) => {

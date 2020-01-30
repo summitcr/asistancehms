@@ -27,6 +27,7 @@ export class NotificationPage implements OnInit, AfterViewInit {
   person: any;
   asocietedName: any;
   timeSpent: any;
+  notification: string = "Notificaciones";
 
   constructor(private modalController: ModalController, 
     private router: Router, 
@@ -71,27 +72,31 @@ export class NotificationPage implements OnInit, AfterViewInit {
   }
 
   getAsociatedAlerts(){
-    let id;
-    for(let i = 0; i < this.asociatedId.length; i++){
-      id = this.asociatedId[i];
-      this.services.get(this.params.params.beaconurl+"/tracker/person/alert/"+id).subscribe((resp) => {
-        this.asociatedIdAlert = resp;
-        this.asociatedAlert = this.asociatedIdAlert.alerts;
-        
-        if(this.asociatedAlert != null){
-          this.alertInfo.push(this.asociatedAlert);
-          console.log(this.alertInfo);
-          this.timeSpent = this.transform(this.asociatedAlert.timespent);
-          for(let x = 0; x < this.person.asocietedpeople.length; x++){
-            if(this.person.asocietedpeople[x].id == id){
-              this.asocietedName = this.person.asocietedpeople[x].name;
+    if(this.asociatedId == null){
+      this.notification = "No hay notificaciones";
+    }else{
+      let id;
+      for(let i = 0; i < this.asociatedId.length; i++){
+        id = this.asociatedId[i];
+        this.services.get(this.params.params.beaconurl+"/tracker/person/alert/"+id).subscribe((resp) => {
+          this.asociatedIdAlert = resp;
+          this.asociatedAlert = this.asociatedIdAlert.alerts;
+          
+          if(this.asociatedAlert != null){
+            this.alertInfo.push(this.asociatedAlert);
+            console.log(this.alertInfo);
+            this.timeSpent = this.transform(this.asociatedAlert.timespent);
+            for(let x = 0; x < this.person.asocietedpeople.length; x++){
+              if(this.person.asocietedpeople[x].id == id){
+                this.asocietedName = this.person.asocietedpeople[x].name;
+              }
             }
           }
-        }
-
-      }, (err) => {
-        console.error(err);
-      });
+  
+        }, (err) => {
+          console.error(err);
+        });
+      }
     }
   }
 

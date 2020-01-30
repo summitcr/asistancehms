@@ -28,6 +28,11 @@ export class Tab2Page implements OnInit, AfterViewInit {
   ticketName: string= "Jairo García";
   ticketUbi: string= "Entrada Principal";
   ticketDesti: string= "Pasillo Mujeres Norte";
+  person: any;
+  beaconsPoints: any;
+  lastBeacon: any;
+  timeLeft: number = 60;
+  interval;
 
   constructor(private services: CrudService,
     private params: UtilsService,
@@ -49,15 +54,32 @@ export class Tab2Page implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(){
-    this.getAsociatedId();
+    
     setTimeout(() => {
+      //this.getBeaconsPointLocal();
+      //this.getLastBeacon();
+      this.getUserLogged();
+      this.getAsociatedId();
       this.getAsociatedAlerts();
+      //this.getUserPosition();
     }, 1000);
   }
 
   getTicketInfo(){
     if(this.ticketNumber != ""){
       this.setVibration();
+      this.interval = setInterval(() => {
+        if(this.timeLeft > 0) {
+          this.timeLeft--;
+          //console.log(this.timeLeft);
+          if(this.timeLeft == 30){
+            this.alert("Faltan 30 segundos");
+            console.log("Faltan 30 segundos");
+          }
+        } else {
+          this.timeLeft = 60;
+        }
+      },1000)
     }
   }
   getTicketName(){
@@ -82,7 +104,41 @@ export class Tab2Page implements OnInit, AfterViewInit {
   }
 
   go(id) {
-    this.router.navigateByUrl('/menu/first/tabs/tab1/'+'3');
+    this.router.navigateByUrl('/menu/first/tabs/tab1/'+'5df0825d1bb18c001609e8e4');
+  }
+
+  goNotification() {
+    this.router.navigateByUrl('menu/third');
+  }
+
+  //Metodo que trae los datos del usuario loggeado de manera local
+  getUserLogged() {
+    this.storeService.localGet(this.localParam.localParam.userLogged).then((resp) => {
+      this.person = resp;
+      this.ticketName = this.person.person.name;
+      //console.log(this.person);
+    }, (err) => {
+      console.error(err);
+    });
+  }
+
+  //Metodo que trae los beacons guardados de manera local
+  getBeaconsPointLocal() {
+    this.storeService.localGet(this.localParam.localParam.gatewaybeacons).then((resp) => {
+      this.beaconsPoints = resp;
+      console.log(this.beaconsPoints);
+    }, (err) => {
+      console.error(err);
+    });
+  }
+
+  //Metodo que trae el ultimo beacon detectado
+  getLastBeacon() {
+    this.storeService.localGet(this.localParam.localParam.lastBeacon).then((resp) => {
+      this.lastBeacon = resp;
+    }, (err) => {
+      console.error(err);
+    });
   }
 
   getAsociatedId(){
@@ -166,6 +222,50 @@ export class Tab2Page implements OnInit, AfterViewInit {
         }
       })
       .catch((e: any) => console.log('Error is', e));
+  }
+
+  binarySearch(items, value) {
+    let startIndex = 0,
+      stopIndex = items.length - 1,
+      middle = Math.floor((stopIndex + startIndex) / 2);
+
+    while (items[middle] != value && startIndex < stopIndex) {
+
+      //adjust search area
+      if (value < items[middle]) {
+        stopIndex = middle - 1;
+      } else if (value > items[middle]) {
+        startIndex = middle + 1;
+      }
+
+      //recalculate middle
+      middle = Math.floor((stopIndex + startIndex) / 2);
+    }
+
+    //make sure it's the right value
+    return (items[middle] != value) ? -1 : middle;
+  }
+
+  //Metodo que busca la posicion del usuario loggeado segun el ultimo beacon leido
+  getUserPosition() {
+    let beaconMac;
+    let index;
+    let value;
+    let items = [];
+    let shortMac;
+
+    for (let i = 0; i < this.beaconsPoints.length; i++) {
+      items.push(this.beaconsPoints[i].shortid);
+    }
+
+    beaconMac = this.lastBeacon.id;
+    shortMac = beaconMac.replace(/:/g, "");
+    value = shortMac.substr(shortMac.length - 5);
+    index = this.binarySearch(items, value);
+
+    if (index > -1) {
+      this.ticketUbi = this.beaconsPoints[index].point.description;
+    }
   }
 
 
