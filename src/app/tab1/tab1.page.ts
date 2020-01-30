@@ -572,6 +572,10 @@ export class Tab1Page implements OnInit, AfterViewInit {
       this.lastBeaconsLat = Number(this.beaconsPoints[index].point.lat);
       this.lastBeaconsLong = Number(this.beaconsPoints[index].point.lon);
       this.personLocation();
+      this.mapwizeMap.flyTo({
+        center: {lon: this.lastBeaconsLong, lat: this.lastBeaconsLat},
+        zoom: 18,
+      });
     }
     //this.personLocation();
 
