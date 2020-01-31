@@ -73,7 +73,9 @@ export class LoginPage implements OnInit {
       //this.storeService.localSave(this.localParam.localParam.alerts, 10);
       this.getAsociatedAlerts();
       this.getBeconsPoints();
-      this.router.navigateByUrl('/menu/first/tabs/tab2');
+      setTimeout(() => {
+        this.router.navigateByUrl('/menu/first/tabs/tab2');
+      }, 0);
 
       console.log(this.userdata);
     }, (err) => {
@@ -98,6 +100,7 @@ export class LoginPage implements OnInit {
     for(let i = 0; i < this.userdata.asocietedpeople.length; i++){
       id = this.userdata.asocietedpeople[i].id;
       asociatedId.push(id);
+      this.storeService.localSave(this.localParam.localParam.alertsId, asociatedId);
       this.service.get(this.params.params.beaconurl+"/tracker/person/alert/"+id).subscribe((resp) => {
         this.personAlert = resp;
         if(this.personAlert.alerts.length < 1){
@@ -111,7 +114,6 @@ export class LoginPage implements OnInit {
           this.bellAlert ++;
           this.storeService.localSave(this.localParam.localParam.alerts, this.bellAlert);
         }
-        this.storeService.localSave(this.localParam.localParam.alertsId, asociatedId);
       }, (err) => {
         console.error(err);
       });

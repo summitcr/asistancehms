@@ -72,9 +72,6 @@ export class NotificationPage implements OnInit, AfterViewInit {
   }
 
   getAsociatedAlerts(){
-    if(this.asociatedId == null){
-      this.notification = "No hay notificaciones";
-    }else{
       let id;
       for(let i = 0; i < this.asociatedId.length; i++){
         id = this.asociatedId[i];
@@ -91,13 +88,14 @@ export class NotificationPage implements OnInit, AfterViewInit {
                 this.asocietedName = this.person.asocietedpeople[x].name;
               }
             }
+          }else if(this.asociatedAlert == null){
+            this.notification = "No hay notificaciones";
           }
   
         }, (err) => {
           console.error(err);
         });
       }
-    }
   }
 
   times = {

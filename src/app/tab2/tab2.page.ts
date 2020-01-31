@@ -26,8 +26,8 @@ export class Tab2Page implements OnInit, AfterViewInit {
   bellAlert: number = 0;
   ticketNumber: string = "v777";
   ticketName: string= "Jairo García";
-  ticketUbi: string= "Entrada Principal";
-  ticketDesti: string= "Pasillo Mujeres Norte";
+  ticketUbi: string= "Pasillo Mujeres Sur";
+  ticketDesti: string= "Pasillo Hombres Norte";
   person: any;
   beaconsPoints: any;
   lastBeacon: any;
@@ -55,11 +55,11 @@ export class Tab2Page implements OnInit, AfterViewInit {
 
   ngAfterViewInit(){
     
+    this.getAsociatedId();
     setTimeout(() => {
       //this.getBeaconsPointLocal();
       //this.getLastBeacon();
       this.getUserLogged();
-      this.getAsociatedId();
       this.getAsociatedAlerts();
       //this.getUserPosition();
     }, 1000);
@@ -104,7 +104,7 @@ export class Tab2Page implements OnInit, AfterViewInit {
   }
 
   go(id) {
-    this.router.navigateByUrl('/menu/first/tabs/tab1/'+'5df0825d1bb18c001609e8e4');
+    this.router.navigateByUrl('/menu/first/tabs/tab1/'+'5df081fbcfc8cf0016d9eaa5');
   }
 
   goNotification() {
@@ -144,6 +144,7 @@ export class Tab2Page implements OnInit, AfterViewInit {
   getAsociatedId(){
     this.storeService.localGet(this.localParam.localParam.alertsId).then((resp) => {
       this.asociatedId = resp;
+      console.log(this.asociatedId);
     }, (err) => {
       console.error(err);
     });
@@ -153,6 +154,7 @@ export class Tab2Page implements OnInit, AfterViewInit {
   getAsociatedAlerts(){
     //let asociatedId = [];
     let id;
+    console.log(this.asociatedId);
     for(let i = 0; i < this.asociatedId.length; i++){
       id = this.asociatedId[i];
       //asociatedId.push(id);
