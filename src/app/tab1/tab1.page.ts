@@ -241,7 +241,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
         this.mapwizeMap.removeMarkers();
         this.personLoggedLocation();
       }
-    }, 15000);
+    }, 8000);
   }
 
 
@@ -456,7 +456,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
     this.interval = setInterval(() => {
       this.ScanBeaconsAll();
 
-    }, 10000);
+    }, 5000);
   }
   timerDoBinary() {
     setTimeout(() => {
@@ -469,7 +469,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   timerWayFinding() {
     this.interval = setInterval(() => {
       this.testWayFinding();
-    }, 12000);
+    }, 4000);
   }
   //scanea todos los bluetooth de baja carga con los rssi
   ScanBeaconsAll() {
@@ -565,11 +565,11 @@ export class Tab1Page implements OnInit, AfterViewInit {
     bdataArray.sort((a, b) => a.rssi - b.rssi);
     bdataArray.reverse();
 
-    console.log(beaconsId);
-    console.log(value);
-    console.log(index);
-    console.log(lastFive);
-    console.log(bdataArray);
+    //console.log("Devices ID "+beaconsId);
+    //console.log(value);
+    console.log("Index loco " +index);
+    console.log("Last five="+lastFive);
+    console.log("bdatarray "+bdataArray);
 
 
     this.storeService.localSave(this.localParam.localParam.lastBeacon, bdataArray[0]);

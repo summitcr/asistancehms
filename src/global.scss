@@ -24,7 +24,24 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
-
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
 #mapwize {
     position: absolute; top:0; bottom:0; left: 0; right: 0;
+  }
+
+  .secondary{
+    color: white !important;
+    text-align: center !important;
+    background-color: #203B69 !important;
+    
+  }
+  .sc-ion-alert-md{
+    justify-content: center !important;
+  }
+  .alert-head{
+    text-align: center !important;
+    font-weight: bold;
+    //font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    //font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-family: 'Open Sans', 'Open-Sans-Bold', sans-serif;
   }

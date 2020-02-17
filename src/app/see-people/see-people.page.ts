@@ -2,7 +2,7 @@ import { Component, OnInit, NgZone, AfterViewInit } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
 import { BeaconModel, BeaconService } from '../services/beacon.service';
 import { IBeacon } from '@ionic-native/ibeacon/ngx';
-import { Platform, Events, NavController, AlertController, ModalController } from '@ionic/angular';
+import { Platform, Events, NavController, AlertController, ModalController, ActionSheetController, LoadingController } from '@ionic/angular';
 import { CrudService } from '../services/crud.service';
 import { UtilsService } from '../services/utils.service';
 import { LocalNotifications, ELocalNotificationTriggerUnit } from '@ionic-native/local-notifications/ngx';
@@ -42,7 +42,8 @@ export class SeePeoplePage implements AfterViewInit {
   bellAlert: number = 0;
   beaconsPoints: any;
   lastBeacon: any;
-
+  myurl = new URL("http://www.google.com");
+  iab: any;
   constructor(
     private ble: BLE,
     private ngZone: NgZone,
@@ -58,10 +59,12 @@ export class SeePeoplePage implements AfterViewInit {
     private modalController: ModalController,
     private storeService: StorageService,
     private localParam: UtilStorageService,
-    private toast: Toast) {
+    private toast: Toast,
+    public actionSheetController: ActionSheetController,
+    public loadingCtrl: LoadingController ) {
 
     this.zone = new NgZone({ enableLongStackTrace: false });
-    this.platform.ready().then(() => {
+    /*this.platform.ready().then(() => {
       this.localNotificactions.on('click').subscribe(res => {
         let msg = res.data ? res.mydata : '';
         this.setVibration();
@@ -73,7 +76,7 @@ export class SeePeoplePage implements AfterViewInit {
         this.showAlert(res.title, res.text, msg);
 
       });
-    });
+    });*/
   }
 
   ngAfterViewInit() {
@@ -115,7 +118,7 @@ export class SeePeoplePage implements AfterViewInit {
     );
   }
 
-  getLastBeacon(){
+  getLastBeacon() {
     this.storeService.localGet(this.localParam.localParam.lastBeacon).then((resp) => {
       this.lastBeacon = resp;
     }, (err) => {
@@ -127,9 +130,9 @@ export class SeePeoplePage implements AfterViewInit {
     console.log('Discovered' + JSON.stringify(device, null, 2));
     this.ngZone.run(() => {
       this.devices.push(device)
-      for(let i = 0; i < this.devices.length; i++) {
-        for(let j = 0; j < this.devices.length; j++) {
-          if(this.devices[i].rssi > this.devices[j].rssi) {
+      for (let i = 0; i < this.devices.length; i++) {
+        for (let j = 0; j < this.devices.length; j++) {
+          if (this.devices[i].rssi > this.devices[j].rssi) {
             this.ble.connect(this.devices[i].id);
             this.storeService.localSave(this.localParam.localParam.lastBeacon, this.devices[i]);
             console.log(this.devices[i].rssi);
@@ -155,14 +158,14 @@ export class SeePeoplePage implements AfterViewInit {
         rssi: 75
       },
     ];
-      for(let i = 0; i < beacon.length; i++) {
-        if(beacon[i].rssi > 70){
-          this.ble.connect(beacon[i].id);
-          this.storeService.localSave(this.localParam.localParam.lastBeacon, beacon[i]);
-          console.log("entra al if del getLastBeacon");
-        }
+    for (let i = 0; i < beacon.length; i++) {
+      if (beacon[i].rssi > 70) {
+        this.ble.connect(beacon[i].id);
+        this.storeService.localSave(this.localParam.localParam.lastBeacon, beacon[i]);
+        console.log("entra al if del getLastBeacon");
       }
-      //console.log(device)
+    }
+    //console.log(device)
   }
 
   //lectura de beacons
@@ -214,6 +217,18 @@ export class SeePeoplePage implements AfterViewInit {
     });
 
   }
+  send() {
+
+    this.localNotificactions.schedule({
+      title: 'Attention',
+      text: 'Jairo Notification',
+      trigger: { at: new Date(new Date().getTime() + 6000) },
+      led: 'ff0000',
+      foreground: true
+    });
+
+  }
+
 
   recurringNotification() {
     this.localNotificactions.schedule({
@@ -260,6 +275,7 @@ export class SeePeoplePage implements AfterViewInit {
   // fin de notificaciones
 
   go(id) {
+    //this.presentLoadingDefault();
     this.router.navigateByUrl('/menu/first/tabs/tab1/' + id);
   }
 
@@ -316,36 +332,36 @@ export class SeePeoplePage implements AfterViewInit {
     });
   }
 
-  binarySearch(items, value){
+  binarySearch(items, value) {
     let startIndex = 0,
-        stopIndex = items.length - 1,
-        middle = Math.floor((stopIndex + startIndex)/2);
- 
-    while(items[middle] != value && startIndex < stopIndex){
- 
-        //adjust search area
-        if (value < items[middle]){
-            stopIndex = middle - 1;
-        } else if (value > items[middle]){
-            startIndex = middle + 1;
-        }
- 
-        //recalculate middle
-        middle = Math.floor((stopIndex + startIndex)/2);
+      stopIndex = items.length - 1,
+      middle = Math.floor((stopIndex + startIndex) / 2);
+
+    while (items[middle] != value && startIndex < stopIndex) {
+
+      //adjust search area
+      if (value < items[middle]) {
+        stopIndex = middle - 1;
+      } else if (value > items[middle]) {
+        startIndex = middle + 1;
+      }
+
+      //recalculate middle
+      middle = Math.floor((stopIndex + startIndex) / 2);
     }
- 
+
     //make sure it's the right value
     return (items[middle] != value) ? -1 : middle;
   }
 
-  doBinary(){
+  doBinary() {
     /*let items = [];
     for(let i = 0; i < this.beaconsPoints.length; i++){
       items.push(this.beaconsPoints[i].externalid);
     }
     console.log(items);*/
     let beaconsId;
-    for(let i = 0; i < this.devices.length; i++){
+    for (let i = 0; i < this.devices.length; i++) {
       beaconsId = this.devices[i].id;
     }
     let items = ["A54SSA", "C21510", "PA5454", "SA54AS"];
@@ -354,5 +370,65 @@ export class SeePeoplePage implements AfterViewInit {
     let index = this.binarySearch(items, value);
 
     console.log(index);
+  }
+
+
+  //ejemplos de alert
+  async presentAlert() {
+    const alert = await this.alertCtrl.create({
+      header: '¡Consejo del día!',
+      subHeader: '',
+      message: 
+      'Le recomendamos: <br> *Si te duela cabeza <br> <br><a href="https://www.fischelenlinea.com/detalle-producto?id=698&name=Ofertas&cat=46&color=6&ProName=IBUPROFENO%20600%20MG%20TABLETAS%20VIA%20ORAL"><img class="img-resp" src="../../assets/img/ibu.png"></img></a>',
+      buttons: [{
+        text: 'Cancel',
+        role: 'Cancel',
+        handler: () => {
+          console.log('you clicked me');
+        }
+      },
+      {
+        text: 'Comprar Aqui',
+        cssClass: 'secondary',
+        handler: () => {
+          console.log('Seconds handler')
+          window.location.href='https://www.fischelenlinea.com/detalle-producto?id=698&name=Ofertas&cat=46&color=6&ProName=IBUPROFENO%20600%20MG%20TABLETAS%20VIA%20ORAL';
+        }
+      },
+      {
+        text: 'Open action',
+        cssClass: 'primary',
+        handler: async () => {
+          const action = await this.actionSheetController.create({
+            header: 'Farmacia Fisher',
+            buttons: [
+              {
+                text: 'Comprar ',
+                icon: 'cart',
+                handler: () => {
+                  window.location.href='https://www.fischelenlinea.com/detalle-producto?id=698&name=Ofertas&cat=46&color=6&ProName=IBUPROFENO%20600%20MG%20TABLETAS%20VIA%20ORAL';
+                }
+              },
+            ]
+          });
+          await action.present();
+        }
+      },
+      ]
+    });
+    await alert.present();
+  }
+
+//spinner de carga
+  async presentLoadingDefault() {
+    let loading = await this.loadingCtrl.create({
+      message: 'Please wait...'
+    });
+  
+    loading.present();
+  
+    setTimeout(() => {
+      loading.dismiss();
+    }, 4000);
   }
 }//fin de la class

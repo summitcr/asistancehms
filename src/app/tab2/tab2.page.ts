@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CrudService } from '../services/crud.service';
 import { UtilsService } from '../services/utils.service';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
-import { Platform } from '@ionic/angular';
+import { Platform, LoadingController } from '@ionic/angular';
 import { Toast } from '@ionic-native/toast/ngx';
 import { StorageService } from '../services/storage.service';
 import { UtilStorageService } from '../services/util-storage.service';
@@ -24,14 +24,15 @@ export class Tab2Page implements OnInit, AfterViewInit {
   asociatedId: any;
   asociatedIdAlert: any;
   bellAlert: number = 0;
-  ticketNumber: string = "v777";
-  ticketName: string= "Jairo García";
-  ticketUbi: string= "Pasillo Mujeres Sur";
-  ticketDesti: string= "Pasillo Hombres Norte";
+  ticketNumber: string;
+  ticketName: string;
+  ticketUbi: string;
+  ticketDesti: string;
   person: any;
   beaconsPoints: any;
   lastBeacon: any;
   timeLeft: number = 60;
+  content: String;
   interval;
 
   constructor(private services: CrudService,
@@ -40,17 +41,18 @@ export class Tab2Page implements OnInit, AfterViewInit {
     private localParam: UtilStorageService, 
     private qrScanner: QRScanner,
     private toast: Toast,
-    private router: Router)
+    private router: Router,
+    public loadingCtrl: LoadingController)
    {
 
    }
 
   ngOnInit() {
     //this.getInfoTickets();
-    this.getTicketInfo();
-    this. getTicketName();
-    this. getTicketUbi();
-    this.getTicketDesti();
+    //this.getTicketInfo();
+    //this. getTicketName();
+    //this. getTicketUbi();
+    //this.getTicketDesti();
   }
 
   ngAfterViewInit(){
@@ -62,18 +64,25 @@ export class Tab2Page implements OnInit, AfterViewInit {
       this.getUserLogged();
       this.getAsociatedAlerts();
       //this.getUserPosition();
+      this.presentLoadingDefault()
     }, 1000);
+    setTimeout(() => {
+       this.getTicketInfo();
+       this.getTicketUbi();
+       this.getTicketDesti();
+    }, 5000);
   }
 
   getTicketInfo(){
     if(this.ticketNumber != ""){
+      this.ticketNumber="A36";
       this.setVibration();
       this.interval = setInterval(() => {
         if(this.timeLeft > 0) {
           this.timeLeft--;
           //console.log(this.timeLeft);
           if(this.timeLeft == 30){
-            this.alert("Faltan 30 segundos");
+            //this.alert("Faltan 30 segundos");
             console.log("Faltan 30 segundos");
           }
         } else {
@@ -89,12 +98,12 @@ export class Tab2Page implements OnInit, AfterViewInit {
   }
   getTicketUbi(){
     if(this.ticketUbi != ""){
-      this.setVibration();
+      this.ticketUbi= "Pasillo Mujeres Sur";
     }
   }
   getTicketDesti(){
     if(this.ticketDesti != ""){
-      this.setVibration();
+      this.ticketDesti= "Pasillo Hombres Norte";
     }
   }
 
@@ -104,6 +113,7 @@ export class Tab2Page implements OnInit, AfterViewInit {
   }
 
   go(id) {
+    this.presentLoadingDefaults();
     this.router.navigateByUrl('/menu/first/tabs/tab1/'+'5df081fbcfc8cf0016d9eaa5');
   }
 
@@ -270,5 +280,27 @@ export class Tab2Page implements OnInit, AfterViewInit {
     }
   }
 
+//alert
+  async presentLoadingDefault() {
+  let loading = await this.loadingCtrl.create({
+    message: 'Please wait...'
+  });
 
+  loading.present();
+
+  setTimeout(() => {
+    loading.dismiss();
+  }, 4000);
+}
+async presentLoadingDefaults() {
+  let loading = await this.loadingCtrl.create({
+    message: 'Please wait...'
+  });
+
+  loading.present();
+
+  setTimeout(() => {
+    loading.dismiss();
+  }, 4000);
+}
 }//fin de la classs tab2

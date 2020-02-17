@@ -10,7 +10,26 @@
 .btnGO{
     float:right;
     margin: 5px;
+  
 }
 .boldName{
     font-weight: bold;
+}
+.img-resp{
+    text-align: center;
+}
+
+ion-card{
+    --background:#EFEEEE;
+    border:  1px solid rgba(255,255,255,0.20);
+    border-radius: 12px;
+    box-shadow: -6px -6px 26px 0 rgba(255,255,255,0.83);
+    box-shadow: 6px 6px 16px 0 rgba(217,210,200,0.51);
+
+}
+.colorB{
+    border-radius: 50px;
+--background: #203B69;
+box-shadow: inset 20px 20px 60px #1b3259, 
+            inset -20px -20px 60px #254479;
 }
