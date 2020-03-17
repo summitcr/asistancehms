@@ -456,7 +456,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
     this.interval = setInterval(() => {
       this.ScanBeaconsAll();
 
-    }, 5000);
+    }, 3000);
   }
   timerDoBinary() {
     setTimeout(() => {
@@ -469,7 +469,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   timerWayFinding() {
     this.interval = setInterval(() => {
       this.testWayFinding();
-    }, 4000);
+    }, 2000);
   }
   //scanea todos los bluetooth de baja carga con los rssi
   ScanBeaconsAll() {

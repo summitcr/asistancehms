@@ -379,7 +379,7 @@ export class SeePeoplePage implements AfterViewInit {
       header: '¡Consejo del día!',
       subHeader: '',
       message: 
-      'Le recomendamos: <br> *Si te duela cabeza <br> <br><a href="https://www.fischelenlinea.com/detalle-producto?id=698&name=Ofertas&cat=46&color=6&ProName=IBUPROFENO%20600%20MG%20TABLETAS%20VIA%20ORAL"><img class="img-resp" src="../../assets/img/ibu.png"></img></a>',
+      'Le recomendamos: <br><br> *Un super descuento 25% <br> <br><a href="https://www.fischelenlinea.com/detalle-producto?id=698&name=Ofertas&cat=46&color=6&ProName=IBUPROFENO%20600%20MG%20TABLETAS%20VIA%20ORAL"><img class="img-resp" src="../../assets/img/an.png"></img></a>',
       buttons: [{
         text: 'Cancel',
         role: 'Cancel',

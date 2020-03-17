@@ -28,11 +28,19 @@
           <br>
             <ion-item>
                 <ion-icon name="pricetag" slot="end"></ion-icon>
-              <ion-input [(ngModel)]="ticketNumber" readonly="true"></ion-input>
+              <ion-input [(ngModel)]="ticketNumber" readonly="true" style="
+              font-weight: bold;
+              font-size: xx-large;
+          "></ion-input>
              
             </ion-item>
             <br>
+            <ion-item>
+              <ion-icon name="people" slot="end"></ion-icon>
+            <ion-input [(ngModel)]="NumberPosition" readonly="true"></ion-input>
            
+          </ion-item>
+          <br>
             <ion-item>
              
               <ion-icon name="pin" slot="end"></ion-icon>
@@ -41,7 +49,8 @@
             </ion-item>
             <br>
             <ion-item>
-              <ion-input [(ngModel)]="ticketDesti" readonly="true"></ion-input>
+              <ion-input [(ngModel)]="ticketDesti" readonly="true"></ion-input> 
+              <br>
               <ion-button class="iconC" (click)="go()"> <ion-icon  name="paper-plane" slot="icon-only"></ion-icon></ion-button>
             </ion-item>
             <br>
