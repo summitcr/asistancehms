@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { HeartrateComponent } from './heartrate/heartrate.component';
+import { CovidComponent } from './covid/covid.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -11,7 +12,10 @@ const routes: Routes = [
   { path: 'heart-rate', component: HeartrateComponent },
   { path: 'modal-page', loadChildren: './modal-page/modal-page.module#ModalPagePageModule' },
   { path: 'modal-notification', loadChildren: './modal-notification/modal-notification.module#ModalNotificationPageModule' },
- 
+  { path: 'Covid-19', component: CovidComponent },
+  { path: 'coronavirus', loadChildren: './coronavirus/coronavirus.module#CoronavirusPageModule' },  { path: 'confirmed', loadChildren: './confirmed/confirmed.module#ConfirmedPageModule' },
+
+
   
 
  

@@ -27,11 +27,13 @@ import { ModalNotificationPage } from './modal-notification/modal-notification.p
 import { HeartrateComponent } from './heartrate/heartrate.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CovidComponent } from './covid/covid.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [AppComponent, ModalPagePage, ModalNotificationPage,HeartrateComponent],
+  declarations: [AppComponent, ModalPagePage, ModalNotificationPage,HeartrateComponent,CovidComponent],
   entryComponents: [ModalPagePage,ModalNotificationPage],
-  imports: [BrowserModule,BrowserAnimationsModule, IonicModule.forRoot(), NgxChartsModule, AppRoutingModule,HttpClientModule,AutoCompleteModule,IonicStorageModule.forRoot()],
+  imports: [BrowserModule,BrowserAnimationsModule, IonicModule.forRoot(), NgxChartsModule, AppRoutingModule,HttpClientModule,AutoCompleteModule,IonicStorageModule.forRoot(),FormsModule, ReactiveFormsModule],
   providers: [
     StatusBar,
     SplashScreen,

@@ -19,9 +19,9 @@ icon:'home'
 url:'/menu/seconds',
 icon:'contacts'
 },
-{ title: 'Notificaciones',
-url:'/menu/third',
-icon:'notifications'
+{ title: 'Diagnóstico COVID-19',
+url:'/menu/four',
+icon:'barcode'
 },
 { title: 'Signos',
 url:'/heart-rate',

@@ -6,6 +6,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { MenuPage } from './menu.page';
+import { CovidComponent } from '../covid/covid.component';
+
 
 const routes: Routes = [
   {
@@ -28,6 +30,8 @@ const routes: Routes = [
       path:'third',
       loadChildren: '../notification/notification.module#NotificationPageModule'
     },
+    { path: 'four', 
+    loadChildren: '../coronavirus/coronavirus.module#CoronavirusPageModule' },
   ]
   }
 ];
@@ -37,7 +41,8 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+
   ],
   declarations: [MenuPage]
 })
