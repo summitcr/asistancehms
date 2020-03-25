@@ -34,6 +34,8 @@ export class Tab2Page implements OnInit, AfterViewInit {
   lastBeacon: any;
   timeLeft: number = 60;
   content: String;
+  getSymptoms: any;
+  getAnotherCases: any;
   interval;
 
   constructor(private services: CrudService,
@@ -49,7 +51,6 @@ export class Tab2Page implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.getInfoTickets();
     //this.getTicketInfo();
     //this. getTicketName();
     //this. getTicketUbi();
@@ -73,7 +74,32 @@ export class Tab2Page implements OnInit, AfterViewInit {
       this.getTicketUbi();
       this.getTicketDesti();
       this.getNumberPosition();
+
+      this.getDbSymptoms();
+      this.getDbCases();
     }, 5000);
+  }
+
+  getDbSymptoms(){
+    this.services.get('http://localhost:61362/api/symptoms').subscribe((resp) => {
+      this.getSymptoms = resp;
+      this.storeService.localSave(this.localParam.localParam.symptoms, this.getSymptoms);
+
+      console.log(this.getSymptoms);
+    }, (err) => {
+      console.error(err);
+    });
+  }
+
+  getDbCases(){
+    this.services.get('http://localhost:61362/api/anotherCases').subscribe((resp) => {
+      this.getAnotherCases = resp;
+      this.storeService.localSave(this.localParam.localParam.anotherCases, this.getAnotherCases);
+
+      console.log(this.getAnotherCases);
+    }, (err) => {
+      console.error(err);
+    });
   }
 
   getTicketInfo() {
@@ -205,16 +231,6 @@ export class Tab2Page implements OnInit, AfterViewInit {
         console.log(toast);
       }
     );
-  }
-
-  //Metodo de prueba del api de los tiquetes
-  getInfoTickets() {
-    this.services.get('http://localhost:56673/api/orchestra_createTicket1/1').subscribe((resp) => {
-      this.tickets = resp;
-      console.log(this.tickets);
-    }, (err) => {
-      console.error(err);
-    });
   }
 
   QR() {

@@ -28,13 +28,17 @@
       <ion-col>
         <div>
           <img size="small" src="../../assets/img/happy.png" alt="Imagen de cara feliz" class="img-responsive">
-          <ion-button shape="round" expand="full" routerLink="/confirmed" class="boton1">Bien</ion-button>
+          <ion-button shape="round" expand="full" routerLink="/confirmed" class="boton1" (click)="healthyStatus()">
+            Bien
+          </ion-button>
         </div>
       </ion-col>
       <ion-col>
         <div>
           <img size="small" src="../../assets/img/sad.png" alt="Imagen de cara triste" class="img-responsive">
-          <ion-button shape="round" expand="full" routerLink="/Covid-19" class="boton2">Mal</ion-button>
+          <ion-button shape="round" expand="full" routerLink="/Covid-19" class="boton2" (click)="unhealthyStatus()">
+            Mal
+          </ion-button>
         </div>
       </ion-col>
     </ion-row>
