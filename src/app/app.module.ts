@@ -29,9 +29,10 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CovidComponent } from './covid/covid.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RegistroCovidPage } from './registro-covid/registro-covid.page';
 
 @NgModule({
-  declarations: [AppComponent, ModalPagePage, ModalNotificationPage,HeartrateComponent,CovidComponent],
+  declarations: [AppComponent, ModalPagePage, ModalNotificationPage,HeartrateComponent,CovidComponent,],
   entryComponents: [ModalPagePage,ModalNotificationPage],
   imports: [BrowserModule,BrowserAnimationsModule, IonicModule.forRoot(), NgxChartsModule, AppRoutingModule,HttpClientModule,AutoCompleteModule,IonicStorageModule.forRoot(),FormsModule, ReactiveFormsModule],
   providers: [
@@ -39,7 +40,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     SplashScreen,
     
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    CrudService,UtilsService, StorageService, UtilStorageService, BeaconService,IBeacon, BLE, Toast, QRScanner, LocalNotifications,SeePeoplePage,
+    CrudService,UtilsService, StorageService, UtilStorageService, BeaconService,IBeacon, BLE, Toast, QRScanner, LocalNotifications,SeePeoplePage,RegistroCovidPage
   ],
   bootstrap: [AppComponent]
 })

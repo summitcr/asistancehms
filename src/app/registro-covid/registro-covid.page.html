@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar class="topMenu">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Summit</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  
+  <ion-card-content>
+    <ion-title class="header-title">Datos Personales</ion-title>
+  <form [formGroup]="myForm" >
+    <ion-list >
+      <ion-item>
+        <ion-icon name="person" slot="end"></ion-icon>
+        <ion-label position="floating">Cédula:</ion-label>
+        <ion-input formControlName="cedula" type="text" placeholder="Cedula"  pattern="^[1-9]\d{4}\d{4}$"></ion-input>
+      </ion-item>
+      <br>
+      <ion-item>
+        <ion-icon name="person" slot="end"></ion-icon>
+        <ion-label position="floating">Nombre Completo:</ion-label>
+        <ion-input formControlName="name" type="text" placeholder="Nombre Completo"></ion-input>
+      </ion-item>
+      <br>
+    
+      <ion-item>
+        <ion-icon name="mail" slot="end"></ion-icon>
+        <ion-label position="floating">Correo electrónico:</ion-label>
+        <ion-input formControlName="email" type="email" placeholder="Email"></ion-input>
+      </ion-item>
+      <br>
+      <ion-item>
+        <ion-icon name="call" slot="end"></ion-icon>
+        <ion-label position="floating">Teléfono:</ion-label>
+        <ion-input formControlName="telefono" type="number" placeholder="Telefono"></ion-input>
+      </ion-item>
+      <br>
+      <ion-item>
+        <ion-icon name="locate" slot="end"></ion-icon>
+        <ion-label position="floating">Dirección:</ion-label>
+        <ion-input formControlName="direccion" type="text" placeholder="Dirección"></ion-input>
+      </ion-item>
+      <br>
+      <ion-item>
+        <ion-icon name="calendar" slot="end"></ion-icon>
+        <ion-label position="floating">Fecha de nacimiento:</ion-label>
+        <ion-datetime formControlName="dateBirth" displayFormat="MM-DD-YYYY" placeholder="MM-DD-YYY"></ion-datetime>
+      </ion-item>
+      <br>
+  
+   
+    </ion-list>
+    <div padding>
+      <ion-button class="btnLoging" expand="block" type="submit" [disabled]="!myForm.valid">Confirmar</ion-button>
+
+    </div>
+  </form>
+</ion-card-content>
+</ion-content>

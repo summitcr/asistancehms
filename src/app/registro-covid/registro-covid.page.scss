@@ -1,10 +1,20 @@
+.topMenu{
+    --background: #203B69;
+    --color: #fff;
+    text-align: right;
+}
+
+
+
 .line-input {
     margin-bottom: 0!important;
     ion-item {
         --border-color: transparent!important;
         --highlight-height: 0;
-        border-radius: 20px;
-        border: 1px solid #575756;
+        border-radius: 12px;
+        --background:#EFEEEE;
+       
+        border:  1px solid rgba(255,255,255,0.20);
         &.item-has-focus {
             border: 1px solid var(--ion-color-primary);
         }
@@ -15,19 +25,6 @@
         }
     }
 }
-.topMenu{
-    --background: #203B69;
-    --color: #fff;
-    text-align: center;
-}
-.logo{
-    text-align: center;
-    width: 132px;
-    margin: 24px auto
-}
-.btnLoging{
-    --background: #203B69;
-}
 ion-card-content{
     --background:#EFEEEE;
     border:  1px solid rgba(255,255,255,0.20);
@@ -36,14 +33,12 @@ ion-card-content{
     box-shadow: 6px 6px 16px 0 rgba(217,210,200,0.51);
 
 }
-.boton1{
-    --background:  #203B69 !important; 
+
+.btnLoging{
+    --background: #203B69;
 }
-.lg_title{
-   text-align: center;
-   font-size: 16px;
-}
-.lg_text1{
+
+.header-title{
     text-align: center;
-    margin-top: 8px;
+    font-weight: bold;
 }
