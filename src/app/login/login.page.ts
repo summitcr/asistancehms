@@ -28,6 +28,7 @@ export class LoginPage implements OnInit {
   person: any;
   personAlert: any;
   bellAlert: number = 0;
+  insured: boolean;
   public loginForm: FormGroup;
   
 
@@ -66,11 +67,11 @@ export class LoginPage implements OnInit {
   login() {
 
     this.service.get(this.params.params.staffurl + "/asocieted/cid/" + this.cedula).subscribe((resp) => {
-
       this.userdata = resp;
-
       this.storeService.localSave(this.localParam.localParam.userLogged, this.userdata);
       //this.storeService.localSave(this.localParam.localParam.alerts, 10);
+      this.insured = true;
+      this.storeService.localSave(this.localParam.localParam.insured, this.insured);
       this.getAsociatedAlerts();
       this.getBeconsPoints();
       setTimeout(() => {
@@ -133,6 +134,11 @@ export class LoginPage implements OnInit {
       this.alert( "Error:Contacte al adminstrador del sistema");
       console.error(err);
     });
+  }
+
+  startCovidForm(){
+    this.insured = false;
+    this.storeService.localSave(this.localParam.localParam.insured, this.insured);
   }
   
 

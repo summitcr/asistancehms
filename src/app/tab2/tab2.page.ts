@@ -74,32 +74,7 @@ export class Tab2Page implements OnInit, AfterViewInit {
       this.getTicketUbi();
       this.getTicketDesti();
       this.getNumberPosition();
-
-      this.getDbSymptoms();
-      this.getDbCases();
     }, 5000);
-  }
-
-  getDbSymptoms(){
-    this.services.get('http://localhost:61362/api/symptoms').subscribe((resp) => {
-      this.getSymptoms = resp;
-      this.storeService.localSave(this.localParam.localParam.symptoms, this.getSymptoms);
-
-      console.log(this.getSymptoms);
-    }, (err) => {
-      console.error(err);
-    });
-  }
-
-  getDbCases(){
-    this.services.get('http://localhost:61362/api/anotherCases').subscribe((resp) => {
-      this.getAnotherCases = resp;
-      this.storeService.localSave(this.localParam.localParam.anotherCases, this.getAnotherCases);
-
-      console.log(this.getAnotherCases);
-    }, (err) => {
-      console.error(err);
-    });
   }
 
   getTicketInfo() {
