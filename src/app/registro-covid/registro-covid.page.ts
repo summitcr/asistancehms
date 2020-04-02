@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { NavController, AlertController } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CrudService } from '../services/crud.service';
 import { UtilsService } from '../services/utils.service';
@@ -47,7 +47,8 @@ export class RegistroCovidPage implements OnInit {
     private params: UtilsService,
     private storeService: StorageService,
     private localParam: UtilStorageService,
-    private router: Router) {
+    private router: Router,
+    private alertCtrl: AlertController) {
     this.myForm = this.createMyForm();
     }
 
@@ -66,10 +67,9 @@ export class RegistroCovidPage implements OnInit {
     let userIdentifier = this.userCed;
     this.services.get(this.params.params.staffurl+"/cid/"+userIdentifier).subscribe((resp) => {
       this.userData = resp;
-      console.log(this.userData);
 
       if(this.userData){
-        console.log("Ya se encuentra registrado");
+        this.presentAlert();
       }
     }, (err) => {
       if(err.status == 404) {
@@ -106,5 +106,23 @@ export class RegistroCovidPage implements OnInit {
       telefono: ['', Validators.required],
       direccion: ['', Validators.required],
     });
+  }
+
+  async presentAlert() {
+    const alert = await this.alertCtrl.create({
+      header: 'Info',
+      subHeader: '',
+      message:
+        'Usted se encuentra registrado, por favor dirijase al inicio e inicie sesión.',
+      buttons: [{
+        text: 'OK',
+        role: 'OK',
+        handler: () => {
+          //console.log('you clicked me');
+        }
+      },
+      ]
+    });
+    await alert.present();
   }
 }
