@@ -38,6 +38,7 @@ export class RegistroCovidPage implements OnInit {
   userAddress: any;
   userStatus: any;
   noInsuredUser: any;
+  diagnosticExists: any;
   myForm: FormGroup;
 
   constructor(
@@ -73,19 +74,31 @@ export class RegistroCovidPage implements OnInit {
       }
     }, (err) => {
       if(err.status == 404) {
-        this.noRegisteredDiagModel.statusId = this.userStatus;
-        this.noRegisteredDiagModel.name = this.userName;
-        this.noRegisteredDiagModel.identifier = this.userCed;
-        this.noRegisteredDiagModel.telephone = this.userTel;
-        this.noRegisteredDiagModel.address = this.userAddress;
+        this.services.get('http://localhost:61362/api/noRegisteredDiagnostics/'+userIdentifier).subscribe((resp) => {
+        this.diagnosticExists = resp;
 
-        this.services.save('http://localhost:61362/api/noRegisteredDiagnostics', this.noRegisteredDiagModel).subscribe((resp) => {
-          this.noInsuredUser = resp;
-          this.storeService.localSave(this.localParam.localParam.insuredUser, this.noInsuredUser);
-          this.router.navigateByUrl('/Covid-19');
-        }, (err) => {
-          console.error(err);
-        });
+        if(this.diagnosticExists){
+          this.presentAlert();
+          //this.router.navigateByUrl('/login');
+        }
+
+      }, (err) => {
+        if(err.status == 404) {
+          this.noRegisteredDiagModel.statusId = this.userStatus;
+          this.noRegisteredDiagModel.name = this.userName;
+          this.noRegisteredDiagModel.identifier = this.userCed;
+          this.noRegisteredDiagModel.telephone = this.userTel;
+          this.noRegisteredDiagModel.address = this.userAddress;
+  
+          this.services.save('http://localhost:61362/api/noRegisteredDiagnostics', this.noRegisteredDiagModel).subscribe((resp) => {
+            this.noInsuredUser = resp;
+            this.storeService.localSave(this.localParam.localParam.insuredUser, this.noInsuredUser);
+            this.router.navigateByUrl('/Covid-19');
+          }, (err) => {
+            console.error(err);
+          });
+        } 
+      });
       }
     });
   }
@@ -113,7 +126,7 @@ export class RegistroCovidPage implements OnInit {
       header: 'Info',
       subHeader: '',
       message:
-        'Usted se encuentra registrado, por favor dirijase al inicio e inicie sesión.',
+        'Usted se encuentra registrado o ya realizó un diagnóstico.',
       buttons: [{
         text: 'OK',
         role: 'OK',
