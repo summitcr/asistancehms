@@ -1,7 +1,7 @@
 
 <ion-header >
     <ion-toolbar class="topMenu" >
-        <ion-title>Welcome</ion-title>
+        <ion-title>welcome</ion-title>
       </ion-toolbar>
 </ion-header>
  
@@ -26,8 +26,8 @@
         <ion-card>
           <ion-card-content>
             <h6 class="lg_title"> <strong>Coronavirus </strong> </h6>
-            <p class="lg_text1">Si usted no se encuentra registrado en SUMMIT, presione <strong>Empezar</strong> para conocer
-              nivel de riesgo y dar seguimiento a sus sintomas y condiciones de salud
+            <p class="lg_text1">If you are not registered in SUMMIT, press <strong>Start</strong> to know the level of risk and follow 
+              up on your symptoms and health conditions
             </p>
             <ion-grid>
       
@@ -37,7 +37,7 @@
                 </ion-col>
                 <ion-col>
                   <div><ion-button shape="round" expand="full" routerLink="/registro-covid" class="boton1" (click)="startCovidForm()">
-                    Empezar
+                    Start
                   </ion-button></div>
                 </ion-col>
                 <ion-col>
@@ -51,8 +51,8 @@
     <ion-list class="line-input"> 
         <ion-item> 
           <ion-icon name="person" slot="end"></ion-icon>
-          <ion-label>User Id.</ion-label> 
-          <ion-input [(ngModel)]="cedula"></ion-input> 
+          <ion-label position="floating">User Id</ion-label> 
+          <ion-input [(ngModel)]="cedula" type="number"></ion-input> 
         </ion-item> 
       </ion-list>
   <!--<button ion-button full routerLink="/menu/first/tabs/tab2 (click)="doLogin()">Login</button>-->

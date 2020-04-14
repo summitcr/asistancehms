@@ -52,7 +52,7 @@ export class CoronavirusPage implements OnInit {
     this.diagnosticModel.statusId = 1;
     this.diagnosticModel.patientId = userId;
 
-    this.services.get('http://localhost:61362/api/diagnostics/'+userId).subscribe((resp) => {
+    this.services.get('http://35.222.165.70/summitCovid/api/diagnostics/'+userId).subscribe((resp) => {
       this.diagnosticExists = resp;
 
       if(this.diagnosticExists){
@@ -62,7 +62,7 @@ export class CoronavirusPage implements OnInit {
 
     }, (err) => {
       if(err.status == 404) {
-        this.services.save('http://localhost:61362/api/diagnostics', this.diagnosticModel).subscribe(() => {
+        this.services.save('http://35.222.165.70/summitCovid/api/diagnostics', this.diagnosticModel).subscribe(() => {
           console.log("Se agregó el diagnostico");
         }, (err) => {
           console.error(err);
@@ -77,7 +77,7 @@ export class CoronavirusPage implements OnInit {
     this.diagnosticModel.statusId = 2;
     this.diagnosticModel.patientId = userId;
 
-    this.services.get('http://localhost:61362/api/diagnostics/'+userId).subscribe((resp) => {
+    this.services.get('http://35.222.165.70/summitCovid/api/diagnostics/'+userId).subscribe((resp) => {
       this.diagnosticExists = resp;
 
       if(this.diagnosticExists){
@@ -87,7 +87,7 @@ export class CoronavirusPage implements OnInit {
 
     }, (err) => {
       if(err.status == 404) {
-        this.services.save('http://localhost:61362/api/diagnostics', this.diagnosticModel).subscribe((resp) => {
+        this.services.save('http://35.222.165.70/summitCovid/api/diagnostics', this.diagnosticModel).subscribe((resp) => {
         this.diagnostic = resp;
         this.storeService.localSave(this.localParam.localParam.diagnostic, this.diagnostic);
         console.log("Se agregó el diagnostico");

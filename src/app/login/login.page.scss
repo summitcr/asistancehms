@@ -3,8 +3,10 @@
     ion-item {
         --border-color: transparent!important;
         --highlight-height: 0;
-        border-radius: 20px;
-        border: 1px solid #575756;
+        border-radius: 12px;
+        --background:#EFEEEE;
+       
+        border:  1px solid rgba(255,255,255,0.20);
         &.item-has-focus {
             border: 1px solid var(--ion-color-primary);
         }
