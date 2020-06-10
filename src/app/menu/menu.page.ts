@@ -23,9 +23,9 @@ icon:'contacts'
 url:'/menu/four',
 icon:'barcode'
 },
-{ title: 'Signos',
+{ title: 'Servicios',
 url:'/heart-rate',
-icon:'heart'
+icon:'apps'
 }
 
 ];

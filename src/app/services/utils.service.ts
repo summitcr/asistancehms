@@ -48,15 +48,39 @@ export class UtilsService {
     personalert:"",
     assetalert:"",
     heartrate:"",
-    gatewaybeacons:""
-
+    gatewaybeacons:"",
+    ticketCreate:"",
+    ticketServices:"",
+    ticketStatus:"",
+    symptoms:"",
+    anotherCases:"",
+    diagnosticSymptoms:"",
+    diagnosticCases:"",
+    diagnostics:"",
+    noRegisteredDiagSymtoms:"",
+    noRegisteredDiagCases:"",
+    noRegisteredDiagnostics:"",
    };
 
    mapwizeParams = {
       searchdirection:""
    }
   constructor() { 
-    var newserverURL = 'http://35.222.165.70/summit/api/';
+     //Apis server desarrollo
+    //var newserverURL = 'http://13.58.166.253/summit/api/';
+    //var ticketsURL = 'http://13.58.166.253/ticketsHospital/api/';
+    //var covidURL = 'http://13.58.166.253/covidApis/api/';
+
+    //Apis server QA
+    //var newserverURL = 'http://3.23.88.169/summit/api/';
+    //var ticketsURL = 'http://3.23.88.169/ticketsHospital/api/';
+    //var covidURL = 'http://3.23.88.169/covidApis/api/';
+
+    //Apis server demo
+    var newserverURL = 'http://18.224.108.194/summit/api/';
+    var ticketsURL = 'http://18.224.108.194/ticketsHospital/api/';
+    var covidURL = 'http://18.224.108.194/covidApis/api/';
+   
     this.params.serverurl = newserverURL;
     this.params.registerurl = newserverURL+"register";
     this.params.loginurl = newserverURL+"users/login";
@@ -105,7 +129,18 @@ export class UtilsService {
     var apikey= "?api_key=439578d65ac560a55bb586feaa299bf7";
     this.mapwizeParams.searchdirection = mapwizeurl+ "directions"+apikey;
 
-
+    this.params.ticketCreate = ticketsURL+"orchestra_createTicket";
+    this.params.ticketServices = ticketsURL+"orchestra_services";
+    this.params.ticketStatus = ticketsURL+"orchestra_ticketStatus";
+    
+    this.params.symptoms = covidURL+"symptoms";
+    this.params.anotherCases = covidURL+"anotherCases";
+    this.params.diagnosticSymptoms = covidURL+"diagnosticSymptoms";
+    this.params.diagnosticCases = covidURL+"diagnosticCases";
+    this.params.diagnostics = covidURL+"diagnostics";
+    this.params.noRegisteredDiagSymtoms = covidURL+"noRegisteredDiagSymtoms";
+    this.params.noRegisteredDiagCases = covidURL+"noRegisteredDiagCases";
+    this.params.noRegisteredDiagnostics = covidURL+"noRegisteredDiagnostics";
   }//fin de bob
 
 

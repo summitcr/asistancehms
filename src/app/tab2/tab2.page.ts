@@ -25,7 +25,7 @@ export class Tab2Page implements OnInit, AfterViewInit {
   asociatedIdAlert: any;
   bellAlert: number = 0;
   ticketNumber: string;
-  ticketName: string="Gustavo Valerin Zamora";
+  ticketName: any;
   ticketUbi: string;
   ticketDesti: string;
   NumberPosition: string;
@@ -36,6 +36,13 @@ export class Tab2Page implements OnInit, AfterViewInit {
   content: String;
   getSymptoms: any;
   getAnotherCases: any;
+  generatedServices: any;
+  createdTicket: any;
+  ticketStatus: any;
+  ticketPosition: any;
+  refreshedTicket: any;
+  popUp: any;
+  stopPopUp = false;
   interval;
 
   constructor(private services: CrudService,
@@ -55,6 +62,7 @@ export class Tab2Page implements OnInit, AfterViewInit {
     //this. getTicketName();
     //this. getTicketUbi();
     //this.getTicketDesti();
+    this.GenerateServices();
   }
 
   ngAfterViewInit() {
@@ -65,20 +73,34 @@ export class Tab2Page implements OnInit, AfterViewInit {
       //this.getLastBeacon();
       //this.getUserLogged(); es bueno
       this.getAsociatedAlerts();
-      this. getTicketName();
+      this.getTicketName();
       //this.getUserPosition();
-      this.presentLoadingDefault()
+      this.presentLoadingDefault();
     }, 1000);
     setTimeout(() => {
       this.getTicketInfo();
       this.getTicketUbi();
       this.getTicketDesti();
-      this.getNumberPosition();
+      this.getTicketPosition();
+      this.timer();
     }, 5000);
   }
 
+  //Metodo que crea los servicios para crear un tiquete
+  GenerateServices(){
+    this.services.saveTicket(this.params.params.ticketServices, null).subscribe((resp) => {
+      this.generatedServices = resp;
+      this.storeService.localSave(this.localParam.localParam.ticketServices, this.generatedServices);
+
+      console.log(this.generatedServices);
+    }, (err) => {
+      console.error(err);
+    });
+  }
+
+  //Metodo para el numero del tiquete
   getTicketInfo() {
-    if (this.ticketNumber != "") {
+    /*if (this.ticketNumber != "") {
       this.ticketNumber = "A36";
       this.setVibration();
       this.interval = setInterval(() => {
@@ -93,31 +115,121 @@ export class Tab2Page implements OnInit, AfterViewInit {
           this.timeLeft = 60;
         }
       }, 1000)
-    }
-  }
-  getTicketName() {
-    if (this.ticketName != "") {
-      this.ticketName="Gustavo Valerin Zamora"
-    }
-  }
-  getTicketUbi() {
-    if (this.ticketUbi != "") {
-      this.ticketUbi = "Pasillo Mujeres Sur";
-    }
-  }
-  getTicketDesti() {
-    if (this.ticketDesti != "") {
-      this.ticketDesti = "Pasillo Hombres Norte";
-    }
-  }
-  getNumberPosition() {
-    if (this.NumberPosition != "") {
-      let x = 1;
-      this.NumberPosition = x + " people left";
-      if (x = 1) {
-        this.presentAlert();
+    }*/
+    this.storeService.localGet(this.localParam.localParam.createdTicket).then((resp) => {
+      this.createdTicket = resp;
+      if(!this.createdTicket){
+        this.ticketNumber = "No hay tiquete";
+      }else if(this.createdTicket){
+        this.ticketNumber = this.createdTicket.ticketNumber;
+        this.setVibration();
       }
-    }
+    }, (err) => {
+      console.error(err);
+    });
+  }
+
+  //Metodo que pone el nombre de la persona en el tiquete
+  getTicketName() {
+    this.storeService.localGet(this.localParam.localParam.userLogged).then((resp) => {
+      this.person = resp;
+      if(!this.person){
+        this.ticketName = "Inicie sesión";
+      }else if(this.person){
+        this.ticketName = this.person.person.name;
+      }
+    }, (err) => {
+      console.error(err);
+    });
+  }
+
+  //Metodo para poner la ubicacion del tiquete
+  getTicketUbi() {
+    this.storeService.localGet(this.localParam.localParam.ticketStatus).then((resp) => {
+      this.ticketStatus = resp;
+      if(!this.ticketStatus){
+        this.ticketUbi = "No se ha creado un ticket.";
+      }else if(this.ticketStatus){
+        this.ticketUbi = this.ticketStatus.queueName;
+      }
+    }, (err) => {
+      console.error(err);
+    });
+  }
+
+  //Metodo para poner el destino del tiquete
+  getTicketDesti() {
+    this.storeService.localGet(this.localParam.localParam.ticketStatus).then((resp) => {
+      this.ticketStatus = resp;
+      if(!this.ticketStatus){
+        this.ticketDesti = "No se ha creado un ticket.";
+      }else if(this.ticketStatus){
+        this.ticketDesti = this.ticketStatus.currentServiceName;
+      }
+    }, (err) => {
+      console.error(err);
+    });
+  }
+
+  //Metodo para saber cuantas personas hay en la fila
+  getTicketPosition() {
+    this.storeService.localGet(this.localParam.localParam.ticketStatus).then((resp) => {
+      this.ticketStatus = resp;
+      if(!this.ticketStatus){
+        this.ticketPosition = "No se ha creado un ticket.";
+      }else if(this.ticketStatus){
+        this.ticketPosition = this.ticketStatus.position+" personas adelante";
+      }
+    }, (err) => {
+      console.error(err);
+    });
+  }
+
+  //Revisa si existe un tiquete creado, si existe hace un get del tiquete nuevamente para refrescarlo
+  refreshTicket(){
+    this.storeService.localGet(this.localParam.localParam.createdTicket).then((resp) => {
+      this.createdTicket = resp;
+      if(this.createdTicket){
+        let visitId = this.createdTicket.visitId;
+        let checksum = this.createdTicket.checksum;
+        this.services.get(this.params.params.ticketStatus+'/visitId/'+visitId+'/checksum/'+checksum).subscribe((resp) => {
+          this.refreshedTicket = resp;
+          this.ticketPosition = this.refreshedTicket.position+" personas adelante";
+          let calledFrom = this.refreshedTicket.servicePointName;
+          if(this.refreshedTicket.position == null){
+            this.ticketPosition = 0+"personas adelante";
+            if (!this.stopPopUp) {
+              //this.stopPopUp = true;
+              if(this.popUp == null){
+                this.presentAlert(calledFrom);
+                
+                this.setVibration();
+               
+              }else if(this.popUp != null){
+                this.popUp.dismiss();
+                this.presentAlert(calledFrom);
+              }
+            }
+          }
+          this.ticketNumber = this.refreshedTicket.ticketId;
+          //this.ticketDesti = this.refreshedTicket.queueName;
+          console.log(this.refreshedTicket);
+        }, (err) => {
+          if(err.status == 404){
+            this.ticketNumber = "Atendido";
+            this.ticketPosition = 0+" personas adelante";
+          }
+        });
+      }
+    }, (err) => {
+      console.error(err);
+    });
+  }
+
+  timer() {
+    this.interval = setInterval(() => {
+      this.refreshTicket();
+    }, 10000);
   }
   setVibration() {
     navigator.vibrate([500, 500, 500]);
@@ -307,12 +419,12 @@ export class Tab2Page implements OnInit, AfterViewInit {
   }
 
 
-  async presentAlert() {
+  async presentAlert(calledFrom) {
     const alert = await this.alertCtrl.create({
       header: 'Alert',
       subHeader: '',
       message:
-        'it is your turn',
+      'It is your turn, please go to: '+ calledFrom,
       buttons: [{
         text: 'OK',
         role: 'OK',
@@ -324,5 +436,6 @@ export class Tab2Page implements OnInit, AfterViewInit {
     });
     await alert.present();
   }
+
 
 }//fin de la classs tab2

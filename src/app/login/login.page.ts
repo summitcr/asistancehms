@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams } from '@ionic/angular';
+import { NavController, NavParams, AlertController } from '@ionic/angular';
 import { CrudService } from '../services/crud.service';
 import { Storage } from '@ionic/storage';
 import { UtilsService } from '../services/utils.service';
@@ -39,6 +39,7 @@ export class LoginPage implements OnInit {
     private params: UtilsService,
     private router: Router,
     private toast: Toast,
+    private alertCtrl: AlertController
     /*public formBuilder: FormBuilder*/)
      {
       /*this.loginForm = formBuilder.group({
@@ -81,7 +82,7 @@ export class LoginPage implements OnInit {
       console.log(this.userdata);
     }, (err) => {
       console.error(err);
-      this.alert(JSON.stringify(err));
+      this.presentAlert();
     });
   }
 
@@ -140,6 +141,21 @@ export class LoginPage implements OnInit {
     this.insured = false;
     this.storeService.localSave(this.localParam.localParam.insured, this.insured);
   }
-  
-
+  async presentAlert() {
+    const alert = await this.alertCtrl.create({
+      header: 'Alert',
+      subHeader: '',
+      message:
+        'Cedula no registrada',
+      buttons: [{
+        text: 'OK',
+        role: 'OK',
+        handler: () => {
+          console.log('you clicked me');
+        }
+      },
+      ]
+    });
+    await alert.present();
+  }
 }// fin de la class

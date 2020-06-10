@@ -74,7 +74,7 @@ export class RegistroCovidPage implements OnInit {
       }
     }, (err) => {
       if(err.status == 404) {
-        this.services.get('http://35.222.165.70/summitCovid/api/noRegisteredDiagnostics/'+userIdentifier).subscribe((resp) => {
+        this.services.get(this.params.params.noRegisteredDiagnostics+'/'+userIdentifier).subscribe((resp) => {
         this.diagnosticExists = resp;
 
         if(this.diagnosticExists){
@@ -90,7 +90,7 @@ export class RegistroCovidPage implements OnInit {
           this.noRegisteredDiagModel.telephone = this.userTel;
           this.noRegisteredDiagModel.address = this.userAddress;
   
-          this.services.save('http://35.222.165.70/summitCovid/api/noRegisteredDiagnostics', this.noRegisteredDiagModel).subscribe((resp) => {
+          this.services.save(this.params.params.noRegisteredDiagnostics, this.noRegisteredDiagModel).subscribe((resp) => {
             this.noInsuredUser = resp;
             this.storeService.localSave(this.localParam.localParam.insuredUser, this.noInsuredUser);
             this.router.navigateByUrl('/Covid-19');

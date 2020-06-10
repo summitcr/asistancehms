@@ -15,6 +15,9 @@ export class UtilStorageService {
     diagnostic:"",
     insured:"",
     insuredUser:"",
+    createdTicket:"",
+    ticketStatus:"",
+    ticketServices:"",
   }
 
   constructor() { 
@@ -28,5 +31,8 @@ export class UtilStorageService {
     this.localParam.diagnostic = "diagnostic";
     this.localParam.insured = "insured";
     this.localParam.insuredUser = "insured-user";
+    this.localParam.createdTicket = "created-ticket";
+    this.localParam.ticketStatus = "ticket-status";
+    this.localParam.ticketServices = "ticket-services";
   }
 }

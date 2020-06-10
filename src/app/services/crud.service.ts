@@ -54,6 +54,9 @@ export class CrudService {
   save(url,data:any){
     return  this.http.post(url,data, { headers: { }});
   }
+  saveTicket(url, data:any){
+    return this.http.post(url, data, { headers: { }});
+  }
   xmlHttpPostRequest(url,formData:FormData ){
     return new Promise((resolve, reject) => {
       var xhr = new XMLHttpRequest();

@@ -114,7 +114,7 @@ export class CovidComponent implements OnInit, AfterViewInit {
 
   //Metodo que trae los sintomas desde la base de datos
   getDbSymptoms(){
-    this.services.get('http://35.222.165.70/summitCovid/api/symptoms').subscribe((resp) => {
+    this.services.get(this.params.params.symptoms).subscribe((resp) => {
       this.symptoms = resp;
 
       console.log(this.symptoms);
@@ -125,7 +125,7 @@ export class CovidComponent implements OnInit, AfterViewInit {
 
   //Metodo que trae los casos/observaciones desde la base de datos
   getDbCases(){
-    this.services.get('http://35.222.165.70/summitCovid/api/anotherCases').subscribe((resp) => {
+    this.services.get(this.params.params.anotherCases).subscribe((resp) => {
       this.anotherCases = resp;
 
       console.log(this.anotherCases);
@@ -213,7 +213,7 @@ export class CovidComponent implements OnInit, AfterViewInit {
   
       for(let i = 0; i < symptomsCheckBoxesId.length; i++){
         this.diagSymptomModel.symptomId = symptomsCheckBoxesId[i];
-        this.services.save('http://35.222.165.70/summitCovid/api/diagnosticSymptoms', this.diagSymptomModel).subscribe(() => {
+        this.services.save(this.params.params.diagnosticSymptoms, this.diagSymptomModel).subscribe(() => {
     
         }, (err) => {
   
@@ -225,7 +225,7 @@ export class CovidComponent implements OnInit, AfterViewInit {
   
       for(let i = 0; i < casesCheckBoxesId.length; i++){
         this.caseSymptomModel.anotherCaseId = casesCheckBoxesId[i];
-        this.services.save('http://35.222.165.70/summitCovid/api/diagnosticCases', this.caseSymptomModel).subscribe(() => {
+        this.services.save(this.params.params.diagnosticCases, this.caseSymptomModel).subscribe(() => {
     
         }, (err) => {
   
@@ -240,7 +240,7 @@ export class CovidComponent implements OnInit, AfterViewInit {
   
       for(let i = 0; i < symptomsCheckBoxesId.length; i++){
         this.NoRegisterDiagSymptomModel.symptomId = symptomsCheckBoxesId[i];
-        this.services.save('http://35.222.165.70/summitCovid/api/noRegisteredDiagSymtoms', this.NoRegisterDiagSymptomModel).subscribe(() => {
+        this.services.save(this.params.params.noRegisteredDiagSymtoms, this.NoRegisterDiagSymptomModel).subscribe(() => {
     
         }, (err) => {
   
@@ -252,7 +252,7 @@ export class CovidComponent implements OnInit, AfterViewInit {
   
       for(let i = 0; i < casesCheckBoxesId.length; i++){
         this.NoRegisterDiagCaseModel.anotherCaseId = casesCheckBoxesId[i];
-        this.services.save('http://35.222.165.70/summitCovid/api/noRegisteredDiagCases', this.NoRegisterDiagCaseModel).subscribe(() => {
+        this.services.save(this.params.params.noRegisteredDiagCases, this.NoRegisterDiagCaseModel).subscribe(() => {
     
         }, (err) => {
   

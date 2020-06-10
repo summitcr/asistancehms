@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { UtilsService } from '../services/utils.service';
 import { IBeacon } from '@ionic-native/ibeacon/ngx';
 import { CrudService } from '../services/crud.service';
+import { UtilStorageService } from '../services/util-storage.service';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-heartrate',
@@ -10,6 +12,11 @@ import { CrudService } from '../services/crud.service';
   styleUrls: ['./heartrate.component.scss'],
 })
 export class HeartrateComponent implements OnInit {
+  
+  ticketStatus: any;
+  createdTicket: any;
+  ticketServices: any;
+
   pages=[
     { title: 'Home',
   url:'/menu/third'
@@ -89,17 +96,55 @@ getHeartData(){
   });
 }
 
-  constructor( private router: Router,  private params: UtilsService,
-    private service: CrudService, ) { 
+  constructor( private router: Router,  
+    private params: UtilsService,
+    private service: CrudService,
+    private storeService: StorageService,
+    private localParam: UtilStorageService, ) { 
   
   }
 
   ngOnInit() {
-    this.getHeartData();
-    this.timer();
+    //this.getHeartData();
+    //this.timer();
+    this.getServices();
   }
   go(id) {
-    this.router.navigateByUrl('/menu/first/tabs/tab1/' + id);
+    this.createTicket(id);
+    this.router.navigateByUrl('/menu/first/tabs/tab2');
+  }
+
+  getTicketStatus(visitId){
+    this.service.get(this.params.params.ticketStatus+'/'+visitId).subscribe((resp) => {
+      this.ticketStatus = resp;
+      this.storeService.localSave(this.localParam.localParam.ticketStatus, this.ticketStatus);
+
+      console.log(this.ticketStatus);
+    }, (err) => {
+      console.error(err);
+    });
+  }
+
+  createTicket(id){
+    this.service.saveTicket(this.params.params.ticketCreate+'/serviceId/'+id, null).subscribe((resp) => {
+      this.createdTicket = resp;
+      this.storeService.localSave(this.localParam.localParam.createdTicket, this.createdTicket);
+
+      this.getTicketStatus(this.createdTicket.visitId);
+      console.log(this.createdTicket);
+    }, (err) => {
+      console.error(err);
+    });
+  }
+
+  getServices(){
+    this.storeService.localGet(this.localParam.localParam.ticketServices).then((resp) => {
+      this.ticketServices = resp;
+
+      console.log(this.ticketServices);
+    }, (err) => {
+      console.error(err);
+    });
   }
 
 }
