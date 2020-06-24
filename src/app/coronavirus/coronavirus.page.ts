@@ -4,6 +4,7 @@ import { StorageService } from '../services/storage.service';
 import { UtilsService } from '../services/utils.service';
 import { CrudService } from '../services/crud.service';
 import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export interface Diagnostic {
   statusId: number,
@@ -25,13 +26,14 @@ export class CoronavirusPage implements OnInit {
   userLogged: any;
   diagnostic: any;
   diagnosticExists: any;
-
+  myForm: FormGroup;
   constructor(private services: CrudService,
     private params: UtilsService,
     private storeService: StorageService,
     private localParam: UtilStorageService,
-    private router: Router,) {
-
+    private router: Router,
+    public formBuilder: FormBuilder,) {
+      this.myForm = this.createMyForm();
     }
 
   ngOnInit() {
@@ -97,5 +99,17 @@ export class CoronavirusPage implements OnInit {
       } 
     });
   }
-
-}
+  private createMyForm() {
+    return this.formBuilder.group({
+      name: ['', Validators.required],
+     cedula: ['', Validators.required],
+      /*email: ['', Validators.compose([
+        Validators.maxLength(70),
+        Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),Validators.required
+      ])],*/
+      estado: ['', Validators.required],
+      telefono: ['', Validators.required],
+      direccion: ['', Validators.required],
+    });
+  }
+}//fin de la class

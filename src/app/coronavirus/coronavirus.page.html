@@ -14,34 +14,128 @@
 
   <div class="row topSection">
 
-    <img size="small" src="assets/img/icon4.png" alt="Icono de información" class="imgIcon">
+
     
-    <p>Ayúdenos a prevenir riesgos en salud durante
-      y hasta 14 días despues de su llegada al país.
-      Repórtenos los síntomas que presente</p>
+    <p>Ayúdenos a prevenir riesgos en salud por favor proceda a llenar esta encuesta</p>
 
   </div>
-  <ion-grid>
-  <p class="text1">¿Cómo está su salud 
-  en este momento?</p>
-    <ion-row>
-      <ion-col>
-        <div>
-          <img size="small" src="assets/img/happy.png" alt="Imagen de cara feliz" class="img-responsive">
-          <ion-button shape="round" expand="full" routerLink="/confirmed" class="boton1" (click)="healthyStatus()">
-            Bien
-          </ion-button>
-        </div>
-      </ion-col>
-      <ion-col>
-        <div>
-          <img size="small" src="assets/img/sad.png" alt="Imagen de cara triste" class="img-responsive">
-          <ion-button shape="round" expand="full" routerLink="/Covid-19" class="boton2" (click)="unhealthyStatus()">
-            Mal
-          </ion-button>
-        </div>
-      </ion-col>
-    </ion-row>
-    <p class="text2">Si la opción elegida es <STRONG>MAL</STRONG> podrá seleccionar los signos y síntomas en la siguiente pantalla</p>
-  </ion-grid>
+  <form   [formGroup]="myForm" padding>
+    <ion-list >
+      <ion-item>
+        <ion-label style="white-space: pre-wrap !important;
+         font-weight: bold; margin-bottom: 10px;" position="floating">¿Tiene historia de fiebre o fiebre mayor a 38?</ion-label>
+        <ion-select formControlName="estado" placeholder="Si o No" [(ngModel)]="statuses" (ionChange)="getStatus(statuses)">
+          <ion-select-option value="1">Si</ion-select-option>
+          <ion-select-option value="2">No</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <br>
+      <ion-item>
+        <ion-label style="white-space: pre-wrap !important; 
+        font-weight: bold; margin-bottom: 10px;" position="floating">¿Tiene disnea o dificultad respiratoria?</ion-label>
+        <ion-select formControlName="estado" placeholder="Si o No" [(ngModel)]="statuses" (ionChange)="getStatus(statuses)">
+          <ion-select-option value="1">Si</ion-select-option>
+          <ion-select-option value="2">No</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <br>
+      <ion-item>
+        <ion-label style="white-space: pre-wrap !important; 
+        font-weight: bold;margin-bottom: 10px;" position="floating">¿Tiene dolor de garganta o tos?</ion-label>
+        <ion-select formControlName="estado" placeholder="Si o No" [(ngModel)]="statuses" (ionChange)="getStatus(statuses)">
+          <ion-select-option value="1">Si</ion-select-option>
+          <ion-select-option value="2">No</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <br>
+      <ion-item>
+        <ion-label style="white-space: pre-wrap !important; 
+        font-weight: bold;margin-bottom: 10px;" position="floating">¿Tiene congestión nasal?</ion-label>
+        <ion-select formControlName="estado" placeholder="Si o No" [(ngModel)]="statuses" (ionChange)="getStatus(statuses)">
+          <ion-select-option value="1">Si</ion-select-option>
+          <ion-select-option value="2">No</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <br>
+      <ion-item>
+        <ion-label style="white-space: pre-wrap !important;
+         font-weight: bold;margin-bottom: 10px;" position="floating">¿Tiene perdida de olfato?</ion-label>
+        <ion-select formControlName="estado" placeholder="Si o No" [(ngModel)]="statuses" (ionChange)="getStatus(statuses)">
+          <ion-select-option value="1">Si</ion-select-option>
+          <ion-select-option value="2">No</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <br>
+      <ion-item>
+        <ion-label style="white-space: pre-wrap !important;
+         font-weight: bold;margin-bottom: 10px;" position="floating">¿Tiene cambios en la percepción del gusto, siente que le perdió sabor a la comida ?</ion-label>
+        <ion-select formControlName="estado" placeholder="Si o No" [(ngModel)]="statuses" (ionChange)="getStatus(statuses)">
+          <ion-select-option value="1">Si</ion-select-option>
+          <ion-select-option value="2">No</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <br>
+      <ion-item>
+        <ion-label style="white-space: pre-wrap !important;
+         font-weight: bold;margin-bottom: 10px;" position="floating">¿Tiene perdida de olfato?</ion-label>
+        <ion-select formControlName="estado" placeholder="Si o No" [(ngModel)]="statuses" (ionChange)="getStatus(statuses)">
+          <ion-select-option value="1">Si</ion-select-option>
+          <ion-select-option value="2">No</ion-select-option>
+        </ion-select>
+      </ion-item>  <br>
+      <ion-item>
+        <ion-label style="white-space: pre-wrap !important;
+         font-weight: bold;margin-bottom: 10px;" position="floating">¿Cuándo empezaron los sintomas los ultimo 10 DÍAS?</ion-label>
+        <ion-select formControlName="estado" placeholder="Si o No" [(ngModel)]="statuses" (ionChange)="getStatus(statuses)">
+          <ion-select-option value="1">Si</ion-select-option>
+          <ion-select-option value="2">No</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <br>
+      <ion-item>
+        <ion-label style="white-space: pre-wrap !important;
+         font-weight: bold;margin-bottom: 10px;" position="floating">¿Ha viajado fuera del país en los 14 días previos al inicio de los síntomas?</ion-label>
+        <ion-select formControlName="estado" placeholder="Si o No" [(ngModel)]="statuses" (ionChange)="getStatus(statuses)">
+          <ion-select-option value="1">Si</ion-select-option>
+          <ion-select-option value="2">No</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <br>
+      <ion-item>
+        <ion-label style="white-space: pre-wrap !important;
+         font-weight: bold;margin-bottom: 10px;" position="floating"> ¿Se empezó a sentir mal después de tener contacto con una persona 
+      que viajó fuera del país en los últimos 14 días, previo al inicio de los síntomas?</ion-label>
+        <ion-select formControlName="estado" placeholder="Si o No" [(ngModel)]="statuses" (ionChange)="getStatus(statuses)">
+          <ion-select-option value="1">Si</ion-select-option>
+          <ion-select-option value="2">No</ion-select-option>
+        </ion-select>
+      </ion-item>
+<br>
+<ion-item>
+  <ion-label style="white-space: pre-wrap !important;
+   font-weight: bold;margin-bottom: 10px;" position="floating">   ¿Necesidad de hospitalización?</ion-label>
+  <ion-select formControlName="estado" placeholder="Si o No" [(ngModel)]="statuses" (ionChange)="getStatus(statuses)">
+    <ion-select-option value="1">Si</ion-select-option>
+    <ion-select-option value="2">No</ion-select-option>
+  </ion-select>
+</ion-item>
+      <br>
+      <ion-item>
+        <ion-label position="floating">Estado:</ion-label>
+        <ion-select formControlName="estado" placeholder="Seleccione uno" [(ngModel)]="statuses" (ionChange)="getStatus(statuses)">
+          <ion-select-option value="1">Me siento Bien</ion-select-option>
+          <ion-select-option value="2">Me siento Mal</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <br>
+  
+   
+    </ion-list>
+    <div padding>
+      <ion-button class="btnLoging" expand="block" type="submit" [disabled]="!myForm.valid" (click)="confirmData()">
+        Confirmar
+      </ion-button>
+
+    </div>
+  </form>
 </ion-content>
