@@ -60,6 +60,8 @@ export class UtilsService {
     noRegisteredDiagSymtoms:"",
     noRegisteredDiagCases:"",
     noRegisteredDiagnostics:"",
+    registroPacient: "",
+    pacient_poll:" ",
    };
 
    mapwizeParams = {
@@ -67,9 +69,9 @@ export class UtilsService {
    }
   constructor() { 
      //Apis server desarrollo
-    //var newserverURL = 'http://13.58.166.253/summit/api/';
-    //var ticketsURL = 'http://13.58.166.253/ticketsHospital/api/';
-    //var covidURL = 'http://13.58.166.253/covidApis/api/';
+    var newserverURL = 'http://13.58.166.253/summit/api/';
+    var ticketsURL = 'http://13.58.166.253/ticketsHospital/api/';
+    var covidURL = 'http://13.58.166.253/CovidHospital/api/';
 
     //Apis server QA
     //var newserverURL = 'http://3.23.88.169/summit/api/';
@@ -77,9 +79,9 @@ export class UtilsService {
     //var covidURL = 'http://3.23.88.169/covidApis/api/';
 
     //Apis server demo
-    var newserverURL = 'http://18.224.108.194/summit/api/';
-    var ticketsURL = 'http://18.224.108.194/ticketsHospital/api/';
-    var covidURL = 'http://18.224.108.194/covidApis/api/';
+    //var newserverURL = 'http://18.224.108.194/summit/api/';
+    //var ticketsURL = 'http://18.224.108.194/ticketsHospital/api/';
+    //var covidURL = 'http://18.224.108.194/covidApis/api/';
    
     this.params.serverurl = newserverURL;
     this.params.registerurl = newserverURL+"register";
@@ -141,6 +143,9 @@ export class UtilsService {
     this.params.noRegisteredDiagSymtoms = covidURL+"noRegisteredDiagSymtoms";
     this.params.noRegisteredDiagCases = covidURL+"noRegisteredDiagCases";
     this.params.noRegisteredDiagnostics = covidURL+"noRegisteredDiagnostics";
+
+    this.params.registroPacient=covidURL+"registerPacients";
+    this.params.pacient_poll=covidURL+"pacient_poll";
   }//fin de bob
 
 

@@ -8,11 +8,13 @@ import { UtilStorageService } from '../services/util-storage.service';
 import { Router } from '@angular/router';
 
 export interface NoRegisteredDiagnostic {
-  statusId: number,
-  name: String,
+  identifierType: String,
   identifier: String,
+  name: String,
+  age: String,
   telephone: String,
-  address: String
+  address: String,
+
 }
 
 @Component({
@@ -23,23 +25,28 @@ export interface NoRegisteredDiagnostic {
 export class RegistroCovidPage implements OnInit {
 
   noRegisteredDiagModel: NoRegisteredDiagnostic = {
-    statusId: null,
-    name: '',
+    identifierType: '',
     identifier: '',
+    name: '',
+    age: '',
     telephone: '',
-    address: ''
+    address: '',
+
   }
 
   statuses: any;
   userData: any;
+  userType: any;
   userCed: any;
   userName: any;
   userTel: any;
   userAddress: any;
   userStatus: any;
+  userEdad: any;
   noInsuredUser: any;
   diagnosticExists: any;
   myForm: FormGroup;
+  registroPacientes: any;
 
   constructor(
     public navCtrl: NavController,
@@ -51,73 +58,86 @@ export class RegistroCovidPage implements OnInit {
     private router: Router,
     private alertCtrl: AlertController) {
     this.myForm = this.createMyForm();
-    }
+  }
 
   ngOnInit() {
 
   }
 
-  getStatus(value){
+  getStatus(value) {
     this.userStatus = value;
     console.log(this.userStatus);
   }
 
   //Metodo que busca el numero de cedula de la persona en la base de datos para verificar si se encuentra
   //registrado o no, si no se encuentra registrado procede a crear el diagnostico
-  confirmData(){
+  confirmData() {
     let userIdentifier = this.userCed;
-    this.services.get(this.params.params.staffurl+"/cid/"+userIdentifier).subscribe((resp) => {
+    this.services.get(this.params.params.staffurl + "/cid/" + userIdentifier).subscribe((resp) => {
       this.userData = resp;
 
-      if(this.userData){
+      if (this.userData) {
         this.presentAlert();
       }
     }, (err) => {
-      if(err.status == 404) {
-        this.services.get(this.params.params.noRegisteredDiagnostics+'/'+userIdentifier).subscribe((resp) => {
-        this.diagnosticExists = resp;
+      if (err.status == 404) {
+        this.services.get(this.params.params.noRegisteredDiagnostics + '/' + userIdentifier).subscribe((resp) => {
+          this.diagnosticExists = resp;
 
-        if(this.diagnosticExists){
-          this.presentAlert();
-          //this.router.navigateByUrl('/login');
-        }
+          if (this.diagnosticExists) {
+            this.presentAlert();
+            //this.router.navigateByUrl('/login');
+          }
 
-      }, (err) => {
-        if(err.status == 404) {
-          this.noRegisteredDiagModel.statusId = this.userStatus;
-          this.noRegisteredDiagModel.name = this.userName;
-          this.noRegisteredDiagModel.identifier = this.userCed;
-          this.noRegisteredDiagModel.telephone = this.userTel;
-          this.noRegisteredDiagModel.address = this.userAddress;
-  
-          this.services.save(this.params.params.noRegisteredDiagnostics, this.noRegisteredDiagModel).subscribe((resp) => {
-            this.noInsuredUser = resp;
-            this.storeService.localSave(this.localParam.localParam.insuredUser, this.noInsuredUser);
-            this.router.navigateByUrl('/Covid-19');
-          }, (err) => {
-            console.error(err);
-          });
-        } 
-      });
+        }, (err) => {
+          if (err.status == 404) {
+            // this.noRegisteredDiagModel.statusId = this.userStatus;
+            this.noRegisteredDiagModel.name = this.userName;
+            this.noRegisteredDiagModel.identifier = this.userCed;
+            this.noRegisteredDiagModel.telephone = this.userTel;
+            this.noRegisteredDiagModel.address = this.userAddress;
+
+            this.services.save(this.params.params.noRegisteredDiagnostics, this.noRegisteredDiagModel).subscribe((resp) => {
+              this.noInsuredUser = resp;
+              this.storeService.localSave(this.localParam.localParam.insuredUser, this.noInsuredUser);
+              this.router.navigateByUrl('/Covid-19');
+            }, (err) => {
+              console.error(err);
+            });
+          }
+        });
       }
     });
   }
 
+  savePaci() {
+    this.noRegisteredDiagModel.identifierType = this.userType;
+    this.noRegisteredDiagModel.identifier = this.userCed;
+    this.noRegisteredDiagModel.name = this.userName;
+    this.noRegisteredDiagModel.age = this.userEdad;
+    this.noRegisteredDiagModel.telephone = this.userTel;
+    this.noRegisteredDiagModel.address = this.userAddress;
+    this.services.save(this.params.params.registroPacient, this.noRegisteredDiagModel).subscribe((resp) => {
+      this.registroPacientes = resp;
+      console.log(this.registroPacientes);
+      this.storeService.localSave(this.localParam.localParam.insuredUser, this.registroPacientes);
+      this.presentConfirm();
+    }, (err) => {
+      console.error(err);
+    });
+  }
   saveData() {
     console.log(this.myForm.value);
   }
 
   private createMyForm() {
     return this.formBuilder.group({
+      tipo: ['', Validators.required],
       name: ['', Validators.required],
-     cedula: ['', Validators.required],
-      /*email: ['', Validators.compose([
-        Validators.maxLength(70),
-        Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),Validators.required
-      ])],*/
-      estado: ['', Validators.required],
+      cedula: ['', Validators.required],
       telefono: ['', Validators.required],
       direccion: ['', Validators.required],
+      edad: ['', Validators.required],
     });
   }
 
@@ -138,4 +158,23 @@ export class RegistroCovidPage implements OnInit {
     });
     await alert.present();
   }
-}
+  async presentConfirm() {
+    const alert = await this.alertCtrl.create({
+      header: 'Info',
+      subHeader: '',
+      message:
+        'Bienvenido(a), proceda a llegar la siguiente encuesta',
+      buttons: [{
+        text: 'OK',
+        role: 'OK',
+        handler: () => {
+          this.router.navigateByUrl('/coronavirus');
+          //console.log('you clicked me');
+        }
+      },
+      ]
+    });
+    await alert.present();
+  }
+}// fin
+

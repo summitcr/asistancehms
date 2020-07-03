@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { IonicModule, IonicRouteStrategy,IonApp } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
@@ -32,9 +32,20 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegistroCovidPage } from './registro-covid/registro-covid.page';
 
 @NgModule({
-  declarations: [AppComponent, ModalPagePage, ModalNotificationPage,HeartrateComponent,CovidComponent,],
+  declarations: [ AppComponent, ModalPagePage, ModalNotificationPage,HeartrateComponent,CovidComponent,],
   entryComponents: [ModalPagePage,ModalNotificationPage],
-  imports: [BrowserModule,BrowserAnimationsModule, IonicModule.forRoot(), NgxChartsModule, AppRoutingModule,HttpClientModule,AutoCompleteModule,IonicStorageModule.forRoot(),FormsModule, ReactiveFormsModule],
+  imports: [BrowserModule,
+    BrowserAnimationsModule,
+     IonicModule.forRoot(
+  { 
+    backButtonText: 'Atras'}), 
+     NgxChartsModule, 
+     AppRoutingModule,
+     HttpClientModule,
+     AutoCompleteModule,
+     IonicStorageModule.forRoot(),
+     FormsModule, 
+     ReactiveFormsModule],
   providers: [
     StatusBar,
     SplashScreen,

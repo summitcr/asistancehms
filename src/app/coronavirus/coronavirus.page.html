@@ -13,126 +13,115 @@
 
 
   <div class="row topSection">
-
-
-    
     <p>Ayúdenos a prevenir riesgos en salud por favor proceda a llenar esta encuesta</p>
-
   </div>
-  <form   [formGroup]="myForm" padding>
-    <ion-list >
+  <form [formGroup]="myForm" padding>
+    <ion-list>
       <ion-item>
         <ion-label style="white-space: pre-wrap !important;
-         font-weight: bold; margin-bottom: 10px;" position="floating">¿Tiene historia de fiebre o fiebre mayor a 38?</ion-label>
-        <ion-select formControlName="estado" placeholder="Si o No" [(ngModel)]="statuses" (ionChange)="getStatus(statuses)">
-          <ion-select-option value="1">Si</ion-select-option>
-          <ion-select-option value="2">No</ion-select-option>
+         font-weight: bold; margin-bottom: 10px;" position="floating">¿Tiene historia de fiebre o fiebre mayor a 38?
+        </ion-label>
+        <ion-select formControlName="preguntaFiebre" placeholder="Si o No" [(ngModel)]="userFiebre"
+          (ionChange)="getStatus(statuses)">
+          <ion-select-option value="Si">Si</ion-select-option>
+          <ion-select-option value="No">No</ion-select-option>
         </ion-select>
       </ion-item>
       <br>
       <ion-item>
         <ion-label style="white-space: pre-wrap !important; 
-        font-weight: bold; margin-bottom: 10px;" position="floating">¿Tiene disnea o dificultad respiratoria?</ion-label>
-        <ion-select formControlName="estado" placeholder="Si o No" [(ngModel)]="statuses" (ionChange)="getStatus(statuses)">
-          <ion-select-option value="1">Si</ion-select-option>
-          <ion-select-option value="2">No</ion-select-option>
+        font-weight: bold; margin-bottom: 10px;" position="floating">¿Tiene disnea o dificultad respiratoria?
+        </ion-label>
+        <ion-select formControlName="preguntaDisnea" placeholder="Si o No" [(ngModel)]="userDisnea">
+          <ion-select-option value="Si">Si</ion-select-option>
+          <ion-select-option value="No">No</ion-select-option>
         </ion-select>
       </ion-item>
       <br>
       <ion-item>
         <ion-label style="white-space: pre-wrap !important; 
-        font-weight: bold;margin-bottom: 10px;" position="floating">¿Tiene dolor de garganta o tos?</ion-label>
-        <ion-select formControlName="estado" placeholder="Si o No" [(ngModel)]="statuses" (ionChange)="getStatus(statuses)">
-          <ion-select-option value="1">Si</ion-select-option>
-          <ion-select-option value="2">No</ion-select-option>
+        font-weight: bold; margin-bottom: 10px;" position="floating">¿Tiene dolor de garganta o tos?</ion-label>
+        <ion-select formControlName="preguntaTos" placeholder="Si o No" [(ngModel)]="userTos">
+          <ion-select-option value="Si">Si</ion-select-option>
+          <ion-select-option value="No">No</ion-select-option>
         </ion-select>
       </ion-item>
       <br>
       <ion-item>
         <ion-label style="white-space: pre-wrap !important; 
-        font-weight: bold;margin-bottom: 10px;" position="floating">¿Tiene congestión nasal?</ion-label>
-        <ion-select formControlName="estado" placeholder="Si o No" [(ngModel)]="statuses" (ionChange)="getStatus(statuses)">
-          <ion-select-option value="1">Si</ion-select-option>
-          <ion-select-option value="2">No</ion-select-option>
+        font-weight:bold; margin-bottom: 10px;" position="floating">¿Tiene congestión nasal?</ion-label>
+        <ion-select formControlName="preguntaNasal" placeholder="Si o No" [(ngModel)]="userNasal">
+          <ion-select-option value="Si">Si</ion-select-option>
+          <ion-select-option value="No">No</ion-select-option>
         </ion-select>
       </ion-item>
       <br>
       <ion-item>
         <ion-label style="white-space: pre-wrap !important;
-         font-weight: bold;margin-bottom: 10px;" position="floating">¿Tiene perdida de olfato?</ion-label>
-        <ion-select formControlName="estado" placeholder="Si o No" [(ngModel)]="statuses" (ionChange)="getStatus(statuses)">
-          <ion-select-option value="1">Si</ion-select-option>
-          <ion-select-option value="2">No</ion-select-option>
+         font-weight: bold; margin-bottom: 10px;" position="floating">¿Tiene perdida de olfato?</ion-label>
+        <ion-select formControlName="preguntaOlfalto" placeholder="Si o No" [(ngModel)]="userOlfato">
+          <ion-select-option value="Si">Si</ion-select-option>
+          <ion-select-option value="No">No</ion-select-option>
         </ion-select>
       </ion-item>
       <br>
       <ion-item>
         <ion-label style="white-space: pre-wrap !important;
-         font-weight: bold;margin-bottom: 10px;" position="floating">¿Tiene cambios en la percepción del gusto, siente que le perdió sabor a la comida ?</ion-label>
-        <ion-select formControlName="estado" placeholder="Si o No" [(ngModel)]="statuses" (ionChange)="getStatus(statuses)">
-          <ion-select-option value="1">Si</ion-select-option>
-          <ion-select-option value="2">No</ion-select-option>
+         font-weight: bold; margin-bottom: 10px;" position="floating">¿Tiene cambios en la percepción del gusto, siente
+          que le perdió sabor a la comida?</ion-label>
+        <ion-select formControlName="preguntaGusto" placeholder="Si o No" [(ngModel)]="userGusto">
+          <ion-select-option value="Si">Si</ion-select-option>
+          <ion-select-option value="No">No</ion-select-option>
         </ion-select>
       </ion-item>
       <br>
       <ion-item>
         <ion-label style="white-space: pre-wrap !important;
-         font-weight: bold;margin-bottom: 10px;" position="floating">¿Tiene perdida de olfato?</ion-label>
-        <ion-select formControlName="estado" placeholder="Si o No" [(ngModel)]="statuses" (ionChange)="getStatus(statuses)">
-          <ion-select-option value="1">Si</ion-select-option>
-          <ion-select-option value="2">No</ion-select-option>
+         font-weight: bold; margin-bottom: 10px;" position="floating">¿No tener otra etiología que explique
+          completamente la presentación clínica del evento?</ion-label>
+        <ion-select formControlName="preguntaEtiologia" placeholder="Si o No" [(ngModel)]="userEti">
+          <ion-select-option value="Si">Si</ion-select-option>
+          <ion-select-option value="No">No</ion-select-option>
         </ion-select>
-      </ion-item>  <br>
+      </ion-item> <br>
       <ion-item>
         <ion-label style="white-space: pre-wrap !important;
-         font-weight: bold;margin-bottom: 10px;" position="floating">¿Cuándo empezaron los sintomas los ultimo 10 DÍAS?</ion-label>
-        <ion-select formControlName="estado" placeholder="Si o No" [(ngModel)]="statuses" (ionChange)="getStatus(statuses)">
-          <ion-select-option value="1">Si</ion-select-option>
-          <ion-select-option value="2">No</ion-select-option>
-        </ion-select>
-      </ion-item>
-      <br>
-      <ion-item>
-        <ion-label style="white-space: pre-wrap !important;
-         font-weight: bold;margin-bottom: 10px;" position="floating">¿Ha viajado fuera del país en los 14 días previos al inicio de los síntomas?</ion-label>
-        <ion-select formControlName="estado" placeholder="Si o No" [(ngModel)]="statuses" (ionChange)="getStatus(statuses)">
-          <ion-select-option value="1">Si</ion-select-option>
-          <ion-select-option value="2">No</ion-select-option>
+         font-weight: bold; margin-bottom: 10px;" position="floating">¿Cuándo empezaron los sintomas los último 10
+          días?
+        </ion-label>
+        <ion-select formControlName="preguntaSintomas" placeholder="Si o No" [(ngModel)]="userSintoma">
+          <ion-select-option value="Si">Si</ion-select-option>
+          <ion-select-option value="No">No</ion-select-option>
         </ion-select>
       </ion-item>
       <br>
       <ion-item>
         <ion-label style="white-space: pre-wrap !important;
-         font-weight: bold;margin-bottom: 10px;" position="floating"> ¿Se empezó a sentir mal después de tener contacto con una persona 
-      que viajó fuera del país en los últimos 14 días, previo al inicio de los síntomas?</ion-label>
-        <ion-select formControlName="estado" placeholder="Si o No" [(ngModel)]="statuses" (ionChange)="getStatus(statuses)">
-          <ion-select-option value="1">Si</ion-select-option>
-          <ion-select-option value="2">No</ion-select-option>
+         font-weight: bold; margin-bottom: 10px;" position="floating">¿Ha viajado fuera del país en los 14 días previos
+          al inicio de los síntomas?</ion-label>
+        <ion-select formControlName="preguntaViajado" placeholder="Si o No" [(ngModel)]="userViaje"
+          (ionChange)="getStatus(statuses)">
+          <ion-select-option value="Si">Si</ion-select-option>
+          <ion-select-option value="No">No</ion-select-option>
         </ion-select>
       </ion-item>
-<br>
-<ion-item>
-  <ion-label style="white-space: pre-wrap !important;
-   font-weight: bold;margin-bottom: 10px;" position="floating">   ¿Necesidad de hospitalización?</ion-label>
-  <ion-select formControlName="estado" placeholder="Si o No" [(ngModel)]="statuses" (ionChange)="getStatus(statuses)">
-    <ion-select-option value="1">Si</ion-select-option>
-    <ion-select-option value="2">No</ion-select-option>
-  </ion-select>
-</ion-item>
       <br>
       <ion-item>
-        <ion-label position="floating">Estado:</ion-label>
-        <ion-select formControlName="estado" placeholder="Seleccione uno" [(ngModel)]="statuses" (ionChange)="getStatus(statuses)">
-          <ion-select-option value="1">Me siento Bien</ion-select-option>
-          <ion-select-option value="2">Me siento Mal</ion-select-option>
+        <ion-label style="white-space: pre-wrap !important;
+         font-weight: bold; margin-bottom: 10px;" position="floating">¿Se empezó a sentir mal después de tener contacto
+          con una persona que viajó fuera del país en los últimos 14 días,
+          previo al inicio de los síntomas?</ion-label>
+        <ion-select formControlName="preguntaMal" placeholder="Si o No" [(ngModel)]="userViajado"
+          (ionChange)="getStatus(statuses)">
+          <ion-select-option value="Si">Si</ion-select-option>
+          <ion-select-option value="No">No</ion-select-option>
         </ion-select>
       </ion-item>
       <br>
-  
-   
+
     </ion-list>
     <div padding>
-      <ion-button class="btnLoging" expand="block" type="submit" [disabled]="!myForm.valid" (click)="confirmData()">
+      <ion-button class="btnLoging" expand="block" type="submit" [disabled]="!myForm.valid" (click)="confirmSurvey()">
         Confirmar
       </ion-button>
 
