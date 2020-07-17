@@ -15,14 +15,8 @@ pages=[
 url:'/menu/first/tabs/tab1/'+'0',
 icon:'home'
 },
-{ title: 'Personas Asociadas',
-url:'/menu/seconds',
-icon:'contacts'
-},
-{ title: 'Diagnóstico COVID-19',
-url:'/menu/four',
-icon:'barcode'
-},
+
+
 { title: 'Servicios',
 url:'/heart-rate',
 icon:'apps'

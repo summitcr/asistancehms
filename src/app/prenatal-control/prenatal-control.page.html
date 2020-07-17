@@ -1,0 +1,263 @@
+<ion-header>
+  <ion-toolbar class="topMenu">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/menu/first/tabs/tab1/'+'0'"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Summit</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+
+
+  <div class="row topSection">
+    <p>Deseamos ayudarla a tener una embarazo sano y un bebé sano.
+      Algunas preguntas son de respuesta obligatoria por lo que necesita llenarla para llegar hasta el final. Gracias
+      por participar.</p>
+  </div>
+
+  <form [formGroup]="myForm" padding>
+    <ion-slides direction='horizontal'  centeredSlides="false" pager #slides (ionSlideDidChange)="slideChanged()" >
+
+      <ion-slide>
+        <ion-card class="cardHome" >
+          <ion-card-header class="cardheader">
+            Paso 1
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list >
+              <ion-item>
+                <ion-label class="option" position="floating">Estado Civil:</ion-label>
+                <ion-select formControlName="estadoCivil" placeholder="Seleccione una opcion" [(ngModel)]="userEstado" okText="Aceptar" cancelText="Cancelar">
+                  <ion-select-option value="Soltera">Soltera</ion-select-option>
+                  <ion-select-option value="Casada">Casada</ion-select-option>
+                  <ion-select-option value="Union Libre">Union Libre</ion-select-option>
+                  <ion-select-option value="Viuda">Viuda</ion-select-option>
+                  <ion-select-option value="Divorciada">Divorciada</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <br>
+
+              <ion-item>
+                <ion-label class="option" position="floating">Edad:</ion-label>
+                <ion-select interface="popover" formControlName="edad" placeholder="Si o No" [(ngModel)]="userEdad">
+                  <ion-select-option value="Menor de 17">Menor de 17 años</ion-select-option>
+                  <ion-select-option value="17 a 34">De 17 años cumplidos a 34 años cumplidos</ion-select-option>
+                  <ion-select-option value="mayor a 35">De 35 años o mas</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <br>
+              <ion-item>
+                <ion-label class="option" position="floating">Escolaridad:</ion-label>
+                <ion-select formControlName="escolaridad" placeholder="Seleccione la escolaridad"
+                  [(ngModel)]="userEscolaridad" okText="Aceptar" cancelText="Cancelar">
+                  <ion-select-option value="Escuela completa">Escuela completa</ion-select-option>
+                  <ion-select-option value="Escuela incompleta">Escuela incompleta</ion-select-option>
+                  <ion-select-option value="Secundaria completa">Secundaria completa</ion-select-option>
+                  <ion-select-option value="Secundaria incompleta">Secundaria incompleta</ion-select-option>
+                  <ion-select-option value="Universitaria completa">Universitaria completa</ion-select-option>
+                  <ion-select-option value="Universitaria incompleta">Universitaria incompleta</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <br>
+              <ion-item>
+                <ion-label class="option" position="floating">¿Cual fue la fecha de su última regla?
+                </ion-label>
+                <ion-datetime doneText="Aceptar" cancelText="Cancelar" formControlName="fechaUltima" displayFormat="DD/MM/YYYY" placeholder="Día /Mes /Año" [(ngModel)]="userDate1"  ></ion-datetime>
+              </ion-item>
+              <br>
+              <ion-item>
+                <ion-label class="option" position="floating">¿Esta segura??</ion-label>
+                <ion-select formControlName="seguridad" placeholder="Si o No" [(ngModel)]="userSegura" okText="Aceptar" cancelText="Cancelar">
+                  <ion-select-option value="Si">Si</ion-select-option>
+                  <ion-select-option value="No">No</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <br>
+              <ion-item>
+                <ion-label class="option" position="floating">¿Cual es su peso actual?</ion-label>
+                <ion-input formControlName="peso" type="text" placeholder="Anotar en Kilos" [(ngModel)]="userPeso">
+                </ion-input>
+              </ion-item> <br>
+              <ion-item>
+                <ion-label class="option" position="floating">¿Cual es su estatura?
+                </ion-label>
+                <ion-input formControlName="estatura" type="text" placeholder="En metros. Ejemplo: 1.75"
+                  [(ngModel)]="userEstatura">
+                </ion-input>
+              </ion-item>
+              <br>
+              <ion-item>
+                <ion-label class="option" position="floating">¿Asiste usted a control Prenatal?</ion-label>
+                <ion-select formControlName="controlPrena" placeholder="Si o No" [(ngModel)]="userCP" okText="Aceptar" cancelText="Cancelar">
+                  <ion-select-option value="Si">Si</ion-select-option>
+                  <ion-select-option value="No">No</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <br>
+              <ion-item>
+                <ion-label class="option" position="floating"> Indique su tipo de Sangre:</ion-label>
+                <ion-select formControlName="tipoSangre" placeholder="Tipo de sangre" [(ngModel)]="userTipoSangre" okText="Aceptar" cancelText="Cancelar">
+                  <ion-select-option value="A">A</ion-select-option>
+                  <ion-select-option value="B">B</ion-select-option>
+                  <ion-select-option value="AB">AB</ion-select-option>
+                  <ion-select-option value="O">O</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <br>
+              <ion-item>
+                <ion-label class="option" position="floating"> Indique si el RH de su sangre es: </ion-label>
+                <ion-select formControlName="tipoRH" placeholder="Positivo o negativo" [(ngModel)]="userRH" okText="Aceptar" cancelText="Cancelar">
+                  <ion-select-option value="Positivo">Positivo</ion-select-option>
+                  <ion-select-option value="Negativo">Negativo</ion-select-option>
+
+                </ion-select>
+              </ion-item>
+              <br>
+              <ion-item>
+                <ion-label class="option" position="floating">¿Cuantos hijos ha tenido??
+                </ion-label>
+                <ion-input formControlName="cantidadEmba" type="text" placeholder="Digite la cantidad" [(ngModel)]="userCantidadEmba">
+                </ion-input>
+              </ion-item>
+              <br>
+              <ion-item>
+                <ion-label class="option" position="floating">¿Le han realizado alguna de estas cirugías?</ion-label>
+                <ion-select formControlName="controlCirugia" placeholder="Digite una opción" [(ngModel)]="userCirugia" okText="Aceptar" cancelText="Cancelar">
+                  <ion-select-option value="Cesarea">Cesarea</ion-select-option>
+                  <ion-select-option value="Cirugia de utero o matriz">Cirugía de útero o matriz</ion-select-option>
+                  <ion-select-option value="Ninguna">Ninguna</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <br>
+              <ion-item>
+                <ion-label class="option" position="floating">¿Su doctor le ha informado que ha tenido 2 o mas
+                  infecciones vaginales?</ion-label>
+                <ion-select formControlName="controlInfeccionV" placeholder="Si o No" [(ngModel)]="userInfeccionesV" okText="Aceptar" cancelText="Cancelar">
+                  <ion-select-option value="Si">Si</ion-select-option>
+                  <ion-select-option value="No">No</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <br>
+              <ion-item>
+                <ion-label class="option" position="floating">¿Su doctor le ha informado que ha tenido 2 o mas
+                  infecciones Urinarias?</ion-label>
+                <ion-select formControlName="controlUrinaria" placeholder="Si o No" [(ngModel)]="userInfeccionesU" okText="Aceptar" cancelText="Cancelar">
+                  <ion-select-option value="Si">Si</ion-select-option>
+                  <ion-select-option value="No">No</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <br>
+              <ion-item>
+                <ion-label class="option" position="floating">¿ Cual fue la fecha de terminación del último embarazo?
+                </ion-label>
+                <ion-datetime doneText="Aceptar" cancelText="Cancelar" formControlName="fechaTerminacion" displayFormat="DD/MM/YYYY" placeholder="Día /Mes /Año"  [(ngModel)]="userUltimoEmba" ></ion-datetime>
+              </ion-item>
+              <br>
+              
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-slide>
+      <ion-slide>
+       
+        <ion-card class="cardHome">
+          <ion-card-header class="cardheader">
+            Paso 2:
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list >
+              <ion-item >
+                <ion-label class="option" position="floating">¿De cuantos Bebé esta usted embarazada?
+                </ion-label>
+                <ion-input formControlName="cantidadBebe" type="text" placeholder="Cantidad" [(ngModel)]="userCantidadBebe">
+                </ion-input>
+              </ion-item> <br>
+              <ion-item>
+                <ion-label class="option" position="floating">¿Ha estado usted tomando un tratamiento para embarazarse?
+                </ion-label>
+                <ion-select formControlName="controlTratamiento" placeholder="Si o No" [(ngModel)]="userTratamiento" okText="Aceptar" cancelText="Cancelar">
+                  <ion-select-option value="Si">Si</ion-select-option>
+                  <ion-select-option value="No">No</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <br>
+              <ion-label class="option" position="floating">¿De cuáles temas le gustaría recibir información:
+              </ion-label>
+              <ion-item *ngFor="let t of topics">
+                <ion-checkbox color="dark" slot="start" value="{{t.id}}" class="check-topics"></ion-checkbox>
+                <ion-label>{{t.topic}}</ion-label>
+              </ion-item>
+
+              <br>
+             
+
+              <ion-label class="option" position="floating">Su doctor le ha informado que usted tiene alguna de las
+                siguientes enfermedades:
+              </ion-label>
+              <ion-item *ngFor="let c of chronic">
+                <ion-checkbox color="dark" slot="start" value="{{c.id}}" class="check-enfermedades"></ion-checkbox>
+                <ion-label>{{c.disease}}</ion-label>
+              </ion-item>
+
+              <br>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+     
+      </ion-slide>
+      <ion-slide>
+        <ion-card class="cardHome">
+          <ion-card-header class="cardheader">
+            Paso 3:
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list>
+              <ion-label class="option" position="floating">Ha tenido alguna de las siguientes enfermedades asociadas al embarazo actual?
+              </ion-label>
+              <ion-item *ngFor="let ca of current ">
+                <ion-checkbox color="dark" slot="start" value="{{ca.id}}" class="check-current"></ion-checkbox>
+                <ion-label>{{ca.disease}}</ion-label>
+              </ion-item>
+
+              <br>
+              <ion-label class="option" position="floating">Ha tenido alguna de las siguientes complicaciones en embarazos anteriores
+              </ion-label>
+              <ion-item *ngFor="let co of complicat">
+                <ion-checkbox color="dark" slot="start" value="{{co.id}}" class="check-complicat"></ion-checkbox>
+                <ion-label>{{co.complication}}</ion-label>
+              </ion-item>
+
+              <br>
+            </ion-list>
+          </ion-card-content>
+          <div padding>
+            <ion-button class="btnLoging" expand="block" type="submit" [disabled]="!myForm.valid"
+            (click)="confirm()">
+              Confirmar
+            </ion-button>
+  
+          </div>
+        </ion-card>
+      </ion-slide>
+  
+    </ion-slides>
+  </form>
+
+</ion-content>
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <ion-segment full="true" (ionChange)="segmentChanged($event)" [(ngModel)]="segment"  assertive>
+      <ion-segment-button id="seg-1" value="0">
+        Paso 1
+      </ion-segment-button>
+      <ion-segment-button id="seg-2" (click)="ScrollToPoint(300, 120)" value="1">
+        Paso 2
+      </ion-segment-button>
+      <ion-segment-button id="seg-3" (click)="ScrollToPoint(300, 120)" value="2">
+        Enviar
+      </ion-segment-button>
+      
+    </ion-segment>
+  </ion-toolbar>
+</ion-footer>

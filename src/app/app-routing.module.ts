@@ -15,6 +15,7 @@ const routes: Routes = [
   { path: 'Covid-19', component: CovidComponent },
   { path: 'coronavirus', loadChildren: './coronavirus/coronavirus.module#CoronavirusPageModule' },  { path: 'confirmed', loadChildren: './confirmed/confirmed.module#ConfirmedPageModule' },
   { path: 'registro-covid', loadChildren: './registro-covid/registro-covid.module#RegistroCovidPageModule' },
+  { path: 'prenatal-control', loadChildren: './prenatal-control/prenatal-control.module#PrenatalControlPageModule' },
 
 
   

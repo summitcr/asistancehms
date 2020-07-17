@@ -36,9 +36,7 @@ import { RegistroCovidPage } from './registro-covid/registro-covid.page';
   entryComponents: [ModalPagePage,ModalNotificationPage],
   imports: [BrowserModule,
     BrowserAnimationsModule,
-     IonicModule.forRoot(
-  { 
-    backButtonText: 'Atras'}), 
+     IonicModule.forRoot(), 
      NgxChartsModule, 
      AppRoutingModule,
      HttpClientModule,

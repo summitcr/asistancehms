@@ -49,6 +49,7 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
+    this.getBeconsPoints();
     this.getUserLogged();
     setTimeout(() => {
       if(this.person.person != null){

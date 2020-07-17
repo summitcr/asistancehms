@@ -24,6 +24,8 @@ export interface NoRegisteredDiagnostic {
 })
 export class RegistroCovidPage implements OnInit {
 
+  d: Date= new Date();
+
   noRegisteredDiagModel: NoRegisteredDiagnostic = {
     identifierType: '',
     identifier: '',
@@ -61,7 +63,7 @@ export class RegistroCovidPage implements OnInit {
   }
 
   ngOnInit() {
-
+console.log(this.d);
   }
 
   getStatus(value) {
@@ -160,10 +162,10 @@ export class RegistroCovidPage implements OnInit {
   }
   async presentConfirm() {
     const alert = await this.alertCtrl.create({
-      header: 'Info',
+      header: 'Aviso',
       subHeader: '',
       message:
-        'Bienvenido(a), proceda a llegar la siguiente encuesta',
+        'Bienvenido(a), proceda a llenar la siguiente encuesta',
       buttons: [{
         text: 'OK',
         role: 'OK',

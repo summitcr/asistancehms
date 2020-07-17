@@ -44,6 +44,7 @@ export class Tab2Page implements OnInit, AfterViewInit {
   popUp: any;
   stopPopUp = false;
   interval;
+  userIdentifier:any;
 
   constructor(private services: CrudService,
     private params: UtilsService,
@@ -63,6 +64,8 @@ export class Tab2Page implements OnInit, AfterViewInit {
     //this. getTicketUbi();
     //this.getTicketDesti();
     this.GenerateServices();
+    this.getUserIdentifier();
+    
   }
 
   ngAfterViewInit() {
@@ -73,7 +76,8 @@ export class Tab2Page implements OnInit, AfterViewInit {
       //this.getLastBeacon();
       //this.getUserLogged(); es bueno
       this.getAsociatedAlerts();
-      this.getTicketName();
+     // this.getTicketName();
+      
       //this.getUserPosition();
       this.presentLoadingDefault();
     }, 1000);
@@ -90,6 +94,9 @@ export class Tab2Page implements OnInit, AfterViewInit {
   GenerateServices(){
     this.services.saveTicket(this.params.params.ticketServices, null).subscribe((resp) => {
       this.generatedServices = resp;
+      if(this.generatedServices.name=="Obstetrícia"){
+        this.router.navigateByUrl('/prenatal-control');
+      }
       this.storeService.localSave(this.localParam.localParam.ticketServices, this.generatedServices);
 
       console.log(this.generatedServices);
@@ -97,7 +104,15 @@ export class Tab2Page implements OnInit, AfterViewInit {
       console.error(err);
     });
   }
-
+  getUserIdentifier() {
+    this.storeService.localGet(this.localParam.localParam.insuredUser).then((resp) => {
+      this.userIdentifier = resp;
+      this.ticketName=this.userIdentifier.name;
+     
+    }, (err) => {
+      console.error(err);
+    });
+  }
   //Metodo para el numero del tiquete
   getTicketInfo() {
     /*if (this.ticketNumber != "") {
@@ -408,7 +423,7 @@ export class Tab2Page implements OnInit, AfterViewInit {
   }
   async presentLoadingDefaults() {
     let loading = await this.loadingCtrl.create({
-      message: 'Please wait...'
+      message: 'Espere por favor...'
     });
 
     loading.present();

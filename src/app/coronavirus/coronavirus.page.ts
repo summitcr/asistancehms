@@ -106,22 +106,41 @@ export class CoronavirusPage implements OnInit {
     this.services.save(this.params.params.pacient_poll, this.diagnosticModel).subscribe((resp) => {
       this.getpacient = resp;
       // this.presentConfirm();
-      this.listaPoll();
-      console.log(this.getpacient);
+      console.log(resp);
+      if(resp!=null){
+      this.listaPoll();}
+
+      
     }, (err) => {
       console.error(err);
     });
   }
   listaPoll() {
-    
+    let count=0;
     let userId = this.userIdentifier.identifier;
-    this.services.get(this.params.params.pacient_poll+'/'+userId).subscribe((resp) => {
+    this.services.get(this.params.params.pacient_poll + '/' + userId).subscribe((resp) => {
       this.getpoll = resp;
       console.log(this.getpoll);
-      if(this.getpoll.preguntaOlfalto =='Si'){
-        this.presentAlert(); 
-      }else if(this.getpoll.preguntaOlfalto=='No'){
+      if (this.getpoll.preguntaOlfalto == 'Si') {
+        count++;
+      }
+      if (this.getpoll.preguntaFiebre == 'Si') {
+        count++;
+      }
+      if (this.getpoll.preguntaGusto == 'Si') {
+        count++;
+      }
+      if (this.getpoll.preguntaSintoma == 'Si') {
+        count++;
+
+      } 
+      console.log(count)
+      if(count>2){
+        this.presentAlert();
+        
+      }else{
         this.presentConfirm();
+        
       }
     }, (err) => {
       console.error(err);
@@ -197,7 +216,7 @@ export class CoronavirusPage implements OnInit {
       header: 'Confirmación',
       subHeader: '',
       message:
-        'Gracias x realizar la encuesta mop',
+        'Gracias por realizar la encuesta, proceda a tomar una ficha',
       buttons: [{
         text: 'OK',
         role: 'OK',
@@ -212,20 +231,23 @@ export class CoronavirusPage implements OnInit {
   }
   async presentAlert() {
     const alert = await this.alertCtrl.create({
-      header: 'Sospechoso',
+      header: 'Aviso',
       subHeader: '',
       message:
-        'Estas mal',
+        'Por favor, dirijase al área de aislamiento',
       buttons: [{
         text: 'OK',
         role: 'OK',
         handler: () => {
-          this.router.navigateByUrl('/menu/first/tabs/tab1/0');
+         this.go();
           //console.log('you clicked me');
         }
       },
       ]
     });
     await alert.present();
+  }
+  go(){
+    this.router.navigateByUrl('/menu/first/tabs/tab1/' + '5e4ef9b6bdadf00016d02b1f');
   }
 }//fin de la class

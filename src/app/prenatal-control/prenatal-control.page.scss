@@ -10,15 +10,10 @@ ion-col div {
     text-align: center;
   }
 
-  ion-card-content{
-    --background:#EFEEEE;
-    border:  1px solid rgba(255,255,255,0.20);
-    border-radius: 12px;
-    box-shadow: -6px -6px 26px 0 rgba(255,255,255,0.83);
-    box-shadow: 6px 6px 16px 0 rgba(217,210,200,0.51);
-
-}
-
+  p {
+    //padding: 10px 0 0 10px !important;
+    //margin: 0;
+  }
 
 
   .topSection{
@@ -52,7 +47,18 @@ ion-col div {
 .boton2{
     --background: #d10e18 !important;
 }
-.btnLoging{
-    --background: #203B69;
+
+.option{
+    white-space: pre-wrap !important;
+         font-weight: bold; margin-bottom: 10px;
 }
 
+ion-slides {
+    height: auto!important;
+    }
+    .btnLoging{
+        --background: #203B69;
+    }
+.cardheader{
+    font-weight: bold;
+    font-size: 18px;}
