@@ -78,9 +78,9 @@ export class UtilsService {
   }
   constructor() {
     //Apis server desarrollo
-    var newserverURL = 'https://13.59.31.150/summit/api/';
-    var ticketsURL = 'https://13.59.31.150/ticketsHospital/api/';
-    var covidURL = 'https://13.59.31.150/CovidHospital/api/';
+    var newserverURL = 'http://13.59.31.150/summit/api/';
+    var ticketsURL = 'http://13.59.31.150/ticketsHospital/api/';
+    var covidURL = 'http://13.59.31.150/CovidHospital/api/';
 
     //Apis server QA
     //var newserverURL = 'http://3.23.88.169/summit/api/';
