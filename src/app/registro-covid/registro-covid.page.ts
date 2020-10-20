@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { NavController, AlertController } from '@ionic/angular';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NavController, AlertController, IonSelect } from '@ionic/angular';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CrudService } from '../services/crud.service';
 import { UtilsService } from '../services/utils.service';
 import { StorageService } from '../services/storage.service';
 import { UtilStorageService } from '../services/util-storage.service';
 import { Router } from '@angular/router';
+import { UbicacionService } from '../services/ubicacion.service';
 
 export interface NoRegisteredDiagnostic {
   identifierType: String,
@@ -24,7 +25,11 @@ export interface NoRegisteredDiagnostic {
 })
 export class RegistroCovidPage implements OnInit {
 
-  d: Date= new Date();
+  @ViewChild('provinceSelect',{static:false}) provinciaSelect:IonSelect
+  @ViewChild('cantonSelect',{static:false}) cantonSelect:IonSelect
+  @ViewChild('distritoSelect',{static:false}) distritoSelect:IonSelect
+
+  d: Date = new Date();
 
   noRegisteredDiagModel: NoRegisteredDiagnostic = {
     identifierType: '',
@@ -50,6 +55,13 @@ export class RegistroCovidPage implements OnInit {
   myForm: FormGroup;
   registroPacientes: any;
 
+  disableCantonSelect = true;
+  disableDistritoSelect = true;
+  provincia: any;
+  cantonesList = [];
+  distritosList = [];
+  direction: any;
+
   constructor(
     public navCtrl: NavController,
     public formBuilder: FormBuilder,
@@ -58,18 +70,56 @@ export class RegistroCovidPage implements OnInit {
     private storeService: StorageService,
     private localParam: UtilStorageService,
     private router: Router,
-    private alertCtrl: AlertController) {
+    private alertCtrl: AlertController,
+    private apiUbicacion: UbicacionService) {
     this.myForm = this.createMyForm();
   }
 
   ngOnInit() {
-console.log(this.d);
+    console.log(this.d);
   }
 
   getStatus(value) {
     this.userStatus = value;
     console.log(this.userStatus);
   }
+
+  GenerateCantones() {
+    this.cantonesList = [];
+    this.apiUbicacion.getCantones(this.provinciaSelect.value.id).then((resp) => {
+      Object.keys(resp).map((value, index, array) => {
+        this.cantonesList.push({ id: value, value: resp[value] });
+      });
+      console.log(this.cantonesList);
+      this.disableCantonSelect = false;
+    });
+    this.cantonSelect.value = undefined;
+    this.distritoSelect.value = undefined;
+  }
+
+  GenerateDistritos(){
+    this.distritosList = [];
+    console.log(this.provinciaSelect)
+    this.apiUbicacion.getDistritos(this.provinciaSelect.value.id, this.cantonSelect.value.id).then((resp) => {
+      Object.keys(resp).map((value, index, array) => {
+        this.distritosList.push({ id: value, value: resp[value] });
+      });
+      console.log(this.distritosList);
+      this.disableDistritoSelect = false;
+    });
+    this.distritoSelect.value = undefined;
+  }
+
+  GenerateDirection(provinceSelect, cantonSelect, distritoSelect){
+    let province = provinceSelect.value.value;
+    let canton = cantonSelect.value.value;
+    let distrito = distritoSelect.value.value;
+    this.direction = `${province}, ${canton}, ${distrito}`;
+    console.log(this.direction);
+    this.userAddress = this.direction
+  }
+
+
 
   //Metodo que busca el numero de cedula de la persona en la base de datos para verificar si se encuentra
   //registrado o no, si no se encuentra registrado procede a crear el diagnostico
@@ -134,7 +184,7 @@ console.log(this.d);
 
   private createMyForm() {
     return this.formBuilder.group({
-      tipo: ['', Validators.required],
+      tipo: new FormControl('n/a', Validators.required),
       name: ['', Validators.required],
       cedula: ['', Validators.required],
       telefono: ['', Validators.required],
