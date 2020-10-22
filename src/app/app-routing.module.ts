@@ -13,14 +13,11 @@ const routes: Routes = [
   { path: 'modal-page', loadChildren: './modal-page/modal-page.module#ModalPagePageModule' },
   { path: 'modal-notification', loadChildren: './modal-notification/modal-notification.module#ModalNotificationPageModule' },
   { path: 'Covid-19', component: CovidComponent },
-  { path: 'coronavirus', loadChildren: './coronavirus/coronavirus.module#CoronavirusPageModule' },  { path: 'confirmed', loadChildren: './confirmed/confirmed.module#ConfirmedPageModule' },
+  { path: 'coronavirus', loadChildren: './coronavirus/coronavirus.module#CoronavirusPageModule' },
+  { path: 'confirmed', loadChildren: './confirmed/confirmed.module#ConfirmedPageModule' },
   { path: 'registro-covid', loadChildren: './registro-covid/registro-covid.module#RegistroCovidPageModule' },
   { path: 'prenatal-control', loadChildren: './prenatal-control/prenatal-control.module#PrenatalControlPageModule' },
-
-
-  
-
- 
+  { path: 'show-encuestas', loadChildren: './show-encuestas/show-encuestas.module#ShowEncuestasPageModule' },
 ];
 
 @NgModule({

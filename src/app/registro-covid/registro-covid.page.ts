@@ -25,9 +25,9 @@ export interface NoRegisteredDiagnostic {
 })
 export class RegistroCovidPage implements OnInit {
 
-  @ViewChild('provinceSelect',{static:false}) provinciaSelect:IonSelect
-  @ViewChild('cantonSelect',{static:false}) cantonSelect:IonSelect
-  @ViewChild('distritoSelect',{static:false}) distritoSelect:IonSelect
+  @ViewChild('provinceSelect', { static: false }) provinciaSelect: IonSelect
+  @ViewChild('cantonSelect', { static: false }) cantonSelect: IonSelect
+  @ViewChild('distritoSelect', { static: false }) distritoSelect: IonSelect
 
   d: Date = new Date();
 
@@ -86,34 +86,35 @@ export class RegistroCovidPage implements OnInit {
 
   GenerateCantones() {
     this.cantonesList = [];
-    this.apiUbicacion.getCantones(this.provinciaSelect.value.id).then((resp) => {
-      Object.keys(resp).map((value, index, array) => {
-        this.cantonesList.push({ id: value, value: resp[value] });
+    if (this.provinciaSelect.value != undefined)
+      this.apiUbicacion.getCantones(this.provinciaSelect.value.id).then((resp) => {
+        Object.keys(resp).map((value, index, array) => {
+          this.cantonesList.push({ id: value, value: resp[value] });
+        });
+        console.log(this.cantonesList);
+        this.disableCantonSelect = false;
       });
-      console.log(this.cantonesList);
-      this.disableCantonSelect = false;
-    });
     this.cantonSelect.value = undefined;
     this.distritoSelect.value = undefined;
   }
 
-  GenerateDistritos(){
+  GenerateDistritos() {
     this.distritosList = [];
-    console.log(this.provinciaSelect)
-    this.apiUbicacion.getDistritos(this.provinciaSelect.value.id, this.cantonSelect.value.id).then((resp) => {
-      Object.keys(resp).map((value, index, array) => {
-        this.distritosList.push({ id: value, value: resp[value] });
+    if (this.provinciaSelect.value != undefined && this.cantonSelect.value != undefined)
+      this.apiUbicacion.getDistritos(this.provinciaSelect.value.id, this.cantonSelect.value.id).then((resp) => {
+        Object.keys(resp).map((value, index, array) => {
+          this.distritosList.push({ id: value, value: resp[value] });
+        });
+        console.log(this.distritosList);
+        this.disableDistritoSelect = false;
       });
-      console.log(this.distritosList);
-      this.disableDistritoSelect = false;
-    });
     this.distritoSelect.value = undefined;
   }
 
-  GenerateDirection(provinceSelect, cantonSelect, distritoSelect){
-    let province = provinceSelect.value.value;
-    let canton = cantonSelect.value.value;
-    let distrito = distritoSelect.value.value;
+  GenerateDirection(provinceSelect, cantonSelect, distritoSelect) {
+    let province = provinceSelect.value != undefined ? provinceSelect.value.value : '';
+    let canton = cantonSelect.value != undefined ? cantonSelect.value.value : '';
+    let distrito = distritoSelect.value != undefined ? distritoSelect.value.value : '';
     this.direction = `${province}, ${canton}, ${distrito}`;
     console.log(this.direction);
     this.userAddress = this.direction
@@ -184,12 +185,15 @@ export class RegistroCovidPage implements OnInit {
 
   private createMyForm() {
     return this.formBuilder.group({
-      tipo: new FormControl('n/a', Validators.required),
+      tipo: ['', Validators.required],
       name: ['', Validators.required],
       cedula: ['', Validators.required],
       telefono: ['', Validators.required],
       direccion: ['', Validators.required],
       edad: ['', Validators.required],
+      provincia: new FormControl(undefined, Validators.required),
+      canton: new FormControl(undefined, Validators.required),
+      distrito: new FormControl(undefined, Validators.required),
     });
   }
 
@@ -215,12 +219,12 @@ export class RegistroCovidPage implements OnInit {
       header: 'Aviso',
       subHeader: '',
       message:
-        'Bienvenido(a), proceda a llenar la siguiente encuesta',
+        'Bienvenido(a), proceda a seleccionar una de las siguientes encuestas',
       buttons: [{
         text: 'OK',
         role: 'OK',
         handler: () => {
-          this.router.navigateByUrl('/coronavirus');
+          this.router.navigateByUrl('/show-encuestas');
           //console.log('you clicked me');
         }
       },

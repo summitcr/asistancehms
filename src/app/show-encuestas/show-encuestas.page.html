@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar class="topMenu">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref=""></ion-back-button>
+    </ion-buttons>
+    <img src="assets/img/logoccss.png" alt="Es el de summit que representa una dos montañas" style="width: 40px;">
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-card [routerLink]="['/prenatal-control']">
+    <ion-card-header>
+      <ion-card-subtitle>Encuesta</ion-card-subtitle>
+      <ion-card-title>Maternidad</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      Información pertinente en relacion a esta encuesta 
+      y que se le deba mostrar al usuario.
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card [routerLink]="['/coronavirus']">
+    <ion-card-header>
+      <ion-card-subtitle>Encuesta</ion-card-subtitle>
+      <ion-card-title>Covid</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      Información pertinente en relacion a esta encuesta 
+      y que se le deba mostrar al usuario.
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
