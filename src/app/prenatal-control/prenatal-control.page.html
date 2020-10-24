@@ -1,12 +1,12 @@
 <ion-header>
   <ion-toolbar class="topMenu">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/menu/first/tabs/tab1/'+'0'"></ion-back-button>
+      <ion-back-button defaultHref=""></ion-back-button>
     </ion-buttons>
-    <ion-title>Summit</ion-title>
-
+    <img src="assets/img/logoccss.png" alt="Es el de summit que representa una dos montañas" style="width: 40px; padding: 0;">
   </ion-toolbar>
 </ion-header>
+
 <ion-content>
 
 
@@ -17,18 +17,19 @@
   </div>
 
   <form [formGroup]="myForm" padding>
-    <ion-slides direction='horizontal'  centeredSlides="false" pager #slides (ionSlideDidChange)="slideChanged()" >
+    <ion-slides direction='horizontal' centeredSlides="false" pager #slides (ionSlideDidChange)="slideChanged()">
 
       <ion-slide>
-        <ion-card class="cardHome" >
+        <ion-card class="cardHome">
           <ion-card-header class="cardheader">
             Paso 1
           </ion-card-header>
           <ion-card-content>
-            <ion-list >
+            <ion-list>
               <ion-item>
                 <ion-label class="option" position="floating">Estado Civil:</ion-label>
-                <ion-select formControlName="estadoCivil" placeholder="Seleccione una opcion" [(ngModel)]="userEstado" okText="Aceptar" cancelText="Cancelar">
+                <ion-select formControlName="estadoCivil" placeholder="Seleccione una opcion" [(ngModel)]="userEstado"
+                  okText="Aceptar" cancelText="Cancelar">
                   <ion-select-option value="Soltera">Soltera</ion-select-option>
                   <ion-select-option value="Casada">Casada</ion-select-option>
                   <ion-select-option value="Union Libre">Union Libre</ion-select-option>
@@ -63,12 +64,14 @@
               <ion-item>
                 <ion-label class="option" position="floating">¿Cual fue la fecha de su última regla?
                 </ion-label>
-                <ion-datetime doneText="Aceptar" cancelText="Cancelar" formControlName="fechaUltima" displayFormat="DD/MM/YYYY" placeholder="Día /Mes /Año" [(ngModel)]="userDate1"  ></ion-datetime>
+                <ion-datetime doneText="Aceptar" cancelText="Cancelar" formControlName="fechaUltima"
+                  displayFormat="DD/MM/YYYY" placeholder="Día /Mes /Año" [(ngModel)]="userDate1"></ion-datetime>
               </ion-item>
               <br>
               <ion-item>
                 <ion-label class="option" position="floating">¿Esta segura??</ion-label>
-                <ion-select formControlName="seguridad" placeholder="Si o No" [(ngModel)]="userSegura" okText="Aceptar" cancelText="Cancelar">
+                <ion-select formControlName="seguridad" placeholder="Si o No" [(ngModel)]="userSegura" okText="Aceptar"
+                  cancelText="Cancelar">
                   <ion-select-option value="Si">Si</ion-select-option>
                   <ion-select-option value="No">No</ion-select-option>
                 </ion-select>
@@ -89,7 +92,8 @@
               <br>
               <ion-item>
                 <ion-label class="option" position="floating">¿Asiste usted a control Prenatal?</ion-label>
-                <ion-select formControlName="controlPrena" placeholder="Si o No" [(ngModel)]="userCP" okText="Aceptar" cancelText="Cancelar">
+                <ion-select formControlName="controlPrena" placeholder="Si o No" [(ngModel)]="userCP" okText="Aceptar"
+                  cancelText="Cancelar">
                   <ion-select-option value="Si">Si</ion-select-option>
                   <ion-select-option value="No">No</ion-select-option>
                 </ion-select>
@@ -97,7 +101,8 @@
               <br>
               <ion-item>
                 <ion-label class="option" position="floating"> Indique su tipo de Sangre:</ion-label>
-                <ion-select formControlName="tipoSangre" placeholder="Tipo de sangre" [(ngModel)]="userTipoSangre" okText="Aceptar" cancelText="Cancelar">
+                <ion-select formControlName="tipoSangre" placeholder="Tipo de sangre" [(ngModel)]="userTipoSangre"
+                  okText="Aceptar" cancelText="Cancelar">
                   <ion-select-option value="A">A</ion-select-option>
                   <ion-select-option value="B">B</ion-select-option>
                   <ion-select-option value="AB">AB</ion-select-option>
@@ -107,7 +112,8 @@
               <br>
               <ion-item>
                 <ion-label class="option" position="floating"> Indique si el RH de su sangre es: </ion-label>
-                <ion-select formControlName="tipoRH" placeholder="Positivo o negativo" [(ngModel)]="userRH" okText="Aceptar" cancelText="Cancelar">
+                <ion-select formControlName="tipoRH" placeholder="Positivo o negativo" [(ngModel)]="userRH"
+                  okText="Aceptar" cancelText="Cancelar">
                   <ion-select-option value="Positivo">Positivo</ion-select-option>
                   <ion-select-option value="Negativo">Negativo</ion-select-option>
 
@@ -117,13 +123,15 @@
               <ion-item>
                 <ion-label class="option" position="floating">¿Cuantos hijos ha tenido??
                 </ion-label>
-                <ion-input formControlName="cantidadEmba" type="text" placeholder="Digite la cantidad" [(ngModel)]="userCantidadEmba">
+                <ion-input formControlName="cantidadEmba" type="text" placeholder="Digite la cantidad"
+                  [(ngModel)]="userCantidadEmba">
                 </ion-input>
               </ion-item>
               <br>
               <ion-item>
                 <ion-label class="option" position="floating">¿Le han realizado alguna de estas cirugías?</ion-label>
-                <ion-select formControlName="controlCirugia" placeholder="Digite una opción" [(ngModel)]="userCirugia" okText="Aceptar" cancelText="Cancelar">
+                <ion-select formControlName="controlCirugia" placeholder="Digite una opción" [(ngModel)]="userCirugia"
+                  okText="Aceptar" cancelText="Cancelar">
                   <ion-select-option value="Cesarea">Cesarea</ion-select-option>
                   <ion-select-option value="Cirugia de utero o matriz">Cirugía de útero o matriz</ion-select-option>
                   <ion-select-option value="Ninguna">Ninguna</ion-select-option>
@@ -133,7 +141,8 @@
               <ion-item>
                 <ion-label class="option" position="floating">¿Su doctor le ha informado que ha tenido 2 o mas
                   infecciones vaginales?</ion-label>
-                <ion-select formControlName="controlInfeccionV" placeholder="Si o No" [(ngModel)]="userInfeccionesV" okText="Aceptar" cancelText="Cancelar">
+                <ion-select formControlName="controlInfeccionV" placeholder="Si o No" [(ngModel)]="userInfeccionesV"
+                  okText="Aceptar" cancelText="Cancelar">
                   <ion-select-option value="Si">Si</ion-select-option>
                   <ion-select-option value="No">No</ion-select-option>
                 </ion-select>
@@ -142,7 +151,8 @@
               <ion-item>
                 <ion-label class="option" position="floating">¿Su doctor le ha informado que ha tenido 2 o mas
                   infecciones Urinarias?</ion-label>
-                <ion-select formControlName="controlUrinaria" placeholder="Si o No" [(ngModel)]="userInfeccionesU" okText="Aceptar" cancelText="Cancelar">
+                <ion-select formControlName="controlUrinaria" placeholder="Si o No" [(ngModel)]="userInfeccionesU"
+                  okText="Aceptar" cancelText="Cancelar">
                   <ion-select-option value="Si">Si</ion-select-option>
                   <ion-select-option value="No">No</ion-select-option>
                 </ion-select>
@@ -151,32 +161,35 @@
               <ion-item>
                 <ion-label class="option" position="floating">¿ Cual fue la fecha de terminación del último embarazo?
                 </ion-label>
-                <ion-datetime doneText="Aceptar" cancelText="Cancelar" formControlName="fechaTerminacion" displayFormat="DD/MM/YYYY" placeholder="Día /Mes /Año"  [(ngModel)]="userUltimoEmba" ></ion-datetime>
+                <ion-datetime doneText="Aceptar" cancelText="Cancelar" formControlName="fechaTerminacion"
+                  displayFormat="DD/MM/YYYY" placeholder="Día /Mes /Año" [(ngModel)]="userUltimoEmba"></ion-datetime>
               </ion-item>
               <br>
-              
+
             </ion-list>
           </ion-card-content>
         </ion-card>
       </ion-slide>
       <ion-slide>
-       
+
         <ion-card class="cardHome">
           <ion-card-header class="cardheader">
             Paso 2:
           </ion-card-header>
           <ion-card-content>
-            <ion-list >
-              <ion-item >
+            <ion-list>
+              <ion-item>
                 <ion-label class="option" position="floating">¿De cuantos Bebé esta usted embarazada?
                 </ion-label>
-                <ion-input formControlName="cantidadBebe" type="text" placeholder="Cantidad" [(ngModel)]="userCantidadBebe">
+                <ion-input formControlName="cantidadBebe" type="text" placeholder="Cantidad"
+                  [(ngModel)]="userCantidadBebe">
                 </ion-input>
               </ion-item> <br>
               <ion-item>
                 <ion-label class="option" position="floating">¿Ha estado usted tomando un tratamiento para embarazarse?
                 </ion-label>
-                <ion-select formControlName="controlTratamiento" placeholder="Si o No" [(ngModel)]="userTratamiento" okText="Aceptar" cancelText="Cancelar">
+                <ion-select formControlName="controlTratamiento" placeholder="Si o No" [(ngModel)]="userTratamiento"
+                  okText="Aceptar" cancelText="Cancelar">
                   <ion-select-option value="Si">Si</ion-select-option>
                   <ion-select-option value="No">No</ion-select-option>
                 </ion-select>
@@ -190,7 +203,7 @@
               </ion-item>
 
               <br>
-             
+
 
               <ion-label class="option" position="floating">Su doctor le ha informado que usted tiene alguna de las
                 siguientes enfermedades:
@@ -204,7 +217,7 @@
             </ion-list>
           </ion-card-content>
         </ion-card>
-     
+
       </ion-slide>
       <ion-slide>
         <ion-card class="cardHome">
@@ -213,7 +226,8 @@
           </ion-card-header>
           <ion-card-content>
             <ion-list>
-              <ion-label class="option" position="floating">Ha tenido alguna de las siguientes enfermedades asociadas al embarazo actual?
+              <ion-label class="option" position="floating">Ha tenido alguna de las siguientes enfermedades asociadas al
+                embarazo actual?
               </ion-label>
               <ion-item *ngFor="let ca of current ">
                 <ion-checkbox color="dark" slot="start" value="{{ca.id}}" class="check-current"></ion-checkbox>
@@ -221,7 +235,8 @@
               </ion-item>
 
               <br>
-              <ion-label class="option" position="floating">Ha tenido alguna de las siguientes complicaciones en embarazos anteriores
+              <ion-label class="option" position="floating">Ha tenido alguna de las siguientes complicaciones en
+                embarazos anteriores
               </ion-label>
               <ion-item *ngFor="let co of complicat">
                 <ion-checkbox color="dark" slot="start" value="{{co.id}}" class="check-complicat"></ion-checkbox>
@@ -232,22 +247,21 @@
             </ion-list>
           </ion-card-content>
           <div padding>
-            <ion-button class="btnLoging" expand="block" type="submit" [disabled]="!myForm.valid"
-            (click)="confirm()">
+            <ion-button class="btnLoging" expand="block" type="submit" [disabled]="!myForm.valid" (click)="confirm()">
               Confirmar
             </ion-button>
-  
+
           </div>
         </ion-card>
       </ion-slide>
-  
+
     </ion-slides>
   </form>
 
 </ion-content>
 <ion-footer class="ion-no-border">
   <ion-toolbar>
-    <ion-segment full="true" (ionChange)="segmentChanged($event)" [(ngModel)]="segment"  assertive>
+    <ion-segment full="true" (ionChange)="segmentChanged($event)" [(ngModel)]="segment" assertive>
       <ion-segment-button id="seg-1" value="0">
         Paso 1
       </ion-segment-button>
@@ -257,7 +271,7 @@
       <ion-segment-button id="seg-3" (click)="ScrollToPoint(300, 120)" value="2">
         Enviar
       </ion-segment-button>
-      
+
     </ion-segment>
   </ion-toolbar>
 </ion-footer>

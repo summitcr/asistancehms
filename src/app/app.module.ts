@@ -30,6 +30,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CovidComponent } from './covid/covid.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegistroCovidPage } from './registro-covid/registro-covid.page';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 @NgModule({
   declarations: [ AppComponent, ModalPagePage, ModalNotificationPage,HeartrateComponent,CovidComponent,],
@@ -43,13 +46,15 @@ import { RegistroCovidPage } from './registro-covid/registro-covid.page';
      AutoCompleteModule,
      IonicStorageModule.forRoot(),
      FormsModule, 
-     ReactiveFormsModule],
+     ReactiveFormsModule,
+    ],
   providers: [
     StatusBar,
     SplashScreen,
     
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    CrudService,UtilsService, StorageService, UtilStorageService, BeaconService,IBeacon, BLE, Toast, QRScanner, LocalNotifications,SeePeoplePage,RegistroCovidPage
+    CrudService,UtilsService, AndroidPermissions, LocationAccuracy, Geolocation, StorageService, UtilStorageService, BeaconService, 
+    IBeacon, BLE, Toast, QRScanner, LocalNotifications,SeePeoplePage,RegistroCovidPage
   ],
   bootstrap: [AppComponent]
 })
