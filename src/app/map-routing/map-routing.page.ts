@@ -111,8 +111,9 @@ export class MapRoutingPage implements OnInit {
   }
 
   requestGPSPermission() {
-    this.locationAccuracy.canRequest().then((canRequest: boolean) => {
+    this.locationAccuracy.canRequest().then(async (canRequest: boolean) => {
       if (canRequest) {
+        await this.askToTurnOnGPS()
         console.log("4");
       } else {
         //Show 'GPS Permission Request' dialogue
