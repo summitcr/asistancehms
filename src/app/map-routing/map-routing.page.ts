@@ -4,6 +4,7 @@ import { Platform } from '@ionic/angular';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { AzureRoutesService } from '../services/azure-routes.service';
 
 declare var google;
 
@@ -21,12 +22,21 @@ export class MapRoutingPage implements OnInit {
   };
   blueDot = null;
   watcher;
+  infoWindow = new google.maps.InfoWindow({
+    content: null,
+  });
+  polyline = new google.maps.Polyline({
+    map: null,
+    strokeColor: '#1a73e8',
+    visible: false
+  });
 
   constructor(
     private androidPermissions: AndroidPermissions,
     private locationAccuracy: LocationAccuracy,
     private geolocation: Geolocation,
     private platform: Platform,
+    private service:AzureRoutesService
   ) { }
 
   async ngOnInit() {
@@ -54,6 +64,8 @@ export class MapRoutingPage implements OnInit {
       scaleControl: false,
       keyboardShortcuts: false,
       clickableIcons: false,
+      maxZoom: 17,
+      minZoom:10,
     });
     google.maps.event.addListenerOnce(this.map, 'idle', () => {
       mapEle.classList.add('show-map');
@@ -149,6 +161,47 @@ export class MapRoutingPage implements OnInit {
       lat: coords.latitude,
       lng: coords.longitude
     };
+  }
+
+  showRoute({ latitude: lat, longitude: lng }) {
+    const routeQuery = `${this.currentPosition.lat},${this.currentPosition.lng}:${lat},${lng}`;
+    // if (card.path) {
+    //   console.log('entro sin pedir');
+    //   this.polyline.setMap(this.map);
+    //   this.polyline.setPath(card.path);
+    //   this.map.fitBounds(card.bounds, { bottom: 60 });
+    // } else {
+    //   console.log('entro para pedir');
+    //   this.getRoute(routeQuery);
+    // }
+    this.getRoute(routeQuery);
+    // this.showAgencies();
+    this.polyline.setVisible(true);
+    this.infoWindow.map = null;
+    this.infoWindow.close();
+  }
+
+  getRoute(routeQuery) {
+    this.service.getRoute(routeQuery)
+      .toPromise().then((data: any) => {
+
+        const pathArray = data.routes[0].legs[0].points;
+        const googleArray = new google.maps.MVCArray();
+        const bounds = new google.maps.LatLngBounds();
+
+        pathArray.forEach((point: any) => {
+          const latLng = new google.maps.LatLng(point.latitude, point.longitude);
+          googleArray.push(latLng);
+          bounds.extend(latLng);
+        });
+        // -------------------------- //
+        // card.bounds = bounds;
+        // card.path = googleArray;
+        // console.log(card);
+        this.polyline.setMap(this.map);
+        this.polyline.setPath(googleArray);
+        this.map.fitBounds(bounds, { bottom: 40 });
+      }).catch(error => console.error(error));
   }
 
 }
