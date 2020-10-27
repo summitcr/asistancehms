@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { NavController, AlertController, IonSelect } from '@ionic/angular';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CrudService } from '../services/crud.service';
@@ -22,6 +22,7 @@ export interface NoRegisteredDiagnostic {
   selector: 'app-registro-covid',
   templateUrl: './registro-covid.page.html',
   styleUrls: ['./registro-covid.page.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegistroCovidPage implements OnInit {
 
@@ -61,6 +62,8 @@ export class RegistroCovidPage implements OnInit {
   cantonesList = [];
   distritosList = [];
   direction: any;
+  registroForm: FormGroup;
+  enableRegisterForm: boolean = false;
 
   constructor(
     public navCtrl: NavController,
@@ -73,6 +76,7 @@ export class RegistroCovidPage implements OnInit {
     private alertCtrl: AlertController,
     private apiUbicacion: UbicacionService) {
     this.myForm = this.createMyForm();
+    // this.loger();
   }
 
   ngOnInit() {
@@ -179,6 +183,37 @@ export class RegistroCovidPage implements OnInit {
       console.error(err);
     });
   }
+
+  confirmButton(event) {
+    if (this.valideteCedula()) {
+      this.savePaci();
+    } else {
+      this.showAlert("No esta registrado", "Debe de completar el formulario");
+      this.registroForm.controls.name.setValidators(Validators.required);
+      this.registroForm.controls.telefono.setValidators(Validators.required);
+      this.registroForm.controls.direccion.setValidators(Validators.required);
+      this.registroForm.controls.edad.setValidators(Validators.required);
+      this.registroForm.controls.provincia.setValidators(Validators.required);
+      this.registroForm.controls.canton.setValidators(Validators.required);
+      this.registroForm.controls.distrito.setValidators(Validators.required);
+      this.registroForm.updateValueAndValidity();
+      this.myForm.updateValueAndValidity();
+      console.log(this.myForm);
+      event.target.innerHTML = "Registrar";
+      this.enableRegisterForm = true;
+    }
+  }
+
+  valideteCedula() {
+    const ced = this.myForm.controls.cedula.value;
+    console.log(ced);
+    if (ced === '102340567') {
+      return true
+    } else {
+      return false
+    }
+  }
+
   saveData() {
     console.log(this.myForm.value);
   }
@@ -186,15 +221,23 @@ export class RegistroCovidPage implements OnInit {
   private createMyForm() {
     return this.formBuilder.group({
       tipo: ['', Validators.required],
-      name: ['', Validators.required],
       cedula: ['', Validators.required],
-      telefono: ['', Validators.required],
-      direccion: ['', Validators.required],
-      edad: ['', Validators.required],
-      provincia: new FormControl(undefined, Validators.required),
-      canton: new FormControl(undefined, Validators.required),
-      distrito: new FormControl(undefined, Validators.required),
+      registro: this.registroForm = new FormGroup({
+        name: new FormControl(''),
+        telefono: new FormControl(''),
+        direccion: new FormControl(''),
+        edad: new FormControl(''),
+        provincia: new FormControl(undefined),
+        canton: new FormControl(undefined),
+        distrito: new FormControl(undefined),
+      }, Validators.required)
     });
+  }
+
+  loger() {
+    setInterval(() => {
+      console.log(this.myForm.controls.registro);
+    }, 2000);
   }
 
   async presentAlert() {
@@ -224,7 +267,24 @@ export class RegistroCovidPage implements OnInit {
         text: 'OK',
         role: 'OK',
         handler: () => {
-          this.router.navigateByUrl('/show-encuestas');
+          this.router.navigateByUrl('/servicios');
+          //console.log('you clicked me');
+        }
+      },
+      ]
+    });
+    await alert.present();
+  }
+
+  async showAlert(header?: string, msg?: string, subHeader?: string) {
+    const alert = await this.alertCtrl.create({
+      header: header || "",
+      subHeader: subHeader || "",
+      message: msg || "",
+      buttons: [{
+        text: 'OK',
+        role: 'OK',
+        handler: () => {
           //console.log('you clicked me');
         }
       },

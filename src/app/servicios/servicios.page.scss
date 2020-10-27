@@ -1,0 +1,47 @@
+.topMenu{
+    --background: #203B69;
+    --color: #fff;
+    text-align: center;
+}
+
+ion-content{
+    h5{
+        padding: 10px 20px 0 20px;
+        margin: 0;
+    }
+    
+    .grid-container{
+        text-align: left;
+        display: grid;
+        justify-content: center;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        grid-gap: 10px;
+        padding: 15px;
+    }
+
+    .card{
+        padding: 0;
+        margin: 0;
+        height: 130px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .title-card{
+        font-size: large;
+    }
+
+    .content-card{
+        padding: 10px;
+    }
+
+    ion-item{
+        --inner-border-width: 0;
+    }
+}
+
+ion-back-button{
+    --color: white;
+}

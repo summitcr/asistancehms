@@ -1,0 +1,86 @@
+<ion-header>
+  <ion-toolbar class="topMenu">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="" [text]="Salir"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <img src="assets/img/logoccss.png" alt="Es el de summit que representa una dos montañas" style="width: 40px;">
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- <ion-title>Servicios</ion-title> -->
+  <ion-card mode="ios">
+    <ion-item>
+      <ion-icon name="pricetag" slot="start"></ion-icon>
+      <ion-label>Seleccione un servicio para adquirir un ticket.</ion-label>
+      <!-- <ion-button fill="outline" slot="end">Ver</ion-button> -->
+    </ion-item>
+  </ion-card>
+
+  <h5>Servicios</h5>
+  <div class="grid-container">
+    <ion-card mode="ios" class="card" [routerLink]="['/coronavirus']">
+      <ion-card-content class="content-card">
+        <span style=" font-size: x-large; color: lightcoral;">
+          <i class="fas fa-ambulance"></i>
+        </span>
+        <ion-card-title class="title-card">Emergencias</ion-card-title>
+      </ion-card-content>
+    </ion-card>
+    
+    <ion-card mode="ios" class="card" [routerLink]="['/coronavirus']">
+      <ion-card-content class="content-card">
+        <span style=" font-size: x-large; color: lightpink;">          
+          <i class="fas fa-heartbeat"></i>
+        </span>
+        <ion-card-title class="title-card">Cardiologia</ion-card-title>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card mode="ios" class="card" [routerLink]="['/coronavirus']">
+      <ion-card-content class="content-card">
+        <span style=" font-size: x-large; color: lightblue;">
+          <i class="fas fa-tooth"></i>
+        </span>
+        <ion-card-title class="title-card">Odontologia</ion-card-title>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card mode="ios" class="card" [routerLink]="['/coronavirus']">
+      <ion-card-content class="content-card">
+        <span style=" font-size: x-large; color: lightsalmon;">
+          <i class="fas fa-baby"></i>
+        </span>
+        <ion-card-title class="title-card">Obstetricia</ion-card-title>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card mode="ios" class="card" [routerLink]="['/coronavirus']">
+      <ion-card-content class="content-card">
+        <span style=" font-size: x-large; color: lightslategray;">
+          <i class="fas fa-radiation"></i>
+        </span>
+        <ion-card-title class="title-card">Rayos X</ion-card-title>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card mode="ios" class="card" [routerLink]="['/coronavirus']">
+      <ion-card-content class="content-card">
+        <span style=" font-size: x-large; color: lightseagreen;">
+          <i class="fas fa-pills"></i>
+        </span>
+        <ion-card-title class="title-card">Farmacia</ion-card-title>
+      </ion-card-content>
+    </ion-card>
+    
+  </div>
+
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+    <ion-fab-button size="small" color="secondary">
+      <ion-icon name="navigate"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  
+</ion-content>

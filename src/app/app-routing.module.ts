@@ -17,7 +17,8 @@ const routes: Routes = [
   { path: 'confirmed', loadChildren: './confirmed/confirmed.module#ConfirmedPageModule' },
   { path: 'registro-covid', loadChildren: './registro-covid/registro-covid.module#RegistroCovidPageModule' },
   { path: 'prenatal-control', loadChildren: './prenatal-control/prenatal-control.module#PrenatalControlPageModule' },
-  { path: 'show-encuestas', loadChildren: './show-encuestas/show-encuestas.module#ShowEncuestasPageModule' },  { path: 'map-routing', loadChildren: './map-routing/map-routing.module#MapRoutingPageModule' },
+  { path: 'map-routing', loadChildren: './map-routing/map-routing.module#MapRoutingPageModule' },
+  { path: 'servicios', loadChildren: './servicios/servicios.module#ServiciosPageModule' },
 
 ];
 

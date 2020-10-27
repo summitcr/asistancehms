@@ -1,11 +1,14 @@
 <ion-header>
   <ion-toolbar class="topMenu">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref=""></ion-back-button>
+      <ion-back-button defaultHref="" [text]="Salir"></ion-back-button>
     </ion-buttons>
-    <img src="assets/img/logoccss.png" alt="Es el de summit que representa una dos montañas" style="width: 40px;">
+    <ion-title>
+      <img src="assets/img/logoccss.png" alt="Es el de summit que representa una dos montañas" style="width: 40px;">
+    </ion-title>
   </ion-toolbar>
 </ion-header>
+
 <ion-content padding>
 
   <ion-card-content>
@@ -30,66 +33,68 @@
           <ion-input formControlName="cedula" type="text" placeholder="Cedula" [(ngModel)]="userCed"></ion-input>
         </ion-item>
         <br>
-        <ion-item>
-          <ion-icon name="person" slot="end"></ion-icon>
-          <ion-label position="floating">Nombre Completo:</ion-label>
-          <ion-input formControlName="name" type="text" placeholder="Nombre Completo" [(ngModel)]="userName">
-          </ion-input>
-        </ion-item>
-        <br>
-
-        <ion-item>
-          <ion-icon name="person" slot="end"></ion-icon>
-          <ion-label position="floating">Edad:</ion-label>
-          <ion-input formControlName="edad" type="number" placeholder="Edad" [(ngModel)]="userEdad"></ion-input>
-        </ion-item>
-        <br>
-        <ion-item>
-          <ion-icon name="call" slot="end"></ion-icon>
-          <ion-label position="floating">Teléfono:</ion-label>
-          <ion-input formControlName="telefono" type="number" placeholder="Telefono" [(ngModel)]="userTel"></ion-input>
-        </ion-item>
-        <br>
-        <ion-item>
-          <ion-icon name="locate" slot="end"></ion-icon>
-          <ion-label position="floating">Lugar de residencia:</ion-label>
-          <ion-select formControlName="provincia" [value]="provinciaId" placeholder="Provincia" #provinceSelect
-            (ionChange)="GenerateCantones(provinceSelect)">
-            <ion-select-option [value]="{id:1, value:'San Jose'}">San Jose</ion-select-option>
-            <ion-select-option [value]="{id:2, value:'Alajuela'}">Alajuela</ion-select-option>
-            <ion-select-option [value]="{id:3, value:'Cartago'}">Cartago</ion-select-option>
-            <ion-select-option [value]="{id:4, value:'Heredia'}">Heredia</ion-select-option>
-            <ion-select-option [value]="{id:5, value:'Guanacaste'}">Guanacaste</ion-select-option>
-            <ion-select-option [value]="{id:6, value:'Puntarenas'}">Puntarenas</ion-select-option>
-            <ion-select-option [value]="{id:7, value:'Limon'}">Limon</ion-select-option>
-          </ion-select>
-
-          <ion-label [hidden]="disableCantonSelect" position="floating">Canton</ion-label>
-          <ion-select formControlName="canton" [value]="cantonId" placeholder="Selecione un Canton" #cantonSelect
-            (ionChange)="GenerateDistritos(provinceSelect, cantonSelect)" [disabled]="disableCantonSelect"
-            [hidden]="disableCantonSelect">
-            <ion-select-option *ngFor="let canton of cantonesList" [value]="canton">
-              {{canton.value}}
-            </ion-select-option>
-          </ion-select>
-
-          <ion-label [hidden]="disableDistritoSelect" position="floating">Distrito</ion-label>
-          <ion-select formControlName="distrito" [value]="distritoId" placeholder="Selecione un Distrito"
-            #distritoSelect (ionChange)="GenerateDirection(provinceSelect, cantonSelect, distritoSelect)"
-            [disabled]="disableDistritoSelect" [hidden]="disableDistritoSelect">
-            <ion-select-option *ngFor="let distrito of distritosList" [value]="distrito">
-              {{distrito.value}}
-            </ion-select-option>
-          </ion-select>
-
-          <ion-input formControlName="direccion" type="text" placeholder="Dirección" [(ngModel)]="userAddress" hidden>
-          </ion-input>
-        </ion-item>
-        <br>
+        <ng-template [ngIf]="enableRegisterForm">
+          <ion-item formGroupName="registro">
+            <ion-icon name="person" slot="end"></ion-icon>
+            <ion-label position="floating">Nombre Completo:</ion-label>
+            <ion-input formControlName="name" type="text" placeholder="Nombre Completo" [(ngModel)]="userName">
+            </ion-input>
+          </ion-item>
+          <br>
+  
+          <ion-item formGroupName="registro">
+            <ion-icon name="person" slot="end"></ion-icon>
+            <ion-label position="floating">Edad:</ion-label>
+            <ion-input formControlName="edad" type="number" placeholder="Edad" [(ngModel)]="userEdad"></ion-input>
+          </ion-item>
+          <br>
+          <ion-item formGroupName="registro">
+            <ion-icon name="call" slot="end"></ion-icon>
+            <ion-label position="floating">Teléfono:</ion-label>
+            <ion-input formControlName="telefono" type="number" placeholder="Telefono" [(ngModel)]="userTel"></ion-input>
+          </ion-item>
+          <br>
+          <ion-item formGroupName="registro">
+            <ion-icon name="locate" slot="end"></ion-icon>
+            <ion-label position="floating">Lugar de residencia:</ion-label>
+            <ion-select formControlName="provincia" [value]="provinciaId" placeholder="Provincia" #provinceSelect
+              (ionChange)="GenerateCantones(provinceSelect)">
+              <ion-select-option [value]="{id:1, value:'San Jose'}">San Jose</ion-select-option>
+              <ion-select-option [value]="{id:2, value:'Alajuela'}">Alajuela</ion-select-option>
+              <ion-select-option [value]="{id:3, value:'Cartago'}">Cartago</ion-select-option>
+              <ion-select-option [value]="{id:4, value:'Heredia'}">Heredia</ion-select-option>
+              <ion-select-option [value]="{id:5, value:'Guanacaste'}">Guanacaste</ion-select-option>
+              <ion-select-option [value]="{id:6, value:'Puntarenas'}">Puntarenas</ion-select-option>
+              <ion-select-option [value]="{id:7, value:'Limon'}">Limon</ion-select-option>
+            </ion-select>
+  
+            <ion-label [hidden]="disableCantonSelect" position="floating">Canton</ion-label>
+            <ion-select formControlName="canton" [value]="cantonId" placeholder="Selecione un Canton" #cantonSelect
+              (ionChange)="GenerateDistritos(provinceSelect, cantonSelect)" [disabled]="disableCantonSelect"
+              [hidden]="disableCantonSelect">
+              <ion-select-option *ngFor="let canton of cantonesList" [value]="canton">
+                {{canton.value}}
+              </ion-select-option>
+            </ion-select>
+  
+            <ion-label [hidden]="disableDistritoSelect" position="floating">Distrito</ion-label>
+            <ion-select formControlName="distrito" [value]="distritoId" placeholder="Selecione un Distrito"
+              #distritoSelect (ionChange)="GenerateDirection(provinceSelect, cantonSelect, distritoSelect)"
+              [disabled]="disableDistritoSelect" [hidden]="disableDistritoSelect">
+              <ion-select-option *ngFor="let distrito of distritosList" [value]="distrito">
+                {{distrito.value}}
+              </ion-select-option>
+            </ion-select>
+  
+            <ion-input formControlName="direccion" type="text" placeholder="Dirección" [(ngModel)]="userAddress" hidden>
+            </ion-input>
+          </ion-item>
+        </ng-template>
+        <!-- <br> -->
 
       </ion-list>
       <div padding>
-        <ion-button class="btnLoging" expand="block" type="submit" [disabled]="!myForm.valid" (click)="savePaci()">
+        <ion-button class="btnLoging" expand="block" type="submit" [disabled]="!myForm.valid" (click)="confirmButton($event)">
           Confirmar
         </ion-button>
 

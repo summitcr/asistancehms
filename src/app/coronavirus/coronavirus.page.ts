@@ -107,16 +107,17 @@ export class CoronavirusPage implements OnInit {
       this.getpacient = resp;
       // this.presentConfirm();
       console.log(resp);
-      if(resp!=null){
-      this.listaPoll();}
+      if (resp != null) {
+        this.listaPoll();
+      }
 
-      
+
     }, (err) => {
       console.error(err);
     });
   }
   listaPoll() {
-    let count=0;
+    let count = 0;
     let userId = this.userIdentifier.identifier;
     this.services.get(this.params.params.pacient_poll + '/' + userId).subscribe((resp) => {
       this.getpoll = resp;
@@ -133,14 +134,14 @@ export class CoronavirusPage implements OnInit {
       if (this.getpoll.preguntaSintoma == 'Si') {
         count++;
 
-      } 
+      }
       console.log(count)
-      if(count>2){
+      if (count > 2) {
         this.presentAlert();
-        
-      }else{
+
+      } else {
         this.presentConfirm();
-        
+
       }
     }, (err) => {
       console.error(err);
@@ -222,6 +223,7 @@ export class CoronavirusPage implements OnInit {
         role: 'OK',
         handler: () => {
           this.router.navigateByUrl('/heart-rate');
+          // this.router.navigateByUrl('/map-routing');
           //console.log('you clicked me');
         }
       },
@@ -239,15 +241,16 @@ export class CoronavirusPage implements OnInit {
         text: 'OK',
         role: 'OK',
         handler: () => {
-         this.go();
+          //  this.go();
           //console.log('you clicked me');
+          this.router.navigateByUrl('/servicios');
         }
       },
       ]
     });
     await alert.present();
   }
-  go(){
+  go() {
     this.router.navigateByUrl('/menu/first/tabs/tab1/' + '5e4ef9b6bdadf00016d02b1f');
   }
 }//fin de la class

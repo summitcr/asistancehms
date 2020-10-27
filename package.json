@@ -58,6 +58,7 @@
     "cordova-sqlite-storage": "^3.4.0",
     "core-js": "^2.5.4",
     "ionic4-auto-complete": "^2.1.4",
+    "ionicons": "^4.6.3",
     "mapbox-gl": "^1.5.0",
     "mapwize": "^3.5.0",
     "mapwize-cordova": "git+https://github.com/Mapwize/mapwize-cordova.git",
