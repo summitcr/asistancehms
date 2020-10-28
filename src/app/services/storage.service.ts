@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { observable, Observable, Observer } from 'rxjs';
 
 export interface iStorage {
   saveData();
@@ -14,12 +14,9 @@ export interface iStorage {
 
 export class StorageService {
 
-  modalTicket:any;
+  modalTicket: any;
 
   constructor(private storage: Storage, private router: Router) {
-    this.modalTicket = new Observable((observer)=>{
-      
-    });
   }
 
   localSave(key, data: any): void {

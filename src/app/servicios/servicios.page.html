@@ -12,9 +12,14 @@
 <ion-content>
   <!-- <ion-title>Servicios</ion-title> -->
   <ion-card mode="ios">
-    <ion-item>
-      <ion-icon name="pricetag" slot="start"></ion-icon>
-      <ion-label>Seleccione un servicio para adquirir un ticket.</ion-label>
+    <ion-item (click)="presentModal()">
+      <!-- <ion-badge slot="start">0</ion-badge>
+      <ion-icon name="pricetag" slot="start"></ion-icon> -->
+      <ion-button class="badge-button">
+        <ion-icon size="large" name="pricetag"></ion-icon>
+        <ion-badge class="badge-number" color="danger">3</ion-badge>
+      </ion-button>
+      <ion-label>Ver tickets y citas pendientes.</ion-label>
       <!-- <ion-button fill="outline" slot="end">Ver</ion-button> -->
     </ion-item>
   </ion-card>
@@ -29,10 +34,10 @@
         <ion-card-title class="title-card">Emergencias</ion-card-title>
       </ion-card-content>
     </ion-card>
-    
+
     <ion-card mode="ios" class="card" [routerLink]="['/coronavirus']">
       <ion-card-content class="content-card">
-        <span style=" font-size: x-large; color: lightpink;">          
+        <span style=" font-size: x-large; color: lightpink;">
           <i class="fas fa-heartbeat"></i>
         </span>
         <ion-card-title class="title-card">Cardiologia</ion-card-title>
@@ -59,7 +64,7 @@
 
     <ion-card mode="ios" class="card" [routerLink]="['/coronavirus']">
       <ion-card-content class="content-card">
-        <span style=" font-size: x-large; color: lightslategray;">
+        <span style=" font-size: x-large; color: lightgrey;">
           <i class="fas fa-radiation"></i>
         </span>
         <ion-card-title class="title-card">Rayos X</ion-card-title>
@@ -74,7 +79,7 @@
         <ion-card-title class="title-card">Farmacia</ion-card-title>
       </ion-card-content>
     </ion-card>
-    
+
   </div>
 
   <ion-fab horizontal="end" vertical="bottom" slot="fixed">
@@ -82,5 +87,5 @@
       <ion-icon name="navigate"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  
+
 </ion-content>

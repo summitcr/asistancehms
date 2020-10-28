@@ -5,6 +5,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { AzureRoutesService } from '../services/azure-routes.service';
+import { Router } from '@angular/router';
 
 declare var google;
 
@@ -30,16 +31,39 @@ export class MapRoutingPage implements OnInit {
     strokeColor: '#1a73e8',
     visible: false
   });
+  centroAdscripcion: any;
+
+  centrosLocations = {
+    "Hospital Monseñor Sanabria": {
+      lat:9.974475,
+      long:-84.752396
+    },
+    "Clinica Barranca": {
+      lat:9.979787,
+      long:-84.722653
+    },
+    "Clinica San Rafael": {
+      lat:9.975295,
+      long:-84.836127
+    }
+  }
+
+  centerLatLong: {
+    lat: number,
+    long: number, 
+  }
 
   constructor(
     private androidPermissions: AndroidPermissions,
     private locationAccuracy: LocationAccuracy,
     private geolocation: Geolocation,
     private platform: Platform,
-    private service:AzureRoutesService
+    private service:AzureRoutesService,
+    private router: Router
   ) { }
 
   async ngOnInit() {
+    this.getNavigationData();
     if (this.platform.is("cordova")) {
       await this.checkGPSPermission();
       await this.getInitialPosition();
@@ -47,6 +71,34 @@ export class MapRoutingPage implements OnInit {
     }else {
       await this.getInitialPosition();
       this.loadMap();
+    }
+  }
+
+  ionViewWillLeave() {
+    this.watcher.unsubscribe();
+  }
+
+  getNavigationData(){
+    const navigationState = this.router.getCurrentNavigation().extras.state;
+    if (
+      navigationState !== undefined && navigationState !== null &&
+      navigationState.data.centro !== undefined && navigationState.data.centro !== null
+    ) {
+      this.centroAdscripcion = navigationState.data.centro;
+      this.getCenterLatLong();
+      console.log(this.centroAdscripcion);
+    } else {
+      this.centroAdscripcion = "No se encontro un centro de adscripcion";
+    }
+  }
+
+  getCenterLatLong(){
+    if(this.centroAdscripcion == "Hospital Monseñor Sanabria"){
+      this.centerLatLong = this.centrosLocations["Hospital Monseñor Sanabria"];
+    } else if(this.centroAdscripcion == "Clinica Barranca"){
+      this.centerLatLong = this.centrosLocations["Clinica Barranca"];
+    } else if(this.centroAdscripcion == "Clinica San Rafael"){
+      this.centerLatLong = this.centrosLocations["Clinica San Rafael"];
     }
   }
 
@@ -163,7 +215,8 @@ export class MapRoutingPage implements OnInit {
     };
   }
 
-  showRoute({ latitude: lat, longitude: lng }) {
+  showRoute() {
+    const {lat, long: lng} = this.centerLatLong
     const routeQuery = `${this.currentPosition.lat},${this.currentPosition.lng}:${lat},${lng}`;
     // if (card.path) {
     //   console.log('entro sin pedir');

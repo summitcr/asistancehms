@@ -64,6 +64,7 @@ export class RegistroCovidPage implements OnInit {
   direction: any;
   registroForm: FormGroup;
   enableRegisterForm: boolean = false;
+  userModel: { id: string; name: string; apellido: string; provincia: string; canton: string; distrito: string; centroAdscrito: string; };
 
   constructor(
     public navCtrl: NavController,
@@ -185,33 +186,59 @@ export class RegistroCovidPage implements OnInit {
   }
 
   confirmButton(event) {
-    if (this.valideteCedula()) {
+    const action = event.target.innerHTML;
+    console.log(action)
+    if (action == " Confirmar ") {
+      console.log(event)
+      this.userModel = this.valideteCedula();
+      if (this.userModel != undefined) {
+        this.presentConfirm();
+      } else {
+        this.showAlert("No esta registrado", "Debe de completar el formulario");
+        this.addValidatorsToForm()
+        event.target.innerHTML = "Registrar";
+        this.enableRegisterForm = true;
+      }
+    } else if (action === "Registrar") {
       this.savePaci();
-    } else {
-      this.showAlert("No esta registrado", "Debe de completar el formulario");
-      this.registroForm.controls.name.setValidators(Validators.required);
-      this.registroForm.controls.telefono.setValidators(Validators.required);
-      this.registroForm.controls.direccion.setValidators(Validators.required);
-      this.registroForm.controls.edad.setValidators(Validators.required);
-      this.registroForm.controls.provincia.setValidators(Validators.required);
-      this.registroForm.controls.canton.setValidators(Validators.required);
-      this.registroForm.controls.distrito.setValidators(Validators.required);
-      this.registroForm.updateValueAndValidity();
-      this.myForm.updateValueAndValidity();
-      console.log(this.myForm);
-      event.target.innerHTML = "Registrar";
-      this.enableRegisterForm = true;
     }
   }
 
   valideteCedula() {
     const ced = this.myForm.controls.cedula.value;
-    console.log(ced);
+
     if (ced === '102340567') {
-      return true
-    } else {
-      return false
+      return {
+        id: "213213",
+        name: "Jose",
+        apellido: "Alfaro",
+        provincia: "Puntarenas",
+        canton: "Central",
+        distrito: "El Roble",
+        centroAdscrito: "Hospital Monseñor Sanabria"
+      }
+    } else if (ced === '601230456') {
+      return {
+        id: "143639",
+        name: "Diana",
+        apellido: "Medina",
+        provincia: "Puntarenas",
+        canton: "Central",
+        distrito: "Puntarenas",
+        centroAdscrito: "Clinica San Rafael"
+      }
+    } else if (ced === '602220333') {
+      return {
+        id: "143639",
+        name: "Carlos",
+        apellido: "Reina",
+        provincia: "Puntarenas",
+        canton: "Central",
+        distrito: "Barranca",
+        centroAdscrito: "Clinica Barranca"
+      }
     }
+    return undefined 
   }
 
   saveData() {
@@ -232,6 +259,19 @@ export class RegistroCovidPage implements OnInit {
         distrito: new FormControl(undefined),
       }, Validators.required)
     });
+  }
+
+  addValidatorsToForm() {
+    this.registroForm.controls.name.setValidators(Validators.required);
+    this.registroForm.controls.telefono.setValidators(Validators.required);
+    this.registroForm.controls.direccion.setValidators(Validators.required);
+    this.registroForm.controls.edad.setValidators(Validators.required);
+    this.registroForm.controls.provincia.setValidators(Validators.required);
+    this.registroForm.controls.canton.setValidators(Validators.required);
+    this.registroForm.controls.distrito.setValidators(Validators.required);
+    this.registroForm.updateValueAndValidity();
+    this.myForm.updateValueAndValidity();
+    console.log(this.myForm);
   }
 
   loger() {
@@ -267,7 +307,7 @@ export class RegistroCovidPage implements OnInit {
         text: 'OK',
         role: 'OK',
         handler: () => {
-          this.router.navigateByUrl('/servicios');
+          this.routerByCentroAdscrito();
           //console.log('you clicked me');
         }
       },
@@ -291,6 +331,14 @@ export class RegistroCovidPage implements OnInit {
       ]
     });
     await alert.present();
+  }
+
+  routerByCentroAdscrito(){
+    if (this.userModel.centroAdscrito == "Hospital Monseñor Sanabria") {
+      this.router.navigateByUrl('/servicios');
+    } else {
+      this.router.navigate(['/map-routing'], { state: { data: { centro: this.userModel.centroAdscrito } } });
+    }
   }
 }// fin
 

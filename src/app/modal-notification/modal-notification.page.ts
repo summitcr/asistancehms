@@ -9,29 +9,14 @@ declare var MapwizeUI: any;
   styleUrls: ['./modal-notification.page.scss'],
 })
 export class ModalNotificationPage implements OnInit, AfterViewInit {
- 
 
-  mapwizeMap: any;
-  constructor(private modalController:ModalController) { }
-
-  
+  constructor(private modalController: ModalController) { }
 
   ngAfterViewInit() {
-      MapwizeUI.map({
-        apiKey: '439578d65ac560a55bb586feaa299bf7',
-        hideMenu: true,
-        centerOnVenue: '5d7420b31a255c0050e14fc5'
-  
-      }).then(instance => {
-        this.mapwizeMap = instance;
-      
-      });
-  
-    
   }
   ngOnInit() {
   }
-  closeModal(){
+  closeModal() {
     this.modalController.dismiss();
-      }
+  }
 }//fin de la class

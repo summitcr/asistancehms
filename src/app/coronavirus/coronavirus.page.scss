@@ -1,58 +1,57 @@
-.topMenu{
-    --background: #203B69;
-    --color: #fff;
-    text-align: center;
+.topMenu {
+  --background: #203b69;
+  --color: #fff;
+  text-align: center;
 }
 ion-col div {
-   
-    border-radius: 2px;
-    padding: 5px;
-    text-align: center;
-  }
-
-  ion-card-content{
-    --background:#EFEEEE;
-    border:  1px solid rgba(255,255,255,0.20);
-    border-radius: 12px;
-    box-shadow: -6px -6px 26px 0 rgba(255,255,255,0.83);
-    box-shadow: 6px 6px 16px 0 rgba(217,210,200,0.51);
-
+  border-radius: 2px;
+  padding: 5px;
+  text-align: center;
 }
 
-
-
-  .topSection{
-    background-color: #203B69;
-    color: white;
-    text-align: center;
-    padding: 26px;
-  }
-
-  img {
-    max-width: 70%;
-    border: 0;
-    padding: 6px;
-}
-.text1{
-    font-size: 22px;
-    text-align: center;
-}
-.text2{
-    font-size: 18px;
-    text-align: center;
-}
-.imgIcon{
-    max-width:15% !important;
-    border: 0;
-    padding: 6px;
-}
-.boton1{
-    --background:  #203B69 !important; 
-}
-.boton2{
-    --background: #d10e18 !important;
-}
-.btnLoging{
-    --background: #203B69;
+ion-card-content {
+  --background: #efeeee;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  box-shadow: -6px -6px 26px 0 rgba(255, 255, 255, 0.83);
+  box-shadow: 6px 6px 16px 0 rgba(217, 210, 200, 0.51);
 }
 
+.topSection {
+  background-color: #203b69;
+  color: white;
+  text-align: center;
+  padding: 26px;
+}
+
+img {
+  max-width: 70%;
+  border: 0;
+  padding: 6px;
+}
+.text1 {
+  font-size: 22px;
+  text-align: center;
+}
+.text2 {
+  font-size: 18px;
+  text-align: center;
+}
+.imgIcon {
+  max-width: 15% !important;
+  border: 0;
+  padding: 6px;
+}
+.boton1 {
+  --background: #203b69 !important;
+}
+.boton2 {
+  --background: #d10e18 !important;
+}
+.btnLoging {
+  --background: #203b69;
+}
+
+ion-back-button {
+  --color: white;
+}

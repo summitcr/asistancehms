@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
+
+import { ModalNotificationPage } from '../modal-notification/modal-notification.page';
 
 @Component({
   selector: 'app-servicios',
@@ -11,7 +13,8 @@ export class ServiciosPage implements OnInit {
 
   constructor(
     private router: Router,
-    private toastController: ToastController
+    private toastController: ToastController,
+    public modalController: ModalController,
   ) { }
 
   ngOnInit() {
@@ -31,21 +34,30 @@ export class ServiciosPage implements OnInit {
         {
           side: 'end',
           text: 'No',
-          role: 'ok',
+          role: 'cancel',
           handler: () => {
-            console.log('Favorite clicked');
+            
           }
         }, {
           side: 'end',
           text: 'Ir',
-          role: 'cancel',
+          role: 'ok',
           handler: () => {
-            console.log('Cancel clicked');
+            this.router.navigateByUrl("/prenatal-control");
           },
         }
       ]
     });
     toast.present();
+  }
+
+  async presentModal() {
+    const modal = await this.modalController.create({
+      component: ModalNotificationPage,
+      cssClass: 'my-modal-class',
+      animated: true
+    });
+    return await modal.present();
   }
 
 }

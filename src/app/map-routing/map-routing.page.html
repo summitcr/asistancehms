@@ -12,14 +12,18 @@
 <ion-content>
   <div id="map"></div>
   <div class="card-container">
-    <ion-card class="ion-no-margin ion-text-left card">
-      <ion-card-header class="ion-no-padding">
-        <ion-card-title class="card-title">Hospital</ion-card-title>
-        <ion-card-subtitle class="card-subtitle">Distancia: 200km</ion-card-subtitle>
-      </ion-card-header>
-      <ion-card-content class="ion-no-padding">
-        <p (click)="showRoute({latitude:9.974475, longitude:-84.752396})">cualquier informacion</p>
-      </ion-card-content>
+    <ion-card #carta class="ion-no-margin ion-text-left card">
+      <ion-item style="--border-style: none; padding: 0">
+        <!-- <ion-icon name="pin" slot="start"></ion-icon> -->
+        <ion-card-header class="ion-no-padding">
+          <ion-card-title style="font-size: large;" class="card-title">{{centroAdscripcion}}</ion-card-title>
+          <ion-card-subtitle class="card-subtitle">Distancia: ...km</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content slot="end" class="ion-no-padding">
+          <!-- <p (click)="showRoute({latitude:9.974475, longitude:-84.752396})">Ver ruta</p> -->
+          <ion-button (click)="showRoute({latitude:9.974475, longitude:-84.752396})" fill="outline" slot="end">Ver ruta</ion-button>
+        </ion-card-content>
+      </ion-item>
     </ion-card>
   </div>
 </ion-content>
