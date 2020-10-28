@@ -60,4 +60,8 @@ export class ServiciosPage implements OnInit {
     return await modal.present();
   }
 
+  goToIndoors() {
+    this.router.navigateByUrl('/menu/first/tabs/tab1/0');
+  }
+
 }

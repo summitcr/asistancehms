@@ -527,7 +527,7 @@ setRouteCovid(){
   }
   timerWayFinding() {
     this.interval = setInterval(() => {
-      this.testWayFinding();
+      // this.testWayFinding();
     }, 2000);
   }
   //scanea todos los bluetooth de baja carga con los rssi
