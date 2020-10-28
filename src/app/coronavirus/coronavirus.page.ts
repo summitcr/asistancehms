@@ -222,7 +222,7 @@ export class CoronavirusPage implements OnInit {
         text: 'OK',
         role: 'OK',
         handler: () => {
-          this.router.navigateByUrl('/heart-rate');
+          this.router.navigateByUrl('/menu/first/tabs/tab1/' + '5e4ef9b6bdadf00016d02b1f');
           // this.router.navigateByUrl('/map-routing');
           //console.log('you clicked me');
         }
