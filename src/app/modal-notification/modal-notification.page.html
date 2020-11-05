@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar class="topMenu">
     <ion-title>Notificaciones</ion-title>
-    <ion-button slot="end" fill="clear" (click)="closeModal()">
+    <ion-button style="color: white" slot="start" fill="clear" (click)="closeModal()">
       Close
     </ion-button>
   </ion-toolbar>
@@ -11,7 +11,7 @@
 
   <div class="container-cards">
 
-    <ion-card #carta class="ion-no-margin ion-text-left card">
+    <ion-card mode="ios" #carta class="ion-no-margin ion-text-left card">
       <ion-item style="--border-style: none; padding: 0">
         <span style=" font-size: large; color: lightcoral;" slot="start">
           <i class="fas fa-ambulance"></i>
@@ -24,7 +24,7 @@
       </ion-item>
     </ion-card>
 
-    <ion-card #carta class="ion-no-margin ion-text-left card">
+    <ion-card mode="ios" #carta class="ion-no-margin ion-text-left card">
       <ion-item style="--border-style: none; padding: 0">
         <span style=" font-size: large; color: lightcoral;" slot="start">
           <i class="fas fa-ambulance"></i>
@@ -37,7 +37,7 @@
       </ion-item>
     </ion-card>
 
-    <ion-card #carta class="ion-no-margin ion-text-left card">
+    <ion-card mode="ios" #carta class="ion-no-margin ion-text-left card">
       <ion-item style="--border-style: none; padding: 0">
         <span style=" font-size: large; color: lightblue;" slot="start">
           <i class="fas fa-tooth"></i>

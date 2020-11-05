@@ -71,6 +71,8 @@ export class UtilsService {
     chronicDiseases_pacient:"",
     currentDiseases_pacient:"",
     complications_pacient:"",
+    searchById:"",
+    addOrEditPeople:"",
   };
 
   mapwizeParams = {
@@ -81,6 +83,7 @@ export class UtilsService {
     var newserverURL = 'http://13.59.31.150/summit/api/';
     var ticketsURL = 'http://13.59.31.150/ticketsHospital/api/';
     var covidURL = 'http://13.59.31.150/CovidHospital/api/';
+    var summitHospitalServer = 'http://13.58.166.253/summitPrueba/';
 
     //Apis server QA
     //var newserverURL = 'http://3.23.88.169/summit/api/';
@@ -164,6 +167,9 @@ export class UtilsService {
     this.params.chronicDiseases_pacient=covidURL+"chronicDiseases_pacient";
     this.params.currentDiseases_pacient=covidURL+"currentDiseases_pacient";
     this.params.complications_pacient=covidURL+"complications_pacient";
+
+    this.params.searchById = summitHospitalServer + "api/searchPeopleById/id/"
+    this.params.addOrEditPeople = summitHospitalServer + "api/EditOrAddPeople"
   }//fin de bob
 
 

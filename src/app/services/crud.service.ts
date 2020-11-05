@@ -35,6 +35,10 @@ export class CrudService {
 
     return this.http.get(url);
   }
+
+  post(url, body) {
+    return this.http.post(url, body).toPromise();
+  }
   //Metodo get con header para probar los tiquetes
   getTicket(url) {
     const headers = new HttpHeaders({

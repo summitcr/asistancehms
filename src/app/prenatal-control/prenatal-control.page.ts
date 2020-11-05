@@ -373,7 +373,7 @@ complicatModel: Complicaciones={
     this.saveCurrent();
     this.saveComplicat();
     this. presentAlert();
-    this.router.navigateByUrl('/menu/first/tabs/tab2');
+    this.router.navigateByUrl('/servicios');
   }
   //ACA
   

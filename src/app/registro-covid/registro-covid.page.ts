@@ -7,6 +7,7 @@ import { StorageService } from '../services/storage.service';
 import { UtilStorageService } from '../services/util-storage.service';
 import { Router } from '@angular/router';
 import { UbicacionService } from '../services/ubicacion.service';
+import { colorSets } from '@swimlane/ngx-charts/release/utils';
 
 export interface NoRegisteredDiagnostic {
   identifierType: String,
@@ -16,6 +17,18 @@ export interface NoRegisteredDiagnostic {
   telephone: String,
   address: String,
 
+}
+
+export interface UserModel {
+  type: String,
+  id: String,
+  name: String,
+  age: String,
+  phone: String,
+  provincia: String,
+  canton: String,
+  distrito: String,
+  centro_adscrito: String,
 }
 
 @Component({
@@ -64,7 +77,7 @@ export class RegistroCovidPage implements OnInit {
   direction: any;
   registroForm: FormGroup;
   enableRegisterForm: boolean = false;
-  userModel: { id: string; name: string; apellido: string; provincia: string; canton: string; distrito: string; centroAdscrito: string; };
+  userModel: UserModel;
 
   constructor(
     public navCtrl: NavController,
@@ -169,20 +182,43 @@ export class RegistroCovidPage implements OnInit {
   }
 
   savePaci() {
-    this.noRegisteredDiagModel.identifierType = this.userType;
-    this.noRegisteredDiagModel.identifier = this.userCed;
-    this.noRegisteredDiagModel.name = this.userName;
-    this.noRegisteredDiagModel.age = this.userEdad;
-    this.noRegisteredDiagModel.telephone = this.userTel;
-    this.noRegisteredDiagModel.address = this.userAddress;
-    this.services.save(this.params.params.registroPacient, this.noRegisteredDiagModel).subscribe((resp) => {
-      this.registroPacientes = resp;
-      console.log(this.registroPacientes);
-      this.storeService.localSave(this.localParam.localParam.insuredUser, this.registroPacientes);
-      this.presentConfirm();
-    }, (err) => {
-      console.error(err);
-    });
+    this.userModel = {
+      type: this.myForm.controls.tipo.value,
+      id: this.myForm.controls.cedula.value,
+      name: this.registroForm.controls.name.value,
+      phone: this.registroForm.controls.telefono.value,
+      age: this.registroForm.controls.edad.value,
+      provincia: this.registroForm.controls.provincia.value.value,
+      canton: this.registroForm.controls.canton.value.value,
+      distrito: this.registroForm.controls.distrito.value.value,
+      centro_adscrito: null,
+    }
+
+    console.log(this.myForm);
+    console.log(this.userModel);
+
+    this.services.post(this.params.params.addOrEditPeople, this.userModel).then((resp)=>{
+      console.log(resp);
+      if(resp === "Success") {
+        this.presentConfirm();
+      }
+    }).catch(error => {
+      console.log(error);
+    })
+    // this.noRegisteredDiagModel.identifierType = this.userType;
+    // this.noRegisteredDiagModel.identifier = this.userCed;
+    // this.noRegisteredDiagModel.name = this.userName;
+    // this.noRegisteredDiagModel.age = this.userEdad;
+    // this.noRegisteredDiagModel.telephone = this.userTel;
+    // this.noRegisteredDiagModel.address = this.userAddress;
+    // this.services.save(this.params.params.registroPacient, this.noRegisteredDiagModel).subscribe((resp) => {
+    //   this.registroPacientes = resp;
+    //   console.log(this.registroPacientes);
+    //   this.storeService.localSave(this.localParam.localParam.insuredUser, this.registroPacientes);
+    //   this.presentConfirm();
+    // }, (err) => {
+    //   console.error(err);
+    // });
   }
 
   confirmButton(event) {
@@ -206,39 +242,49 @@ export class RegistroCovidPage implements OnInit {
 
   valideteCedula() {
     const ced = this.myForm.controls.cedula.value;
+    let resp;
+    this.services.get(this.params.params.searchById + ced).toPromise().then((data)=>{
+      console.log(data)
+      if(data["id"] !== null) {
+        resp = undefined;
+      } else {
+        resp = data
+      }
+    });
+    return resp;
 
-    if (ced === '102340567') {
-      return {
-        id: "213213",
-        name: "Jose",
-        apellido: "Alfaro",
-        provincia: "Puntarenas",
-        canton: "Central",
-        distrito: "El Roble",
-        centroAdscrito: "Hospital Monseñor Sanabria"
-      }
-    } else if (ced === '601230456') {
-      return {
-        id: "143639",
-        name: "Diana",
-        apellido: "Medina",
-        provincia: "Puntarenas",
-        canton: "Central",
-        distrito: "Puntarenas",
-        centroAdscrito: "Clinica San Rafael"
-      }
-    } else if (ced === '602220333') {
-      return {
-        id: "143639",
-        name: "Carlos",
-        apellido: "Reina",
-        provincia: "Puntarenas",
-        canton: "Central",
-        distrito: "Barranca",
-        centroAdscrito: "Clinica Barranca"
-      }
-    }
-    return undefined 
+    // if (ced === '102340567') {
+    //   return {
+    //     id: "213213",
+    //     name: "Jose",
+    //     apellido: "Alfaro",
+    //     provincia: "Puntarenas",
+    //     canton: "Central",
+    //     distrito: "El Roble",
+    //     centroAdscrito: "Hospital Monseñor Sanabria"
+    //   }
+    // } else if (ced === '601230456') {
+    //   return {
+    //     id: "143639",
+    //     name: "Diana",
+    //     apellido: "Medina",
+    //     provincia: "Puntarenas",
+    //     canton: "Central",
+    //     distrito: "Puntarenas",
+    //     centroAdscrito: "Clinica San Rafael"
+    //   }
+    // } else if (ced === '602220333') {
+    //   return {
+    //     id: "143639",
+    //     name: "Carlos",
+    //     apellido: "Reina",
+    //     provincia: "Puntarenas",
+    //     canton: "Central",
+    //     distrito: "Barranca",
+    //     centroAdscrito: "Clinica Barranca"
+    //   }
+    // }
+    // return undefined 
   }
 
   saveData() {
@@ -334,10 +380,10 @@ export class RegistroCovidPage implements OnInit {
   }
 
   routerByCentroAdscrito(){
-    if (this.userModel.centroAdscrito == "Hospital Monseñor Sanabria") {
+    if (this.userModel.centro_adscrito == "Hospital Monseñor Sanabria") {
       this.router.navigateByUrl('/servicios');
     } else {
-      this.router.navigate(['/map-routing'], { state: { data: { centro: this.userModel.centroAdscrito } } });
+      this.router.navigate(['/map-routing'], { state: { data: { centro: this.userModel.centro_adscrito } } });
     }
   }
 }// fin
