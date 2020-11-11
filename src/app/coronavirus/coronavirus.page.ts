@@ -110,8 +110,6 @@ export class CoronavirusPage implements OnInit {
       if (resp != null) {
         this.listaPoll();
       }
-
-
     }, (err) => {
       console.error(err);
     });

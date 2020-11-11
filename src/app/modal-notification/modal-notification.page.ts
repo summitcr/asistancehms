@@ -1,4 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 
 declare var MapwizeUI: any;
@@ -10,13 +11,23 @@ declare var MapwizeUI: any;
 })
 export class ModalNotificationPage implements OnInit, AfterViewInit {
 
-  constructor(private modalController: ModalController) { }
+  constructor(
+    private modalController: ModalController,
+    private router: Router
+  ) { }
 
   ngAfterViewInit() {
   }
   ngOnInit() {
   }
+
   closeModal() {
     this.modalController.dismiss();
   }
+
+  goToTicket(ticket) {
+    this.modalController.dismiss();
+    this.router.navigateByUrl(`/menu/first/tabs/tab1/${ticket}`);
+  }
+
 }//fin de la class

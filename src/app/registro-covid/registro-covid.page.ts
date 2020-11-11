@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { NavController, AlertController, IonSelect } from '@ionic/angular';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CrudService } from '../services/crud.service';
@@ -7,7 +7,6 @@ import { StorageService } from '../services/storage.service';
 import { UtilStorageService } from '../services/util-storage.service';
 import { Router } from '@angular/router';
 import { UbicacionService } from '../services/ubicacion.service';
-import { colorSets } from '@swimlane/ngx-charts/release/utils';
 
 export interface NoRegisteredDiagnostic {
   identifierType: String,
@@ -20,15 +19,16 @@ export interface NoRegisteredDiagnostic {
 }
 
 export interface UserModel {
-  type: String,
-  id: String,
+  id: number,
+  tipoIdentificacion: String,
+  identifier: String,
   name: String,
   age: String,
   phone: String,
   provincia: String,
   canton: String,
   distrito: String,
-  centro_adscrito: String,
+  areaDeSalud: String,
 }
 
 @Component({
@@ -88,7 +88,9 @@ export class RegistroCovidPage implements OnInit {
     private localParam: UtilStorageService,
     private router: Router,
     private alertCtrl: AlertController,
-    private apiUbicacion: UbicacionService) {
+    private apiUbicacion: UbicacionService,
+    private changeRef: ChangeDetectorRef
+  ) {
     this.myForm = this.createMyForm();
     // this.loger();
   }
@@ -183,23 +185,26 @@ export class RegistroCovidPage implements OnInit {
 
   savePaci() {
     this.userModel = {
-      type: this.myForm.controls.tipo.value,
-      id: this.myForm.controls.cedula.value,
+      id: null,
+      tipoIdentificacion: this.myForm.controls.tipo.value,
+      identifier: this.myForm.controls.cedula.value,
       name: this.registroForm.controls.name.value,
       phone: this.registroForm.controls.telefono.value,
       age: this.registroForm.controls.edad.value,
       provincia: this.registroForm.controls.provincia.value.value,
       canton: this.registroForm.controls.canton.value.value,
       distrito: this.registroForm.controls.distrito.value.value,
-      centro_adscrito: null,
+      areaDeSalud: null,
     }
 
     console.log(this.myForm);
     console.log(this.userModel);
 
-    this.services.post(this.params.params.addOrEditPeople, this.userModel).then((resp)=>{
+    this.services.post(this.params.params.addOrEditPeople, this.userModel).then((resp: UserModel) => {
       console.log(resp);
-      if(resp === "Success") {
+      if (resp["id"] != null) {
+        this.userModel = resp
+        this.storeService.localSave(this.localParam.localParam.insuredUser, this.userModel);
         this.presentConfirm();
       }
     }).catch(error => {
@@ -221,70 +226,41 @@ export class RegistroCovidPage implements OnInit {
     // });
   }
 
-  confirmButton(event) {
+  async confirmButton(event) {
     const action = event.target.innerHTML;
     console.log(action)
     if (action == " Confirmar ") {
       console.log(event)
-      this.userModel = this.valideteCedula();
-      if (this.userModel != undefined) {
+      let existCedula = await this.valideteCedula();
+      // this._ngZone.run(() => {});
+      console.log(existCedula)
+      if (existCedula) {
+        this.storeService.localSave(this.localParam.localParam.insuredUser, this.userModel);
         this.presentConfirm();
       } else {
         this.showAlert("No esta registrado", "Debe de completar el formulario");
         this.addValidatorsToForm()
-        event.target.innerHTML = "Registrar";
         this.enableRegisterForm = true;
+        event.target.innerHTML = "Registrar";
+        this.changeRef.detectChanges();
       }
     } else if (action === "Registrar") {
       this.savePaci();
     }
   }
 
-  valideteCedula() {
+  async valideteCedula() {
     const ced = this.myForm.controls.cedula.value;
-    let resp;
-    this.services.get(this.params.params.searchById + ced).toPromise().then((data)=>{
-      console.log(data)
-      if(data["id"] !== null) {
-        resp = undefined;
+    let resp: boolean;
+    await this.services.get(this.params.params.searchById + ced).toPromise().then((data: UserModel) => {
+      if (data['id'] === null) {
+        resp = false;
       } else {
-        resp = data
+        this.userModel = data
+        resp = true
       }
     });
-    return resp;
-
-    // if (ced === '102340567') {
-    //   return {
-    //     id: "213213",
-    //     name: "Jose",
-    //     apellido: "Alfaro",
-    //     provincia: "Puntarenas",
-    //     canton: "Central",
-    //     distrito: "El Roble",
-    //     centroAdscrito: "Hospital Monseñor Sanabria"
-    //   }
-    // } else if (ced === '601230456') {
-    //   return {
-    //     id: "143639",
-    //     name: "Diana",
-    //     apellido: "Medina",
-    //     provincia: "Puntarenas",
-    //     canton: "Central",
-    //     distrito: "Puntarenas",
-    //     centroAdscrito: "Clinica San Rafael"
-    //   }
-    // } else if (ced === '602220333') {
-    //   return {
-    //     id: "143639",
-    //     name: "Carlos",
-    //     apellido: "Reina",
-    //     provincia: "Puntarenas",
-    //     canton: "Central",
-    //     distrito: "Barranca",
-    //     centroAdscrito: "Clinica Barranca"
-    //   }
-    // }
-    // return undefined 
+    return resp
   }
 
   saveData() {
@@ -294,7 +270,7 @@ export class RegistroCovidPage implements OnInit {
   private createMyForm() {
     return this.formBuilder.group({
       tipo: ['', Validators.required],
-      cedula: ['', Validators.required],
+      cedula: ['', [Validators.required, Validators.minLength(9)]],
       registro: this.registroForm = new FormGroup({
         name: new FormControl(''),
         telefono: new FormControl(''),
@@ -309,7 +285,7 @@ export class RegistroCovidPage implements OnInit {
 
   addValidatorsToForm() {
     this.registroForm.controls.name.setValidators(Validators.required);
-    this.registroForm.controls.telefono.setValidators(Validators.required);
+    this.registroForm.controls.telefono.setValidators([Validators.required, Validators.minLength(8)]);
     this.registroForm.controls.direccion.setValidators(Validators.required);
     this.registroForm.controls.edad.setValidators(Validators.required);
     this.registroForm.controls.provincia.setValidators(Validators.required);
@@ -349,6 +325,7 @@ export class RegistroCovidPage implements OnInit {
       subHeader: '',
       message:
         'Bienvenido(a), proceda a seleccionar una de las siguientes encuestas',
+      backdropDismiss: false,
       buttons: [{
         text: 'OK',
         role: 'OK',
@@ -379,12 +356,14 @@ export class RegistroCovidPage implements OnInit {
     await alert.present();
   }
 
-  routerByCentroAdscrito(){
-    if (this.userModel.centro_adscrito == "Hospital Monseñor Sanabria") {
+  routerByCentroAdscrito() {
+    console.log(this.userModel)
+    if (this.userModel.areaDeSalud === "Hospital Monseñor Sanabria") {
       this.router.navigateByUrl('/servicios');
     } else {
-      this.router.navigate(['/map-routing'], { state: { data: { centro: this.userModel.centro_adscrito } } });
+      this.router.navigate(['/map-routing'], { state: { data: { centro: this.userModel.areaDeSalud } } });
     }
+    // this.router.navigateByUrl('/servicios');
   }
 }// fin
 
