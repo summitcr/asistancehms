@@ -1,12 +1,39 @@
-<ion-header>
+<!-- <ion-header>
     <ion-toolbar class="topMenu">
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
           </ion-buttons>
-      <ion-title>Summit</ion-title>
-      <ion-button color="primary" (click)="setRoute()">Route</ion-button>
+      <ion-title>Summit</ion-title> -->
+      <!--  <ion-button class="btnGO"  color="primary" (click)=" ScanBeaconsAll()">
+        scanAll
+      </ion-button>
+      <ion-button class="btnGO"  color="primary" (click)="doBinary()">
+        scanDoBinary
+      </ion-button>
+      <ion-button class="btnGO"  color="primary" (click)="testWayFinding()">
+        scanTest 
+      </ion-button>-->
+     
+      <!-- <ng-container *ngFor="let p of pages" item-content>
+      <ion-button [routerLink]="p.url" routerDirection="root" slot="end" color="ligth" size="small" shape="round">
+        <ion-icon  name="notifications"></ion-icon>
+        <ion-badge id="cart-badge" color="ligth" slot="end">{{alertAmount}}</ion-badge>
+      </ion-button>
+      </ng-container>
+    </ion-toolbar>
+  </ion-header> -->
+
+  <ion-header>
+    <ion-toolbar class="topMenu">
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/servicios" [text]="Salir"></ion-back-button>
+      </ion-buttons>
+      <ion-title>
+        <img src="assets/img/logoccss.png" alt="Es el de summit que representa una dos montañas" style="width: 40px;">
+      </ion-title>
     </ion-toolbar>
   </ion-header>
+
   <ion-content class="ion-padding">
     <div id="mapwize"></div>
     

@@ -1,0 +1,64 @@
+.topMenu {
+  --background: #203b69;
+  --color: #fff;
+  text-align: center;
+}
+
+ion-content {
+  h5 {
+    padding: 10px 20px 0 20px;
+    margin: 0;
+  }
+
+  .grid-container {
+    text-align: left;
+    display: grid;
+    justify-content: center;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    grid-gap: 10px;
+    padding: 15px;
+    margin-bottom: 25px;
+  }
+
+  .card {
+    padding: 0;
+    margin: 0;
+    height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .title-card {
+    font-size: large;
+  }
+
+  .content-card {
+    padding: 10px;
+  }
+
+  .badge-number {
+    position: absolute;
+    top: -8px;
+    left: 4px;
+    font-size: 0.8em;
+    --padding-start: 5px;
+    --padding-end: 5px;
+  }
+
+  .badge-button {
+    color: #383a3e;
+    --background: none;
+    --border-radius: 0;
+    --overflow: visible;
+  }
+
+  ion-item {
+    --inner-border-width: 0;
+  }
+}
+
+ion-back-button {
+  --color: white;
+}

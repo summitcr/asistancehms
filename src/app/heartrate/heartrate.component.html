@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar class="topMenu">
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/menu/first/tabs/tab2"></ion-back-button>
+        </ion-buttons>
+    <ion-title>Summit</ion-title>
+    <ion-button slot="end"  color="ligth" size="small" shape="round" (click)="go()">
+      <ion-icon  name="notifications"></ion-icon>
+     
+  </ion-button>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding center">
+  
+    <ion-title class="title">Servicios</ion-title>
+    <br>
+  <!--<ngx-charts-line-chart
+ 
+      [view]="view"
+      [scheme]="colorScheme"
+      [results]="multi"
+      [gradient]="gradient"
+      [xAxis]="showXAxis"
+      [yAxis]="showYAxis"
+      [legend]="showLegend"
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      [xAxisLabel]="xAxisLabel"
+      [yAxisLabel]="yAxisLabel"
+      [autoScale]="false"
+      [timeline]="timeline"
+      [yScaleMax]="yScaleMax"
+      [yScaleMin]="yScaleMin"
+      (select)="onSelect($event)">
+  </ngx-charts-line-chart>-->
+  <p class="text">Seleccione una opción:</p>
+  
+  <ion-list >
+     
+      <ion-card *ngFor="let ts of  generatedServices">
+        <ion-card-header>
+         
+          <ion-card-title>{{ts.name}}</ion-card-title>
+        </ion-card-header>
+      
+        <ion-card-content>
+          <ion-button class="btnServices" (click)="go(ts.id)">Tomar Ficha</ion-button>
+        </ion-card-content>
+      </ion-card>
+  </ion-list>
+
+  </ion-content>

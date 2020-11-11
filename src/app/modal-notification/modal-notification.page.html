@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar class="topMenu">
+    <ion-title>Notificaciones</ion-title>
+    <ion-button style="color: white" slot="start" fill="clear" (click)="closeModal()">
+      Close
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="container-cards">
+
+    <ion-card mode="ios" #carta class="ion-no-margin ion-text-left card">
+      <ion-item style="--border-style: none; padding: 0">
+        <span style=" font-size: large; color: lightcoral;" slot="start">
+          <i class="fas fa-ambulance"></i>
+        </span>
+        <ion-card-header class="ion-no-padding">
+          <ion-card-title style="font-size: large;" class="card-title">Emergencias</ion-card-title>
+          <ion-card-subtitle class="card-subtitle">ahora</ion-card-subtitle>
+        </ion-card-header>
+        <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button>
+      </ion-item>
+    </ion-card>
+
+    <ion-card mode="ios" #carta class="ion-no-margin ion-text-left card">
+      <ion-item style="--border-style: none; padding: 0">
+        <span style=" font-size: large; color: lightcoral;" slot="start">
+          <i class="fas fa-ambulance"></i>
+        </span>
+        <ion-card-header class="ion-no-padding">
+          <ion-card-title style="font-size: large;" class="card-title">Emergencias</ion-card-title>
+          <ion-card-subtitle class="card-subtitle">falta 5 min</ion-card-subtitle>
+        </ion-card-header>
+        <ion-button fill="outline" slot="end" (click)="goToTicket(2)">ticket</ion-button>
+      </ion-item>
+    </ion-card>
+
+    <ion-card mode="ios" #carta class="ion-no-margin ion-text-left card">
+      <ion-item style="--border-style: none; padding: 0">
+        <span style=" font-size: large; color: lightblue;" slot="start">
+          <i class="fas fa-tooth"></i>
+        </span>
+        <ion-card-header class="ion-no-padding">
+          <ion-card-title style="font-size: large;" class="card-title">Odontología</ion-card-title>
+          <ion-card-subtitle class="card-subtitle">hace 2 semanas</ion-card-subtitle>
+        </ion-card-header>
+        <ion-button fill="outline" slot="end" (click)="goToTicket(3)">ticket</ion-button>
+      </ion-item>
+    </ion-card>
+
+  </div>
+
+</ion-content>

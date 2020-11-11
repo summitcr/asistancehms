@@ -4,6 +4,10 @@
             <ion-menu-button></ion-menu-button>
           </ion-buttons>
       <ion-title>Summit</ion-title>
+      <ion-button slot="end" color="ligth" size="small" shape="round" (click)="goNotification()">
+        <ion-icon  name="notifications"></ion-icon>
+        <ion-badge id="cart-badge" color="ligth" slot="end">{{bellAlert}}</ion-badge>
+    </ion-button>
     </ion-toolbar>
    
   </ion-header>
@@ -11,29 +15,49 @@
 
   
   <ion-content padding>
-      <ion-title>Información de Tickets</ion-title>
-      <br>
-        <ion-list class="line-input">
-            <ion-item> 
-                <ion-label>N# de tickets</ion-label> 
-                <ion-input class="ion-text-right"></ion-input> 
-              </ion-item> 
+      <ion-card-content>
+          <ion-title class="title">Tickets</ion-title>
+          <br>
+          <ion-list class="line-input">
+
+            <ion-item>
+              <ion-icon name="person" slot="end"></ion-icon>
+           
+            <ion-input [(ngModel)]="ticketName" readonly="true"></ion-input>
+          </ion-item>
+          <br>
+            <ion-item>
+                <ion-icon name="pricetag" slot="end"></ion-icon>
+              <ion-input [(ngModel)]="ticketNumber" readonly="true" style="
+              font-weight: bold;
+              font-size: xx-large;
+          "></ion-input>
+             
+            </ion-item>
+            <br>
+            <ion-item>
+              <ion-icon name="people" slot="end"></ion-icon>
+            <ion-input [(ngModel)]="ticketPosition" readonly="true"></ion-input>
+           
+          </ion-item>
+          <br>
+            <ion-item>
+             
+              <ion-icon name="pin" slot="end"></ion-icon>
+              <ion-input [(ngModel)]="ticketUbi" readonly="true"></ion-input>
+            
+            </ion-item>
+            <br>
+            <ion-item>
+              <ion-input [(ngModel)]="ticketDesti" readonly="true"></ion-input> 
               <br>
-              <ion-item> 
-                  <ion-label>Nombre:</ion-label> 
-                  <ion-input class="ion-text-right"></ion-input> 
-                </ion-item> 
-                <br>
-                <ion-item> 
-                    <ion-label>Ubiacicón:</ion-label> 
-                    <ion-input class="ion-text-right"></ion-input> 
-                  </ion-item> 
-                  <br>
-                  <ion-item> 
-                      <ion-label>Destino:</ion-label> 
-                      <ion-input class="ion-text-right"></ion-input> 
-                      <ion-button>Go</ion-button>
-                    </ion-item> 
-        </ion-list>
-      
+              <ion-button class="iconC" (click)="go()"> <ion-icon  name="paper-plane" slot="icon-only"></ion-icon></ion-button>
+            </ion-item>
+            <br>
+        
+          </ion-list>
+        </ion-card-content>
+        
+         
+          <!--<ion-button color="primary" (click)="QR()">scanner</ion-button>-->
     </ion-content>

@@ -110,4 +110,7 @@
     </plugin>
     <plugin name="com.unarin.cordova.beacon" spec="~3.8.1" />
     <engine name="ios" spec="^4.5.5" />
+    <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
+        <string>We use your location for full functionality of certain app features.</string>
+    </edit-config>
 </widget>

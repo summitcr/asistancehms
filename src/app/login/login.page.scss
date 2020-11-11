@@ -3,8 +3,10 @@
     ion-item {
         --border-color: transparent!important;
         --highlight-height: 0;
-        border: 1px solid #dedede;
-        border-radius: 4px;
+        border-radius: 12px;
+        --background:#EFEEEE;
+       
+        border:  1px solid rgba(255,255,255,0.20);
         &.item-has-focus {
             border: 1px solid var(--ion-color-primary);
         }
@@ -22,4 +24,28 @@
 }
 .logo{
     text-align: center;
+    width: 248px;
+    margin: 24px auto
+}
+.btnLoging{
+    --background: #203B69;
+}
+ion-card-content{
+    --background:#EFEEEE;
+    border:  1px solid rgba(255,255,255,0.20);
+    border-radius: 12px;
+    box-shadow: -6px -6px 26px 0 rgba(255,255,255,0.83);
+    box-shadow: 6px 6px 16px 0 rgba(217,210,200,0.51);
+
+}
+.boton1{
+    --background:  #203B69 !important; 
+}
+.lg_title{
+   text-align: center;
+   font-size: 16px;
+}
+.lg_text1{
+    text-align: center;
+    margin-top: 8px;
 }

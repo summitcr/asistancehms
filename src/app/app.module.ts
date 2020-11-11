@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { IonicModule, IonicRouteStrategy,IonApp } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
@@ -16,17 +16,45 @@ import { BeaconService } from './services/beacon.service';
 import { IBeacon } from '@ionic-native/ibeacon/ngx';
 import { BLE } from '@ionic-native/ble/ngx';
 import { Toast } from '@ionic-native/toast/ngx';
+import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
+import { IonicStorageModule } from '@ionic/storage';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import { ModalPagePage } from './modal-page/modal-page.page';
+import { SeePeoplePage } from './see-people/see-people.page';
+import { StorageService } from './services/storage.service';
+import { UtilStorageService } from './services/util-storage.service';
+import { ModalNotificationPage } from './modal-notification/modal-notification.page';
+import { HeartrateComponent } from './heartrate/heartrate.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CovidComponent } from './covid/covid.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RegistroCovidPage } from './registro-covid/registro-covid.page';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,HttpClientModule,AutoCompleteModule,],
+  declarations: [ AppComponent, ModalPagePage, ModalNotificationPage,HeartrateComponent,CovidComponent,],
+  entryComponents: [ModalPagePage,ModalNotificationPage],
+  imports: [BrowserModule,
+    BrowserAnimationsModule,
+     IonicModule.forRoot(), 
+     NgxChartsModule, 
+     AppRoutingModule,
+     HttpClientModule,
+     AutoCompleteModule,
+     IonicStorageModule.forRoot(),
+     FormsModule, 
+     ReactiveFormsModule,
+    ],
   providers: [
     StatusBar,
     SplashScreen,
     
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    CrudService,UtilsService, BeaconService,IBeacon, BLE, Toast
+    CrudService,UtilsService, AndroidPermissions, LocationAccuracy, Geolocation, StorageService, UtilStorageService, BeaconService, 
+    IBeacon, BLE, Toast, QRScanner, LocalNotifications,SeePeoplePage,RegistroCovidPage
   ],
   bootstrap: [AppComponent]
 })

@@ -1,43 +1,52 @@
 <ion-header>
   <ion-toolbar class="topMenu">
-      <ion-buttons slot="start">
-          <ion-menu-button></ion-menu-button>
-        </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
     <ion-title>Summit</ion-title>
-
+    <ion-button slot="end" color="ligth" size="small" shape="round" (click)="goNotification()">
+      <ion-icon name="notifications"></ion-icon>
+      <ion-badge id="cart-badge" color="ligth" slot="end">{{bellAlert}}</ion-badge>
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-    <ion-title>{{tracker}}</ion-title>
+  <ion-title class="header-title">Personas Asociadas</ion-title>
 
+  <ion-list>
 
-    <ion-label color="primary">Primary Label</ion-label>
-     <!--<ion-list>
+    <ion-card>
+      <ion-item *ngFor="let p of person">
+        <ion-icon name="person" slot="start"></ion-icon>
+        <ion-card-content>
+          <ion-label class="boldName">{{p.name}}</ion-label>
+          <ion-label>{{p.identifier}}</ion-label>
+        </ion-card-content>
+        <ion-button class="btnGO colorB" slot="end"  (click)="heartmonitor()">
+          <ion-icon name="md-heart" slot="icon-only"></ion-icon>
+        </ion-button>
+        <ion-button class="btnGO colorB" slot="end"  (click)="go(p.id)">
+          <ion-icon name="paper-plane" slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-card>
+
+  
       <ion-card-content ion-item *ngFor="let device of devices">
         <p>{{device.name || 'Unnamed'}}</p>
         <p>{{device.id}}</p>
         <p> RSSI: {{device.rssi}}</p>
+       
       
-        
       </ion-card-content>
-    </ion-list>-->
-    <ion-list no-lines>
-      <ion-item *ngFor="let beacon of beacons">
-        <ion-grid>
-          <ion-row>
-            <ion-col>Major</ion-col>
-            <ion-col>{{beacon.major}}</ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col>Minor</ion-col>
-            <ion-col>{{beacon.minor}}</ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col>RSSI</ion-col>
-            <ion-col>{{beacon.rssi}}</ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-item>
-    </ion-list>
+      <ion-button class="btnGO colorB" slot="end"  (click)="presentAlert()">
+        AN
+      </ion-button>
+      <ion-button class="btnGO colorB" slot="end"  (click)="ScanAll()">
+       2
+      </ion-button>
+  </ion-list>
+  
+ 
 </ion-content>

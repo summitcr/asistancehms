@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router, RouterEvent } from '@angular/router';
+import { Storage } from '@ionic/storage';
+
 
 @Component({
   selector: 'app-menu',
@@ -9,17 +11,23 @@ import { Router, RouterEvent } from '@angular/router';
 })
 export class MenuPage implements OnInit {
 pages=[
-  { title: 'Home',
-url:'/menu/first'
+  { title: 'Inicio',
+url:'/menu/first/tabs/tab1/'+'0',
+icon:'home'
 },
-{ title: 'Personas Asociadas',
-url:'/menu/seconds'
-},
+
+
+{ title: 'Servicios',
+url:'/heart-rate',
+icon:'apps'
+}
 
 ];
 selectedPath='';
 
-  constructor(private router: Router) { 
+  person: any;
+
+  constructor(private router: Router, private storage: Storage) { 
     this.router.events.subscribe((event: RouterEvent)=>{
       if(event && event.url){
           this.selectedPath=event.url;
@@ -28,6 +36,13 @@ selectedPath='';
   }
 
   ngOnInit() {
+ 
   }
 
-}
+  logout(){
+    this.storage.clear();
+    this.router.navigateByUrl('/login');
+  }
+
+
+}//fin de la class

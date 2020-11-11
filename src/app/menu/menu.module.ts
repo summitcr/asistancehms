@@ -6,6 +6,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { MenuPage } from './menu.page';
+import { CovidComponent } from '../covid/covid.component';
+
 
 const routes: Routes = [
   {
@@ -16,11 +18,20 @@ const routes: Routes = [
       path: 'first',
       loadChildren: '../tabs/tabs.module#TabsPageModule'
     },
+    /*{
+      path: 'firts/notifications',
+      loadChildren: '../notification/notification.module#NotificationPageModule' 
+    },*/
     {
       path:'seconds',
       loadChildren: '../see-people/see-people.module#SeePeoplePageModule' 
     },
-   
+    {
+      path:'third',
+      loadChildren: '../notification/notification.module#NotificationPageModule'
+    },
+    { path: 'four', 
+    loadChildren: '../coronavirus/coronavirus.module#CoronavirusPageModule' },
   ]
   }
 ];
@@ -30,7 +41,8 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+
   ],
   declarations: [MenuPage]
 })

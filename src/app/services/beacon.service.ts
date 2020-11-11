@@ -35,38 +35,47 @@ export class BeaconService {
     );    
   }
   initialise(): any {
-    this.alert("Entro al ini");
+    //this.alert("Entro al ini");
     let promise = new Promise((resolve, reject) => {
-      this.alert("Entro al promise");
+      //this.alert("Entro al promise");
       /* we need to be running on a device */
       if (this.platform.is('cordova')) {    
-        this.alert("Entro al if linea 42");
+        //this.alert("Entro al if linea 42");
         /* Request permission to use location on iOS */
         this.ibeacon.requestAlwaysAuthorization();
-        this.alert("Entro la linea 46"+this.ibeacon);
+        //this.alert("Entro la linea 46"+this.ibeacon);
         /* create a new delegate and register it with the native layer */
         this.delegate = this.ibeacon.Delegate();
-        this.alert("Entro la linea 49");
+        //this.alert("Entro la linea 49");
         /* Subscribe to some of the delegate's event handlers */
         this.delegate.didRangeBeaconsInRegion().subscribe( data => {
           console.log("Ranging result: "+JSON.stringify(data));
-          this.alert("Entro la linea 52");
+          //this.alert("Entro la linea 52");
           this.events.publish('didRangeBeaconsInRegion', data);
-          this.alert("Entro la linea 55");
+          //this.alert("Entro la linea 55");
         }, error => 
           this.alert(error)
         );
         
         /* setup a beacon region – remove any special characters or else the plugin will not work.
           https://www.beautifyconverter.com/uuid-validator.php
+
+
+          beacons de tavo: f7826da6-4fa2-4e98-8024-bC5b71e0893e
+
+          posible beacons: 00002A00-0000-1000-8000-00805F9B34FB
+
+          segundo posible beacons: 00112233-4455-6677-8899-AABBCCDDEEFF
+
+          tercer posible 01120011-2233-4455-6677-8899aabbccdd
         */
-        this.region = this.ibeacon.BeaconRegion('deskBeacon', 'f7826da6-4fa2-4e98-8024-bC5b71e0893e');
+        this.region = this.ibeacon.BeaconRegion('deskBeacon', '00002A00-0000-1000-8000-00805F9B34FB');
         
         this.alert(`Scanning has started`);
 
         /* start ranging */
         this.ibeacon.startRangingBeaconsInRegion(this.region).then(() => {
-          this.alert("Entro la linea 69");
+          //this.alert("Entro la linea 69");
           resolve(true);
         }, error => {
           this.alert(`Failed to begin monitoring: ${error}`);
