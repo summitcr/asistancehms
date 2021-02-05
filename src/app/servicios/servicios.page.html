@@ -25,8 +25,19 @@
   </ion-card>
 
   <h5>Servicios</h5>
+  
   <div class="grid-container">
-    <ion-card mode="ios" class="card" [routerLink]="['/coronavirus']">
+
+    <ion-card *ngFor="let service of services" mode="ios" class="card" (click)="getMeATicket(service)">
+      <ion-card-content class="content-card">
+        <span [style.color]="service.icon.color" [style.fontSize]="service.icon.font">
+          <i [class]="service.icon.class"></i>
+        </span>
+        <ion-card-title class="title-card">{{service.name}}</ion-card-title>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- <ion-card mode="ios" class="card" [routerLink]="['/coronavirus']">
       <ion-card-content class="content-card">
         <span style=" font-size: x-large; color: lightcoral;">
           <i class="fas fa-ambulance"></i>
@@ -78,7 +89,7 @@
         </span>
         <ion-card-title class="title-card">Farmacia</ion-card-title>
       </ion-card-content>
-    </ion-card>
+    </ion-card> -->
 
   </div>
 

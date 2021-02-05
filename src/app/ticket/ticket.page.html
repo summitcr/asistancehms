@@ -1,0 +1,80 @@
+<ion-header>
+  <ion-toolbar class="topMenu">
+    <ion-buttons slot="start">
+      <!-- <ion-back-button defaultHref="" ></ion-back-button> -->
+    </ion-buttons>
+    <ion-title>
+      <img src="assets/img/logoccss.png" alt="Es el de summit que representa una dos montañas" style="width: 40px;">
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-card-content >
+    <ion-list class="line-input">
+      <div class="centerItem">
+        <p class="text1">{{ticketServiceName}}</p>
+      </div>
+      <div class="centerItem"> 
+        <p class="text2" >{{user.name}}</p>
+      </div>
+      <div class="centerItem"> 
+        <p class="text3" >{{user.identifier}}</p>
+      </div>
+      <ion-item class="centerItem">
+    
+      <div class="card-background-page">
+      <ion-card>
+        <img src="assets/img/ticket.png"/>
+        <div class="card-title">TICKET <br> NÚMERO
+          <hr>
+        </div>
+        
+        <div class="card-subtitle">
+          
+          <ion-input [(ngModel)]="ticketNumber" readonly="true" ></ion-input>
+        </div>
+        
+      </ion-card>
+    </div>
+      </ion-item>
+      <ion-item>
+        <ion-progress-bar [value]="maxProgressBar"></ion-progress-bar>
+        <!--<ion-button class="btnLoging" expand="block" (click)="progress()">Progress</ion-button> -->
+      </ion-item>
+      <ion-item class="centerItem">
+        <ion-input class="text1" [(ngModel)]="ticketPosition" readonly="true"></ion-input>
+      </ion-item>
+      <div class="centerItem">
+        <!-- <p class="text1">{{createdDate}}</p> -->
+      </div>
+      <ion-grid>
+        <ion-row>
+          <ion-col col-6>
+            <div style="text-align: center;">
+              <!-- <ion-button (click)="salir()" color="primary" [disabled]="cancelDisable">Cancelar <br> Ticket</ion-button> -->
+            </div>
+          </ion-col>
+          <ion-col col-6>
+            <div style="text-align: center;">
+              <!-- <ion-button (click)="postponeTicket()" color="primary" [disabled]="postPoneDisable">Posponer <br> Ticket </ion-button> -->
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    
+    </ion-list>
+    <br>
+  
+
+  <!-- <div class="">
+    <ion-slides pager="true" [options]="sliderConfig">
+      <ion-slide *ngFor='let img of slides' >
+        <a [href]="img.link" [target]="img.target">
+          <img [src]="img.img" alt="">
+        </a>
+      </ion-slide>
+    </ion-slides> 
+  </div> -->
+  </ion-card-content>
+</ion-content>

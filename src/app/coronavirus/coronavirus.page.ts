@@ -59,7 +59,9 @@ export class CoronavirusPage implements OnInit {
   userSintoma: any;
   userViajado: any;
   userViaje: any;
-  constructor(private services: CrudService,
+  serviceId: any;
+  constructor(
+    private services: CrudService,
     private params: UtilsService,
     private storeService: StorageService,
     private localParam: UtilStorageService,
@@ -70,6 +72,21 @@ export class CoronavirusPage implements OnInit {
   }
 
   ngOnInit() {
+    const navigationState = this.router.getCurrentNavigation().extras.state;
+    if (
+      navigationState !== undefined && navigationState !== null &&
+      navigationState.data.id !== undefined && navigationState.data.id !== null
+    ) {
+      this.serviceId = navigationState.data.id;
+      console.log(this.serviceId);
+      // setTimeout(() => {
+      //   // console.log(navigationState.data.id)
+      //   const office = this.filterOfficePerID(navigationState.data.id);
+
+      //   // console.log(this.offices[office]);
+      //   this.officesList.value = this.offices[office];
+      // }, 2500);
+    }
     this.getUserLogged();
     this.getUserIdentifier();
     //this.listaPoll();
@@ -86,7 +103,7 @@ export class CoronavirusPage implements OnInit {
   getUserIdentifier() {
     this.storeService.localGet(this.localParam.localParam.insuredUser).then((resp) => {
       this.userIdentifier = resp;
-      console.log(this.userIdentifier.identifier);
+      console.log(this.userIdentifier);
     }, (err) => {
       console.error(err);
     });
@@ -210,17 +227,30 @@ export class CoronavirusPage implements OnInit {
 
     });
   }
+
+  createTicket() {
+    this.services.saveTicket(this.params.params.ticketCreate + '/serviceId/' + this.serviceId, null).subscribe((resp) => {
+      console.log(resp)
+      this.storeService.localSave(this.localParam.localParam.createdTicket, resp);
+      this.router.navigateByUrl(`/menu/first/tabs/tab1/${this.serviceId}`);
+      // this.getTicketStatus(this.createdTicket.visitId);
+    }, (err) => {
+      console.error(err);
+    });
+  }
+
   async presentConfirm() {
     const alert = await this.alertCtrl.create({
       header: 'Confirmación',
       subHeader: '',
       message:
-        'Gracias por realizar la encuesta, proceda a tomar una ficha',
+        'Gracias por realizar la encuesta.',
       buttons: [{
         text: 'OK',
         role: 'OK',
         handler: () => {
-          this.router.navigateByUrl('/menu/first/tabs/tab1/' + '5e4ef9b6bdadf00016d02b1f');
+          this.createTicket();
+          // this.router.navigateByUrl('/menu/first/tabs/tab1/' + '5e4ef9b6bdadf00016d02b1f');
           // this.router.navigateByUrl('/map-routing');
           //console.log('you clicked me');
         }

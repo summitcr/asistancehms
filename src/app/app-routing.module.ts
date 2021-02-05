@@ -19,6 +19,8 @@ const routes: Routes = [
   { path: 'prenatal-control', loadChildren: './prenatal-control/prenatal-control.module#PrenatalControlPageModule' },
   { path: 'map-routing', loadChildren: './map-routing/map-routing.module#MapRoutingPageModule' },
   { path: 'servicios', loadChildren: './servicios/servicios.module#ServiciosPageModule' },
+  // { path: 'ticket', loadChildren: './ticket/ticket.module#TicketPageModule' },
+
 
 ];
 

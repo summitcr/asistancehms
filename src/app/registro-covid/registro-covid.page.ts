@@ -20,11 +20,11 @@ export interface NoRegisteredDiagnostic {
 
 export interface UserModel {
   id: number,
-  tipoIdentificacion: String,
+  identifierType: String,
   identifier: String,
   name: String,
   age: String,
-  phone: String,
+  telephone: String,
   provincia: String,
   canton: String,
   distrito: String,
@@ -99,6 +99,10 @@ export class RegistroCovidPage implements OnInit {
     console.log(this.d);
   }
 
+  ionViewWillLeave(){
+    this.myForm.reset();
+  }
+
   getStatus(value) {
     this.userStatus = value;
     console.log(this.userStatus);
@@ -106,28 +110,28 @@ export class RegistroCovidPage implements OnInit {
 
   GenerateCantones() {
     this.cantonesList = [];
-    if (this.provinciaSelect.value != undefined)
+    if (this.provinciaSelect !== undefined && this.provinciaSelect.value !== undefined){
       this.apiUbicacion.getCantones(this.provinciaSelect.value.id).then((resp) => {
         Object.keys(resp).map((value, index, array) => {
           this.cantonesList.push({ id: value, value: resp[value] });
         });
-        console.log(this.cantonesList);
         this.disableCantonSelect = false;
       });
+    }
     this.cantonSelect.value = undefined;
     this.distritoSelect.value = undefined;
   }
 
   GenerateDistritos() {
     this.distritosList = [];
-    if (this.provinciaSelect.value != undefined && this.cantonSelect.value != undefined)
+    if (this.provinciaSelect.value !== undefined && this.cantonSelect !== undefined && this.cantonSelect.value !== undefined){
       this.apiUbicacion.getDistritos(this.provinciaSelect.value.id, this.cantonSelect.value.id).then((resp) => {
         Object.keys(resp).map((value, index, array) => {
           this.distritosList.push({ id: value, value: resp[value] });
         });
-        console.log(this.distritosList);
         this.disableDistritoSelect = false;
       });
+    }
     this.distritoSelect.value = undefined;
   }
 
@@ -136,7 +140,6 @@ export class RegistroCovidPage implements OnInit {
     let canton = cantonSelect.value != undefined ? cantonSelect.value.value : '';
     let distrito = distritoSelect.value != undefined ? distritoSelect.value.value : '';
     this.direction = `${province}, ${canton}, ${distrito}`;
-    console.log(this.direction);
     this.userAddress = this.direction
   }
 
@@ -186,15 +189,15 @@ export class RegistroCovidPage implements OnInit {
   savePaci() {
     this.userModel = {
       id: null,
-      tipoIdentificacion: this.myForm.controls.tipo.value,
+      identifierType: this.myForm.controls.tipo.value,
       identifier: this.myForm.controls.cedula.value,
       name: this.registroForm.controls.name.value,
-      phone: this.registroForm.controls.telefono.value,
+      telephone: this.registroForm.controls.telefono.value,
       age: this.registroForm.controls.edad.value,
       provincia: this.registroForm.controls.provincia.value.value,
       canton: this.registroForm.controls.canton.value.value,
       distrito: this.registroForm.controls.distrito.value.value,
-      areaDeSalud: null,
+      areaDeSalud: "Hospital Monseñor Sanabria",
     }
 
     console.log(this.myForm);
@@ -253,7 +256,7 @@ export class RegistroCovidPage implements OnInit {
     const ced = this.myForm.controls.cedula.value;
     let resp: boolean;
     await this.services.get(this.params.params.searchById + ced).toPromise().then((data: UserModel) => {
-      if (data['id'] === null) {
+      if (data === null) {
         resp = false;
       } else {
         this.userModel = data
@@ -330,6 +333,7 @@ export class RegistroCovidPage implements OnInit {
         text: 'OK',
         role: 'OK',
         handler: () => {
+          this.enableRegisterForm = false;
           this.routerByCentroAdscrito();
           //console.log('you clicked me');
         }
@@ -357,6 +361,7 @@ export class RegistroCovidPage implements OnInit {
   }
 
   routerByCentroAdscrito() {
+    
     console.log(this.userModel)
     if (this.userModel.areaDeSalud === "Hospital Monseñor Sanabria") {
       this.router.navigateByUrl('/servicios');

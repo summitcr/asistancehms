@@ -1,4 +1,11 @@
+// ion-header{
+//   margin-top: 20px; /* Status bar height on iOS 10 */
+//   // margin-top: constant(safe-area-inset-top); /* Status bar height on iOS 11.0 */
+//   // margin-top: env(safe-area-inset-top); /* Status bar height on iOS 11+ */
+// }
+
 .topMenu {
+  // padding:10px;
   --background: #203b69;
   --color: #fff;
   text-align: center;

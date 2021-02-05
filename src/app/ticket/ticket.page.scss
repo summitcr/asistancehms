@@ -1,0 +1,122 @@
+.topMenu {
+    --background: #203b69;
+    --color: #fff;
+    text-align: center;
+  }
+.line-input {
+    margin-bottom: 0!important;
+    ion-item {
+        --border-color: transparent!important;
+        --highlight-height: 0;
+        border-radius: 12px;
+        //--background:#EFEEEE;
+       
+        border:  1px solid rgba(255,255,255,0.20);
+        &.item-has-focus {
+            border: 1px solid var(--ion-color-primary);
+        }
+        ion-label {
+            //color: #807e7e!important;
+            font-weight: 300;
+            font-size: 1rem!important;
+        }
+    }
+}
+
+.title{
+    text-align: center;
+    font-weight: bold;
+}
+.ios .title{
+    text-align: center;
+    font-weight: bold;
+    position: inherit;
+    font-size: 23px;
+}
+ion-card-content{
+    background:#fff;
+    border:  1px solid rgba(255,255,255,0.20);
+    border-radius: 12px;
+    box-shadow: -6px -6px 26px 0 rgba(255,255,255,0.83);
+    box-shadow: 6px 6px 16px 0 rgba(217,210,200,0.51);
+
+}
+.iconC{
+    --background: #125eab;
+}
+
+
+
+.tabbar{
+    --color: #125eab!important;
+  }
+  ion-content{
+    --background: #eaeaea;
+  }
+
+  
+    .logo{
+        max-width: 39%;
+      }
+
+.centerItem{
+    text-align: center;
+    font-weight: bold;
+}
+.centerItem2{
+    text-align: center;
+    font-weight: bold;
+    color: var(--ion-color-primary);
+}
+.imagenTiquete{
+    background-image: url('../../assets/img/ticket.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.card-background-page {
+
+    ion-card {
+      position: relative;
+      text-align: center;
+      box-shadow: none;
+    }
+  
+    .card-title {
+        position: absolute;
+        top: 6%;
+        font-size: 1.4em;
+        width: 100%;
+        font-weight: bold;
+        color: #32afcc;
+    }
+  
+    .card-subtitle {
+        font-size: 2em;
+        position: absolute;
+        top: 43%;
+        width: 100%;
+        color: #32afcc;
+        font-weight: bold;
+    }
+  
+  }
+  hr{
+    background-color: #32afcc;
+    width: 131px;
+    height: 2px;
+  }
+  .text1{
+      font-weight: bold;
+      color: #999999;
+      font-size: 20px;
+  }
+  .text2{
+    font-size: 18px;
+    color:#005aaa;
+  }
+  .text3{
+    font-size: 18px;
+    color:#005aaa;
+    font-weight: bold;
+  }

@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar class="topMenu">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="" [text]="Salir"></ion-back-button>
+      <ion-back-button defaultHref="" text="Salir"></ion-back-button>
     </ion-buttons>
     <ion-title>
       <img src="assets/img/logoccss.png" alt="Es el de summit que representa una dos montañas" style="width: 40px;">
@@ -57,7 +57,7 @@
           <ion-item formGroupName="registro">
             <ion-icon name="locate" slot="end"></ion-icon>
             <ion-label position="floating">Lugar de residencia:</ion-label>
-            <ion-select formControlName="provincia" [value]="provinciaId" placeholder="Provincia" #provinceSelect
+            <ion-select formControlName="provincia" placeholder="Provincia" #provinceSelect
               (ionChange)="GenerateCantones(provinceSelect)">
               <ion-select-option [value]="{id:1, value:'San Jose'}">San Jose</ion-select-option>
               <ion-select-option [value]="{id:2, value:'Alajuela'}">Alajuela</ion-select-option>
@@ -69,7 +69,7 @@
             </ion-select>
   
             <ion-label [hidden]="disableCantonSelect" position="floating">Canton</ion-label>
-            <ion-select formControlName="canton" [value]="cantonId" placeholder="Selecione un Canton" #cantonSelect
+            <ion-select formControlName="canton" placeholder="Selecione un Canton" #cantonSelect
               (ionChange)="GenerateDistritos(provinceSelect, cantonSelect)" [disabled]="disableCantonSelect"
               [hidden]="disableCantonSelect">
               <ion-select-option *ngFor="let canton of cantonesList" [value]="canton">
@@ -78,7 +78,7 @@
             </ion-select>
   
             <ion-label [hidden]="disableDistritoSelect" position="floating">Distrito</ion-label>
-            <ion-select formControlName="distrito" [value]="distritoId" placeholder="Selecione un Distrito"
+            <ion-select formControlName="distrito" placeholder="Selecione un Distrito"
               #distritoSelect (ionChange)="GenerateDirection(provinceSelect, cantonSelect, distritoSelect)"
               [disabled]="disableDistritoSelect" [hidden]="disableDistritoSelect">
               <ion-select-option *ngFor="let distrito of distritosList" [value]="distrito">

@@ -80,10 +80,25 @@ export class UtilsService {
   }
   constructor() {
     //Apis server desarrollo
-    var newserverURL = 'http://13.59.31.150/summit/api/';
-    var ticketsURL = 'http://13.59.31.150/ticketsHospital/api/';
-    var covidURL = 'http://13.59.31.150/CovidHospital/api/';
-    var summitHospitalServer = 'http://13.58.166.253/summitPrueba/';
+    // var newserverURL = 'http://13.59.31.150/summit/api/'; // demo O7
+    // var ticketsURL = 'http://13.59.31.150/ticketsHospital/api/'; //demo O7
+    // var covidURL = 'http://13.59.31.150/CovidHospital/api/'; //demo O7
+    // var summitHospitalServer = 'http://13.59.31.150/covidHospital/api/'; //demo O7
+
+    // var newserverURL = 'http://13.58.166.253/summit/api/'; // dev
+    // var ticketsURL = 'http://13.58.166.253/ticketsHospital/api/'; //dev
+    // var covidURL = 'http://13.58.166.253/CovidHospital/api/'; //dev
+    // var summitHospitalServer = 'http://13.58.166.253/covidHospital/api/'; //dev
+
+    // var newserverURL = 'https://18.188.106.125/summit/api/'; // dev
+    // var ticketsURL = 'https://18.188.106.125/ticketsHospital/api/'; //dev
+    // var covidURL = 'https://18.188.106.125/CovidHospital/api/'; //dev
+    // var summitHospitalServer = 'https://18.188.106.125/covidHospital/api/'; //dev
+
+    var newserverURL = 'http://18.188.106.125/summit/api/'; // dev
+    var ticketsURL = 'http://18.188.106.125/ticketsHospitalO7/api/'; //dev
+    var covidURL = 'http://18.188.106.125/CovidHospital/api/'; //dev
+    var summitHospitalServer = 'http://18.188.106.125/covidHospital/api/'; //dev
 
     //Apis server QA
     //var newserverURL = 'http://3.23.88.169/summit/api/';
@@ -168,8 +183,8 @@ export class UtilsService {
     this.params.currentDiseases_pacient=covidURL+"currentDiseases_pacient";
     this.params.complications_pacient=covidURL+"complications_pacient";
 
-    this.params.searchById = summitHospitalServer + "api/searchPeopleById/id/"
-    this.params.addOrEditPeople = summitHospitalServer + "api/EditOrAddPeople"
+    this.params.searchById = summitHospitalServer + "searchPeopleById/id/"
+    this.params.addOrEditPeople = summitHospitalServer + "EditOrAddPeople"
   }//fin de bob
 
 
