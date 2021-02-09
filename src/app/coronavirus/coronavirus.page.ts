@@ -60,6 +60,8 @@ export class CoronavirusPage implements OnInit {
   userViajado: any;
   userViaje: any;
   serviceId: any;
+  ticketStatus: Object;
+  createdTicket: any;
   constructor(
     private services: CrudService,
     private params: UtilsService,
@@ -227,13 +229,26 @@ export class CoronavirusPage implements OnInit {
 
     });
   }
+  getTicketStatus(visitId) {
+    this.services.get(this.params.params.ticketStatus + '/' + visitId).subscribe((resp) => {
+      this.ticketStatus = resp;
+      this.storeService.localSave(this.localParam.localParam.ticketStatus, this.ticketStatus);
 
+      console.log(this.ticketStatus);
+    }, (err) => {
+      console.error(err);
+    });
+  }
   createTicket() {
-    this.services.saveTicket(this.params.params.ticketCreate + '/serviceId/' + this.serviceId, null).subscribe((resp) => {
+    let userId = this.userIdentifier.identifier;
+    this.services.saveTicket(this.params.params.ticketCreate + '/serviceId/' +this.serviceId+'/officeId/'+'1'+'/userId/'+userId, null).subscribe((resp) => {
       console.log(resp)
+      this.createdTicket=resp;
       this.storeService.localSave(this.localParam.localParam.createdTicket, resp);
-      this.router.navigateByUrl(`/menu/first/tabs/tab1/${this.serviceId}`);
-      // this.getTicketStatus(this.createdTicket.visitId);
+      this.router.navigateByUrl('/menu/first/tabs/tab2');
+      // this.router.navigateByUrl(`/menu/first/tabs/tab1/${this.serviceId}`);
+      
+       this.getTicketStatus(this.createdTicket.visitId);
     }, (err) => {
       console.error(err);
     });

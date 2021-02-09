@@ -65,7 +65,10 @@ export class Tab2Page implements OnInit, AfterViewInit {
     //this.getTicketDesti();
     this.GenerateServices();
     this.getUserIdentifier();
-    
+    // this.getTicketInfo();
+    // this.getTicketUbi();
+    // this.getTicketDesti();
+    // this.getTicketPosition();
   }
 
   ngAfterViewInit() {
@@ -82,10 +85,10 @@ export class Tab2Page implements OnInit, AfterViewInit {
       this.presentLoadingDefault();
     }, 1000);
     setTimeout(() => {
-      this.getTicketInfo();
-      this.getTicketUbi();
-      this.getTicketDesti();
-      this.getTicketPosition();
+      // this.getTicketInfo();
+      // this.getTicketUbi();
+      // this.getTicketDesti();
+      // this.getTicketPosition();
       this.timer();
     }, 5000);
   }
@@ -108,7 +111,10 @@ export class Tab2Page implements OnInit, AfterViewInit {
     this.storeService.localGet(this.localParam.localParam.insuredUser).then((resp) => {
       this.userIdentifier = resp;
       this.ticketName=this.userIdentifier.name;
-     
+      this.getTicketInfo();
+    this.getTicketUbi();
+    this.getTicketDesti();
+    this.getTicketPosition();
     }, (err) => {
       console.error(err);
     });
@@ -165,13 +171,12 @@ export class Tab2Page implements OnInit, AfterViewInit {
       if(!this.ticketStatus){
         this.ticketUbi = "No se ha creado un ticket.";
       }else if(this.ticketStatus){
-        this.ticketUbi = this.ticketStatus.queueName;
+        this.ticketUbi = this.ticketStatus[0].queueName;
       }
     }, (err) => {
       console.error(err);
     });
   }
-
   //Metodo para poner el destino del tiquete
   getTicketDesti() {
     this.storeService.localGet(this.localParam.localParam.ticketStatus).then((resp) => {
@@ -179,13 +184,12 @@ export class Tab2Page implements OnInit, AfterViewInit {
       if(!this.ticketStatus){
         this.ticketDesti = "No se ha creado un ticket.";
       }else if(this.ticketStatus){
-        this.ticketDesti = this.ticketStatus.currentServiceName;
+        this.ticketDesti = this.ticketStatus[0].currentServiceName;
       }
     }, (err) => {
       console.error(err);
     });
   }
-
   //Metodo para saber cuantas personas hay en la fila
   getTicketPosition() {
     this.storeService.localGet(this.localParam.localParam.ticketStatus).then((resp) => {
@@ -193,7 +197,7 @@ export class Tab2Page implements OnInit, AfterViewInit {
       if(!this.ticketStatus){
         this.ticketPosition = "No se ha creado un ticket.";
       }else if(this.ticketStatus){
-        this.ticketPosition = this.ticketStatus.position+" personas adelante";
+        this.ticketPosition = this.ticketStatus[0].position+" personas adelante";
       }
     }, (err) => {
       console.error(err);

@@ -29,7 +29,7 @@ export class TicketPage implements OnInit {
   ticketPosition:any;
 
   maxProgressBar: number = 0;
-  refreshedTicket: Object;
+  refreshedTicket: any;
   stopPositionPopUp = false;
   stopPopUp = false;
   positionPopUp: any;
@@ -40,6 +40,12 @@ export class TicketPage implements OnInit {
   oldTicketPosition: any;
   exitDelay: any;
   intervalRefresher: any;
+  ticketStatus:any;
+  createdTicket: any;
+  ticketUbi: string;
+  ticketDesti: string;
+  interval:any;
+  lastPosition: any;
 
   constructor(
     private services: CrudService,
@@ -94,7 +100,15 @@ export class TicketPage implements OnInit {
       // console.log(this.ticket)
       this.refreshTicket();
       this.timeToRefresh();
-    }, 200)
+      this.getTicketInfo();
+      this.getTicketUbi();
+      this.getTicketDesti();
+      this.getTicketPosition();
+     
+    }, 1000)
+    setTimeout(() => {
+      this.timer();
+    }, 5000)
   }
 
   ionViewWillLeave() {
@@ -142,67 +156,127 @@ export class TicketPage implements OnInit {
       };
     }
   }
-
-  refreshTicket() {
+  getTicketInfo() {
+    
     this.storeService.localGet(this.localParam.localParam.createdTicket).then((resp) => {
-      this.ticket = resp;
-      if (this.ticket) {
-        let visitId = this.ticket["visitId"];
-        this.services.get(this.params.params.ticketStatus + '/' + visitId).subscribe((resp) => {
-          this.refreshedTicket = resp;
-          this.storeService.localSave(this.localParam.localParam.ticketStatus, this.refreshedTicket);
-          let positionInQueue = this.refreshedTicket["position"];
-          let currentStatus = this.refreshedTicket["currentStatus"];
-          if (this.oldTicketPosition != positionInQueue && positionInQueue != "") {
-            console.log("entra cuando la posicion actual es diferente a la que entra en la llamada")
-            console.log(this.ticket)
-            console.log(`Posicion Actual ${this.ticketPosition} <== VS ==> ${positionInQueue} Posicion Entrante `)
-            this.stopPositionPopUp = false;
-            // this.alertSound = false;
-            this.ticketPosition = "Su posición en la fila es: "+positionInQueue;
-            this.oldTicketPosition = positionInQueue;
-            console.log(this.ticket)
-            this.positionUpdated(positionInQueue);
-          }
-          this.ticket.serviceName = this.refreshedTicket["currentServiceName"];
-          this.ticketServiceName = this.refreshedTicket["currentServiceName"];
-          this.ticketPosition = positionInQueue;
-          this.ticket
-          this.maxProgressBar = 1 / positionInQueue;
-          let calledFrom = this.refreshedTicket["servicePointName"];
-          if (currentStatus == "CALLED") {
-            console.log("currentStatus: "+currentStatus)
-            this.ticketPosition = "Su turno en fila es: " + 0;
-            if (!this.stopPopUp) {
-              // this.stopPopUp = true;
-              if (this.popUp == null) {
-                this.presentAlert(calledFrom);
-                //this.setVibration();
-              } else if (this.popUp != null) {
-                this.popUp.dismiss();
-                this.presentAlert(calledFrom);
-                //this.setVibration();
-              }
-            }
-          }
-          this.ticketNumber = this.refreshedTicket["ticketId"];
-          //this.ticketDesti = this.refreshedTicket.queueName;
-          //console.log(this.refreshedTicket);
-
-        }, (err) => {
-          if (err.status == 404) {
-            this.storage.remove("created-ticket");
-            this.storage.remove("ticket-status");
-            this.ticketNumber = "Atendido";
-            this.ticketPosition = "Atendido";
-            this.ticket.serviceName = "Atendido";
-          }
-        });
+      this.createdTicket = resp;
+      if(!this.createdTicket){
+        this.ticketNumber = "No hay tiquete";
+      }else if(this.createdTicket){
+        this.ticketNumber = this.createdTicket.ticketNumber;
+        
       }
     }, (err) => {
       console.error(err);
     });
   }
+
+  //Metodo para poner la ubicacion del tiquete
+  getTicketUbi() {
+    this.storeService.localGet(this.localParam.localParam.ticketStatus).then((resp) => {
+      this.ticketStatus = resp;
+      if(!this.ticketStatus){
+        this.ticketUbi = "No se ha creado un ticket.";
+      }else if(this.ticketStatus){
+        this.ticketUbi = this.ticketStatus[0].queueName;
+      }
+    }, (err) => {
+      console.error(err);
+    });
+  }
+  //Metodo para poner el destino del tiquete
+  getTicketDesti() {
+    this.storeService.localGet(this.localParam.localParam.ticketStatus).then((resp) => {
+      this.ticketStatus = resp;
+      if(!this.ticketStatus){
+        this.ticketDesti = "No se ha creado un ticket.";
+      }else if(this.ticketStatus){
+        this.ticketDesti = this.ticketStatus[0].currentServiceName;
+      }
+    }, (err) => {
+      console.error(err);
+    });
+  }
+  //Metodo para saber cuantas personas hay en la fila
+  getTicketPosition() {
+    this.storeService.localGet(this.localParam.localParam.ticketStatus).then((resp) => {
+      this.ticketStatus = resp;
+      if(!this.ticketStatus){
+        this.ticketPosition = "No se ha creado un ticket.";
+      }else if(this.ticketStatus){
+        this.ticketPosition = this.ticketStatus[0].position+" personas adelante";
+      }
+    }, (err) => {
+      console.error(err);
+    });
+  }
+ //Revisa si existe un tiquete creado, si existe hace un get del tiquete nuevamente para refrescarlo
+ refreshTicket(){
+  this.storeService.localGet(this.localParam.localParam.createdTicket).then((resp) => {
+    this.createdTicket = resp;
+    if (this.createdTicket) {
+      let visitId = this.createdTicket.visitId;
+      this.services.getTicket(this.params.params.ticketStatus + '/' + visitId).subscribe((resp) => {
+        this.refreshedTicket = resp;
+        this.storeService.localSave(this.localParam.localParam.ticketStatus, this.refreshedTicket);
+        let positionInQueue = this.refreshedTicket[0].positionInQueue;
+        let currentStatus = this.refreshedTicket[0].currentStatus;
+        if (this.lastPosition != positionInQueue && positionInQueue != null) {
+          this.stopPositionPopUp = false;
+          this.lastPosition = positionInQueue;
+          this.positionUpdated(positionInQueue);
+        }
+      
+        this.ticketDesti = this.refreshedTicket[0].currentServiceName;
+        this.ticketPosition = "Su posición es: " + positionInQueue;
+        this.maxProgressBar = 1 / positionInQueue;
+        let calledFrom = this.refreshedTicket[0].servicePointName;
+        if (currentStatus == "CALLED") {
+          this.ticketPosition = "Su posición es: " + 0;
+          if (!this.stopPopUp) {
+            //this.stopPopUp = true;
+            if (this.popUp == null) {
+              this.presentAlert(calledFrom);
+              //this.setVibration();
+              setTimeout(() => {
+                this.exitTicket();
+              }, 5000);
+            } else if (this.popUp != null) {
+              this.popUp.dismiss();
+              this.presentAlert(calledFrom);
+              //this.setVibration();
+              setTimeout(() => {
+              this.exitTicket();
+            }, 5000);
+            }
+          }
+        }
+        this.ticketNumber = this.refreshedTicket[0].ticketId;
+        //this.ticketDesti = this.refreshedTicket.queueName;
+        //console.log(this.refreshedTicket);
+
+      }, (err) => {
+        if (err.status == 404) {
+          this.storage.remove("created-ticket");
+          this.storage.remove("ticket-status");
+          this.ticketNumber = "Atendido";
+          this.ticketPosition = "Atendido";
+          this.ticketUbi = "Atendido";
+          this.ticketDesti = "Atendido";
+        }
+      });
+    }
+  }, (err) => {
+    console.error(err);
+  });
+}
+
+timer() {
+  this.interval = setInterval(() => {
+    this.refreshTicket();
+  }, 10000);
+}
+
 
   positionUpdated(positionInQueue) {
 
@@ -310,6 +384,27 @@ export class TicketPage implements OnInit {
     // this.setVibration();
   }
 
+  async exitTicket() {
+    let exitPopUp = await this.alertCtrl.create({
+      cssClass: 'my-custom-class',
+      header: 'CCSS Tickets',
+      subHeader: '',
+      message:
+        '<img class="my-custom-class" src="assets/img/like.png"></img><br> <br><h6>Ticket Finalizado</h6>Te invitamos a seguir utilizando nuestro servicios.',
+
+      buttons: [{
+        text: 'Aceptar',
+        role: 'OK',
+        handler: () => {
+          this.storage.remove("created-ticket");
+          this.storage.remove("ticket-status");
+          this.router.navigateByUrl('/servicios');
+        }
+      },
+      ]
+    });
+    await exitPopUp.present();
+  }
   // async popUpExit() {
   //   let exitPopUp = await this.alertCtrl.create({
   //     header: '¿Desea salir?',

@@ -12,7 +12,7 @@ import { UtilStorageService } from '../services/util-storage.service';
 import mapboxgl from 'mapbox-gl';
 import { SeePeoplePage } from '../see-people/see-people.page';
 import { Router, ActivatedRoute } from '@angular/router';
-// import { BLE } from '@ionic-native/ble/ngx';
+import { BLE } from '@ionic-native/ble/ngx';
 
 //declare var require:any;
 //const Mapwize = require('mapwize');
@@ -79,7 +79,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
     public actionSheetController: ActionSheetController,
-    private ngZone: NgZone, ) {
+    private ngZone: NgZone,private ble: BLE ) {
 
     //Mapwize.apiKey("439578d65ac560a55bb586feaa299bf7");
     this.zone = new NgZone({ enableLongStackTrace: false });
@@ -403,7 +403,7 @@ setRouteCovid(){
         //this.personLocation();
         //this.personLoggedLocation();
         //this.asociatedPersonLocation();
-        //this.timer();
+        this.timer();
         this.timerBeacons();
         //this.timerDoBinary();
         this.timerWayFinding();
@@ -526,16 +526,16 @@ setRouteCovid(){
   }
   timerWayFinding() {
     this.interval = setInterval(() => {
-      // this.testWayFinding();
+       this.testWayFinding();
     }, 2000);
   }
   //scanea todos los bluetooth de baja carga con los rssi
   ScanBeaconsAll() {
     this.devices = [];
-    // this.ble.scan([], 15).subscribe(
-    //   device => this.onDeviceDiscovered(device)
+    this.ble.scan([], 15).subscribe(
+    device => this.onDeviceDiscovered(device)
 
-    // );
+    );
 
   }//fin del metodo scan
 
