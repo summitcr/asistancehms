@@ -73,6 +73,7 @@ export class UtilsService {
     complications_pacient:"",
     searchById:"",
     addOrEditPeople:"",
+    deleteTicket:"",
   };
 
   mapwizeParams = {
@@ -96,9 +97,9 @@ export class UtilsService {
     // var summitHospitalServer = 'https://18.188.106.125/covidHospital/api/'; //dev
 
     var newserverURL = 'http://3.138.134.82/summit/api/'; // dev
-    var ticketsURL = 'https://18.188.106.125/ticketsHospitalO7/api/'; //dev
-    var covidURL = 'https://18.188.106.125/CovidHospital/api/'; //dev
-    var summitHospitalServer = 'https://18.188.106.125/covidHospital/api/'; //dev
+    var ticketsURL = 'http://18.188.106.125/ticketsHospitalO7/api/'; //dev
+    var covidURL = 'http://18.188.106.125/CovidHospital/api/'; //dev
+    var summitHospitalServer = 'http://18.188.106.125/covidHospital/api/'; //dev
 
     //Apis server QA
     //var newserverURL = 'http://3.23.88.169/summit/api/';
@@ -161,6 +162,7 @@ export class UtilsService {
     this.params.ticketCreate = ticketsURL + "orchestra_createTicket";
     this.params.ticketServices = ticketsURL + "orchestra_services";
     this.params.ticketStatus = ticketsURL + "orchestra_ticketStatus";
+    this.params.deleteTicket = ticketsURL+"orchestra_tickets/deleteTicket";
 
     this.params.symptoms = covidURL + "symptoms";
     this.params.anotherCases = covidURL + "anotherCases";

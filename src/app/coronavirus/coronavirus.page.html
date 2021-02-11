@@ -48,7 +48,7 @@
       
       <ion-item>
         <ion-label style=" font-weight:bold;margin-bottom: 10px;" position="floating">¿Tiene congestión nasal?</ion-label>
-        <ion-select formControlName="preguntaNasal" placeholder="Si o No" [(ngModel)]="userNasal">
+        <ion-select formControlName="preguntaNasal" okText="Aceptar" cancelText="Cancelar"  placeholder="Si o No" [(ngModel)]="userNasal">
           <ion-select-option value="Si">Si</ion-select-option>
           <ion-select-option value="No">No</ion-select-option>
         </ion-select>

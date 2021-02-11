@@ -61,6 +61,9 @@ export class CrudService {
   saveTicket(url, data: any) {
     return this.http.post(url, data, { headers: {} });
   }
+  delete(url){
+    return this.http.delete(url, { headers: {} });
+  }
   xmlHttpPostRequest(url, formData: FormData) {
     return new Promise((resolve, reject) => {
       var xhr = new XMLHttpRequest();

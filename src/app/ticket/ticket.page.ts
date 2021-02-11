@@ -146,7 +146,7 @@ export class TicketPage implements OnInit {
         }
       })
       this.router.navigateByUrl('/servicios');
-    }, 300000);
+    }, 60000);
   }
 
   destroyDelay(exitDelay) {
@@ -155,6 +155,7 @@ export class TicketPage implements OnInit {
         clearTimeout(exitDelay);
       };
     }
+    clearTimeout(this.exitDelay);
   }
   getTicketInfo() {
     
@@ -238,16 +239,12 @@ export class TicketPage implements OnInit {
             if (this.popUp == null) {
               this.presentAlert(calledFrom);
               //this.setVibration();
-              setTimeout(() => {
-                this.exitTicket();
-              }, 5000);
+             
             } else if (this.popUp != null) {
               this.popUp.dismiss();
               this.presentAlert(calledFrom);
               //this.setVibration();
-              setTimeout(() => {
-              this.exitTicket();
-            }, 5000);
+          
             }
           }
         }
@@ -346,7 +343,7 @@ timer() {
     this.alertTi();
     this.popUp = await this.alertCtrl.create({
       cssClass: 'my-custom-class',
-      header: 'Ficoticket',
+      header: 'CCSS',
       subHeader: '',
       message:
         '<img class="my-custom-class" src="assets/img/unticket.png"></img><br> <br> Su ticket número ' + this.ticketNumber + ' está siendo llamado, pasar a la ventanilla: ' + calledFrom,
@@ -408,53 +405,72 @@ timer() {
   // goToIndoors() {
   //   this.router.navigateByUrl('/menu/first/tabs/tab1/0');
   // }
-  // async popUpExit() {
-  //   let exitPopUp = await this.alertCtrl.create({
-  //     header: '¿Desea salir?',
-  //     subHeader: '',
-  //     message:
-  //       'Si tiene un ticket activo se perderá',
-  //     buttons: [{
-  //       text: 'Sí',
-  //       role: 'OK',
-  //       handler: () => {
-  //         this.cancelTicket();
-  //         this.storage.clear();
-  //       }
-  //     },
-  //     {
-  //       text: 'No',
-  //       role: 'cancel',
-  //       handler: () => {
-  //         //console.log('Cancelar');
-  //       }
-  //     },
-  //     ]
-  //   });
-  //   await exitPopUp.present();
-  // }
+  async popUpExit() {
+    let exitPopUp = await this.alertCtrl.create({
+      header: '¿Desea salir?',
+      subHeader: '',
+      message:
+        'Si tiene un ticket activo se perderá',
+      buttons: [{
+        text: 'Sí',
+        role: 'OK',
+        handler: () => {
+          this.cancelTicket();
+          this.storage.remove("created-ticket");
+          this.storage.remove("ticket-status");
+        }
+      },
+      {
+        text: 'No',
+        role: 'cancel',
+        handler: () => {
+          //console.log('Cancelar');
+        }
+      },
+      ]
+    });
+    await exitPopUp.present();
+  }
 
-  // cancelTicket() {
-  //   this.storeService.localGet(this.localParam.localParam.createdTicket).then((resp) => {
-  //     let createdTicket = resp;
-  //     let visitId = createdTicket.visitId;
-  //     let queueId = createdTicket.queueId;
-  //     let officeId = createdTicket.branchId;
-  //     let serviceId = createdTicket.serviceId;
+  cancelTicket() {
+    this.storeService.localGet(this.localParam.localParam.createdTicket).then((resp) => {
+      let createdTicket = resp;
+      let visitId = createdTicket.visitId;
+      let queueId = createdTicket.queueId;
+      let officeId = createdTicket.branchId;
+      let serviceId = createdTicket.serviceId;
 
-  //     this.services.delete(
-  //       this.params.params.deleteTicket + '/services/' + serviceId + '/branches/' + officeId + '/ticket/' + visitId + '/queueId/' + queueId).subscribe((resp) => {
+      this.services.delete(
+        this.params.params.deleteTicket + '/services/' + serviceId + '/branches/' + officeId + '/ticket/' + visitId + '/queueId/' + queueId).subscribe((resp) => {
 
-  //         this.cancelledTicket();
-  //         OneSignal.removeExternalUserId();
-  //         OneSignal.setSubscription(false);
+          this.cancelledTicket();
+         
+        }, (err) => {
+          console.error(err);
+        });
+    }, (err) => {
+      console.error(err);
+    });
+  }
+  async cancelledTicket() {
+    let cancelledPopUp = await this.alertCtrl.create({
+      cssClass: 'my-custom-class',
+      header: 'CCSS Tickets',
+      subHeader: '',
+      message:
+        '<img class="my-custom-class" src="assets/img/cancel.png"></img><br> <br><h6>Has cancelado el ticket generado</h6>Le invitamos a seguir utilizando nuestro servicio CCSS Tickets.',
 
-  //       }, (err) => {
-  //         console.error(err);
-  //       });
-  //   }, (err) => {
-  //     console.error(err);
-  //   });
-  // }
-
+      buttons: [{
+        text: 'Aceptar',
+        role: 'OK',
+        handler: () => {
+          this.storage.remove("created-ticket");
+          this.storage.remove("ticket-status");
+          this.router.navigateByUrl('/servicios');
+        }
+      },
+      ]
+    });
+    await cancelledPopUp.present();
+  }
 }
