@@ -7,6 +7,7 @@ import { StorageService } from '../services/storage.service';
 import { UtilStorageService } from '../services/util-storage.service';
 import { Router } from '@angular/router';
 import { UbicacionService } from '../services/ubicacion.service';
+import { Storage } from '@ionic/storage';
 
 export interface NoRegisteredDiagnostic {
   identifierType: String,
@@ -78,6 +79,7 @@ export class RegistroCovidPage implements OnInit {
   registroForm: FormGroup;
   enableRegisterForm: boolean = false;
   userModel: UserModel;
+ 
 
   constructor(
     public navCtrl: NavController,
@@ -89,7 +91,8 @@ export class RegistroCovidPage implements OnInit {
     private router: Router,
     private alertCtrl: AlertController,
     private apiUbicacion: UbicacionService,
-    private changeRef: ChangeDetectorRef
+    private changeRef: ChangeDetectorRef,
+    private storage: Storage,
   ) {
     this.myForm = this.createMyForm();
     // this.loger();
@@ -240,12 +243,16 @@ export class RegistroCovidPage implements OnInit {
       if (existCedula) {
         this.storeService.localSave(this.localParam.localParam.insuredUser, this.userModel);
         this.presentConfirm();
+        this.storage.remove("created-ticket");
+        this.storage.remove("ticket-status");
       } else {
         this.showAlert("No esta registrado", "Debe de completar el formulario");
         this.addValidatorsToForm()
         this.enableRegisterForm = true;
         event.target.innerHTML = "Registrar";
         this.changeRef.detectChanges();
+        this.storage.remove("created-ticket");
+        this.storage.remove("ticket-status");
       }
     } else if (action === "Registrar") {
       this.savePaci();

@@ -405,6 +405,9 @@ timer() {
     });
     await exitPopUp.present();
   }
+  // goToIndoors() {
+  //   this.router.navigateByUrl('/menu/first/tabs/tab1/0');
+  // }
   // async popUpExit() {
   //   let exitPopUp = await this.alertCtrl.create({
   //     header: '¿Desea salir?',

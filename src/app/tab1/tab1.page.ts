@@ -13,6 +13,7 @@ import mapboxgl from 'mapbox-gl';
 import { SeePeoplePage } from '../see-people/see-people.page';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BLE } from '@ionic-native/ble/ngx';
+import { Toast } from '@ionic-native/toast/ngx';
 
 //declare var require:any;
 //const Mapwize = require('mapwize');
@@ -64,6 +65,8 @@ export class Tab1Page implements OnInit, AfterViewInit {
   pointDesc: any;
   trackBeacons: any;
   actionSheet: any = null;
+  intervalBeacons: any;
+  intervalFinding: any;
 
   constructor(private storage: Storage,
     private storeService: StorageService,
@@ -79,7 +82,9 @@ export class Tab1Page implements OnInit, AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
     public actionSheetController: ActionSheetController,
-    private ngZone: NgZone,private ble: BLE ) {
+    private ngZone: NgZone,
+    private ble: BLE,
+    private toast: Toast) {
 
     //Mapwize.apiKey("439578d65ac560a55bb586feaa299bf7");
     this.zone = new NgZone({ enableLongStackTrace: false });
@@ -89,9 +94,13 @@ export class Tab1Page implements OnInit, AfterViewInit {
   ngOnInit() {
     //Obtener el id de la url
     this.urlId = this.route.snapshot.paramMap.get("id");
-    console.log("EL ID DE LA RUTA ES: "+this.urlId);
+    console.log("EL ID DE LA RUTA ES: " + this.urlId);
   }
-
+  ionViewWillLeave() {
+    // clearInterval(this.intervalBeacons);
+    // clearInterval(this.intervalFinding);
+    // clearInterval(this.interval);
+  }
   //Metodo que busca el id de la persona loggeada para obtener la informacion.
   personLoggedLocation() {
     this.service.get(this.params.params.beaconurl + "/tracker/person/alert/" + this.person.person.id).subscribe((resp) => {
@@ -202,13 +211,13 @@ export class Tab1Page implements OnInit, AfterViewInit {
     } else {
       if (!this.stopPopUp) {
         //this.stopPopUp = true;
-        if(this.actionSheet == null){
+        if (this.actionSheet == null) {
           this.presentActionSheet();
-        }else if(this.actionSheet != null){
+        } else if (this.actionSheet != null) {
           this.actionSheet.dismiss();
           this.presentActionSheet();
         }
-        else{
+        else {
           this.actionSheet.buttons[0].text = "Por favor, inténtelo de nuevo.";
         }
       }
@@ -271,118 +280,118 @@ export class Tab1Page implements OnInit, AfterViewInit {
     console.log(this.person.identifier);
     console.log(this.person.personasocieted);
   }
-setRouteCovid(){
-  if (this.urlId != 0 && this.urlId.length >= 10){
-  var dir = {
-    "from": { "placeId": "5de81d15dd3e2d00164eb884" },
-    "to": { "placeId": this.urlId},
-    "options": { "isAccessible": false }
-  };
+  setRouteCovid() {
+    if (this.urlId != 0 && this.urlId.length >= 10) {
+      var dir = {
+        "from": { "placeId": "5de81d15dd3e2d00164eb884" },
+        "to": { "placeId": this.urlId },
+        "options": { "isAccessible": false }
+      };
 
-  this.service.save(this.services.mapwizeParams.searchdirection, dir).subscribe((response) => {
-    this.mapwizeMap.setDirection(response);
-  }, (err) => {
+      this.service.save(this.services.mapwizeParams.searchdirection, dir).subscribe((response) => {
+        this.mapwizeMap.setDirection(response);
+      }, (err) => {
 
-    console.error(err);
-  });
-  
-  this.mapwizeMap.removeMarkers();
-  //Marcador donde se ubica la persona
-  const myCustomMarker = new mapboxgl.Marker({ color: '#C51586' });
-  myCustomMarker.setPopup(new mapboxgl.Popup({
-    closeOnClick: false,
-    closeButton: false
-  }).setHTML('<p>' + " Entrada principal " + '</p>'));
+        console.error(err);
+      });
 
-  this.mapwizeMap.on('mapwize:markerclick', e => {
-    alert('marker: ' + e.marker);
-  });
-  this.mapwizeMap.addMarker({
-    latitude: 9.975585796452705,
-    longitude: -84.74963674976945,
-    floor: 0,
-  }, myCustomMarker).then((marker => {
+      this.mapwizeMap.removeMarkers();
+      //Marcador donde se ubica la persona
+      const myCustomMarker = new mapboxgl.Marker({ color: '#C51586' });
+      myCustomMarker.setPopup(new mapboxgl.Popup({
+        closeOnClick: false,
+        closeButton: false
+      }).setHTML('<p>' + " Entrada principal " + '</p>'));
 
-    var s = "";
-  }));
+      this.mapwizeMap.on('mapwize:markerclick', e => {
+        alert('marker: ' + e.marker);
+      });
+      this.mapwizeMap.addMarker({
+        latitude: 9.975585796452705,
+        longitude: -84.74963674976945,
+        floor: 0,
+      }, myCustomMarker).then((marker => {
 
-  //Marcador hacia donde va la persona
-  const goMarker = new mapboxgl.Marker({ color: '#C51586' });
-  goMarker.setPopup(new mapboxgl.Popup({
-    closeOnClick: false,
-    closeButton: false
-  }).setHTML('<p>' + " Pasillo  " + '</p>'));
+        var s = "";
+      }));
 
-  this.mapwizeMap.on('mapwize:markerclick', e => {
-    alert('marker: ' + e.marker);
-  });
-  this.mapwizeMap.addMarker({
-    latitude: 9.975855958410477,
-    longitude: -84.74947979513465,
-    floor: 0,
-  }, goMarker).then((marker => {
+      //Marcador hacia donde va la persona
+      const goMarker = new mapboxgl.Marker({ color: '#C51586' });
+      goMarker.setPopup(new mapboxgl.Popup({
+        closeOnClick: false,
+        closeButton: false
+      }).setHTML('<p>' + " Pasillo  " + '</p>'));
 
-    var s = "";
-  }));
-  }
+      this.mapwizeMap.on('mapwize:markerclick', e => {
+        alert('marker: ' + e.marker);
+      });
+      this.mapwizeMap.addMarker({
+        latitude: 9.975855958410477,
+        longitude: -84.74947979513465,
+        floor: 0,
+      }, goMarker).then((marker => {
+
+        var s = "";
+      }));
+    }
   }
   //this.mapwizeMap.removeMarkers();
 
   //Metodo con el que se esta probando la creacion de ruta y marcador de los tiquetes
   setRoute() {
     //el from placeId es el this.trackBeacons, por el momento esta alambrado para probar los tiquetes
-    if (this.urlId != 0 && this.urlId.length >= 10){
+    if (this.urlId != 0 && this.urlId.length >= 10) {
       var dir = {
         "from": { "placeId": "5de81d15dd3e2d00164eb884" },
         "to": { "placeId": "5e4ef9b6bdadf00016d02b1f" },
         "options": { "isAccessible": false }
       };
-  
+
       this.service.save(this.services.mapwizeParams.searchdirection, dir).subscribe((response) => {
         this.mapwizeMap.setDirection(response);
       }, (err) => {
-  
+
         console.error(err);
       });
 
       this.mapwizeMap.removeMarkers();
-    //Marcador donde se ubica la persona
-    const myCustomMarker = new mapboxgl.Marker({ color: '#C51586' });
-    myCustomMarker.setPopup(new mapboxgl.Popup({
-      closeOnClick: false,
-      closeButton: false
-    }).setHTML('<p>' + " Entrada principal " + '</p>'));
+      //Marcador donde se ubica la persona
+      const myCustomMarker = new mapboxgl.Marker({ color: '#C51586' });
+      myCustomMarker.setPopup(new mapboxgl.Popup({
+        closeOnClick: false,
+        closeButton: false
+      }).setHTML('<p>' + " Entrada principal " + '</p>'));
 
-    this.mapwizeMap.on('mapwize:markerclick', e => {
-      alert('marker: ' + e.marker);
-    });
-    this.mapwizeMap.addMarker({
-      latitude: 9.975585796452705,
-      longitude: -84.74963674976945,
-      floor: 0,
-    }, myCustomMarker).then((marker => {
+      this.mapwizeMap.on('mapwize:markerclick', e => {
+        alert('marker: ' + e.marker);
+      });
+      this.mapwizeMap.addMarker({
+        latitude: 9.975585796452705,
+        longitude: -84.74963674976945,
+        floor: 0,
+      }, myCustomMarker).then((marker => {
 
-      var s = "";
-    }));
+        var s = "";
+      }));
 
-    //Marcador hacia donde va la persona
-    const goMarker = new mapboxgl.Marker({ color: '#C51586' });
-    goMarker.setPopup(new mapboxgl.Popup({
-      closeOnClick: false,
-      closeButton: false
-    }).setHTML('<p>' + " Sala de medicina  " + '</p>'));
+      //Marcador hacia donde va la persona
+      const goMarker = new mapboxgl.Marker({ color: '#C51586' });
+      goMarker.setPopup(new mapboxgl.Popup({
+        closeOnClick: false,
+        closeButton: false
+      }).setHTML('<p>' + " Sala de medicina  " + '</p>'));
 
-    this.mapwizeMap.on('mapwize:markerclick', e => {
-      alert('marker: ' + e.marker);
-    });
-    this.mapwizeMap.addMarker({
-      latitude: 9.975263270104705,
-      longitude: -84.74953045762234,
-      floor: 0,
-    }, goMarker).then((marker => {
+      this.mapwizeMap.on('mapwize:markerclick', e => {
+        alert('marker: ' + e.marker);
+      });
+      this.mapwizeMap.addMarker({
+        latitude: 9.975263270104705,
+        longitude: -84.74953045762234,
+        floor: 0,
+      }, goMarker).then((marker => {
 
-      var s = "";
-    }));
+        var s = "";
+      }));
     }
   }
 
@@ -391,6 +400,8 @@ setRouteCovid(){
     setTimeout(() => {
       this.getUserLogged();
       this.getAlertAmount();
+      this.timerBeacons();
+      this.timerWayFinding();
       MapwizeUI.map({
         apiKey: '439578d65ac560a55bb586feaa299bf7',
         hideMenu: true,
@@ -404,15 +415,15 @@ setRouteCovid(){
         //this.personLoggedLocation();
         //this.asociatedPersonLocation();
         this.timer();
-        this.timerBeacons();
+        // this.timerBeacons();
         //this.timerDoBinary();
-        this.timerWayFinding();
+        // this.timerWayFinding();
         this.setRouteCovid();
         //Metodo de prueba para las rutas de los tiquetes...
-       this.setRoute();
-    
-      // this.setRouteCovid();
-       
+        this.setRoute();
+
+        // this.setRouteCovid();
+
       });
     }, 1000);
 
@@ -511,9 +522,9 @@ setRouteCovid(){
 
   //se está actualizando cada cierto tiempo
   timerBeacons() {
-    this.interval = setInterval(() => {
+    this.intervalBeacons = setInterval(() => {
       this.ScanBeaconsAll();
-
+      //this.alert('Scanning...');
     }, 3000);
   }
   timerDoBinary() {
@@ -525,18 +536,21 @@ setRouteCovid(){
     }, 5000);
   }
   timerWayFinding() {
-    this.interval = setInterval(() => {
-       this.testWayFinding();
-    }, 2000);
+    this.intervalFinding = setInterval(() => {
+      this.testWayFinding();
+    }, 4000);
   }
   //scanea todos los bluetooth de baja carga con los rssi
   ScanBeaconsAll() {
-    this.devices = [];
-    this.ble.scan([], 15).subscribe(
-    device => this.onDeviceDiscovered(device)
+    try {
+      this.devices = [];
+      this.ble.scan([], 15).subscribe(
+        device => this.onDeviceDiscovered(device)
 
-    );
-
+      );
+    } catch (Error) {
+      this.alert(Error.message);
+    }
   }//fin del metodo scan
 
   getLastBeacon() {
@@ -549,13 +563,20 @@ setRouteCovid(){
   }
 
   onDeviceDiscovered(device) {
-    console.log('Discovered' + JSON.stringify(device, null, 2));
+    //this.alert('Discovered' + JSON.stringify(device, null, 2));
     this.ngZone.run(() => {
       this.devices.push(device);
       console.log(device);
       this.doBinary();
     })
 
+  }
+  alert(msg: string) {
+    this.toast.show(msg, '5000', 'center').subscribe(
+      toast => {
+        console.log(toast);
+      }
+    );
   }
   getBeaconsPointLocal() {
     this.storeService.localGet(this.localParam.localParam.gatewaybeacons).then((resp) => {
@@ -626,9 +647,9 @@ setRouteCovid(){
 
     //console.log("Devices ID "+beaconsId);
     //console.log(value);
-    console.log("Index loco " +index);
-    console.log("Last five="+lastFive);
-    console.log("bdatarray "+bdataArray);
+    //this.alert("Index loco " + index);
+    //this.alert("Last five=" + lastFive);
+    //this.alert("bdatarray " + bdataArray);
 
 
     this.storeService.localSave(this.localParam.localParam.lastBeacon, bdataArray[0]);
@@ -647,37 +668,38 @@ setRouteCovid(){
   }//fin del dobinary
   testWayFinding() {
 
-    this.getLastBeacon();
-    let point;
-    let beaconMac;
-    let index;
-    let value;
-    let items = [];
-    let shortMac;
-    console.log(this.lastBeacon);
-    for (let i = 0; i < this.beaconsPoints.length; i++) {
-      items.push(this.beaconsPoints[i].shortid);
-    }
-    beaconMac = this.lastBeacon.id;
-    shortMac = beaconMac.replace(/:/g, "");
-    value = shortMac.substr(shortMac.length - 5);
-    index = this.binarySearch(items, value);
-    console.log(value);
-    console.log(index);
+    setTimeout(() => {
+      this.getLastBeacon();
+      let point;
+      let beaconMac;
+      let index;
+      let value;
+      let items = [];
+      let shortMac;
+      //this.alert('last beacons' + this.lastBeacon);
+      for (let i = 0; i < this.beaconsPoints.length; i++) {
+        items.push(this.beaconsPoints[i].shortid);
+      }
+      beaconMac = this.lastBeacon.id;
+      shortMac = beaconMac.replace(/:/g, "");
+      value = shortMac.substr(shortMac.length - 5);
+      index = this.binarySearch(items, value);
+      console.log(value);
+      console.log(index);
 
-    if (index > -1) {
-      this.pointDesc = this.beaconsPoints[index].point.description;
-      this.trackBeacons=this.beaconsPoints[index].point.externalid;
-      this.lastBeaconsLat = Number(this.beaconsPoints[index].point.lat);
-      this.lastBeaconsLong = Number(this.beaconsPoints[index].point.lon);
-      this.personLocation();
-      this.mapwizeMap.flyTo({
-        center: {lon: this.lastBeaconsLong, lat: this.lastBeaconsLat},
-        zoom: 18,
-      });
-    }
-    //this.personLocation();
-
+      if (index > -1) {
+        this.pointDesc = this.beaconsPoints[index].point.description;
+        this.trackBeacons = this.beaconsPoints[index].point.externalid;
+        this.lastBeaconsLat = Number(this.beaconsPoints[index].point.lat);
+        this.lastBeaconsLong = Number(this.beaconsPoints[index].point.lon);
+        this.personLocation();
+        this.mapwizeMap.flyTo({
+          center: { lon: this.lastBeaconsLong, lat: this.lastBeaconsLat },
+          zoom: 18,
+        });
+      }
+      //this.personLocation();
+    }, 1000);
   }
   //Fin de los metodos de la lectura de beacons
 }// fin

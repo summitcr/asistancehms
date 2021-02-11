@@ -20,6 +20,7 @@ const routes: Routes = [
   { path: 'map-routing', loadChildren: './map-routing/map-routing.module#MapRoutingPageModule' },
   { path: 'servicios', loadChildren: './servicios/servicios.module#ServiciosPageModule' },
   // { path: 'ticket', loadChildren: './ticket/ticket.module#TicketPageModule' },
+  //{ path: 'maps/:id', loadChildren: './tab1/tab1.module#Tab1PageModule' },
 
 
 ];
