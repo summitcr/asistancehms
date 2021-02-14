@@ -1,8 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-
 import { Platform, NavController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+
+declare var cordova;
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,7 @@ export class AppComponent {
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
-    private statusBar: StatusBar
+    private statusBar: StatusBar,
   ) {
     this.initializeApp();
   }
@@ -33,6 +34,27 @@ export class AppComponent {
       });
       this.preventWebBackButton();
     });
+  }
+
+  backgroundMode() {
+    if (this.platform.is('cordova')) {
+      cordova.plugins.backgroundMode.setDefaults({ 
+        title: 'Ficoticket',
+        text: '¡Ficoticket se encuentra activo!',
+        hidden: false,
+        silent: false,
+        sticky: true,
+        resume: false,
+        foreground: true,
+        lockscreen: true,
+       });
+
+      cordova.plugins.backgroundMode.enable();
+      cordova.plugins.backgroundMode.disableBatteryOptimizations();
+      cordova.plugins.backgroundMode.on('activate', () => {
+        cordova.plugins.backgroundMode.disableWebViewOptimizations(); 
+      });
+    }
   }
 
   preventWebBackButton() {

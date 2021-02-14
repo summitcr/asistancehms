@@ -33,6 +33,7 @@ import { RegistroCovidPage } from './registro-covid/registro-covid.page';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 
 @NgModule({
   declarations: [ AppComponent, ModalPagePage, ModalNotificationPage,HeartrateComponent,CovidComponent,],
@@ -51,10 +52,9 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
   providers: [
     StatusBar,
     SplashScreen,
-    
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     CrudService,UtilsService, AndroidPermissions, LocationAccuracy, Geolocation, StorageService, UtilStorageService, BeaconService, 
-    IBeacon, BLE, Toast, QRScanner, LocalNotifications,SeePeoplePage,RegistroCovidPage
+    IBeacon, BLE, Toast, QRScanner, LocalNotifications,SeePeoplePage,RegistroCovidPage, BackgroundMode
   ],
   bootstrap: [AppComponent]
 })

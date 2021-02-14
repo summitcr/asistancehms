@@ -22,6 +22,7 @@
     "@angular/platform-browser-dynamic": "~8.1.2",
     "@angular/router": "~8.1.2",
     "@ionic-native/android-permissions": "^5.29.0",
+    "@ionic-native/background-mode": "^5.31.1",
     "@ionic-native/ble": "^5.15.1",
     "@ionic-native/core": "^5.0.0",
     "@ionic-native/geolocation": "^5.29.0",
@@ -84,6 +85,7 @@
     "cordova-ios": "^6.2.0",
     "cordova-plugin-add-swift-support": "^2.0.2",
     "cordova-plugin-android-permissions": "^1.1.0",
+    "cordova-plugin-background-mode": "^0.7.3",
     "cordova-plugin-geolocation": "^4.0.2",
     "cordova-plugin-ionic-webview": "^5.0.0",
     "cordova-plugin-request-location-accuracy": "^2.3.0",
@@ -123,7 +125,8 @@
         "PLAY_SERVICES_LOCATION_VERSION": "16.+"
       },
       "cordova-plugin-geolocation": {},
-      "cordova-plugin-ionic-webview": {}
+      "cordova-plugin-ionic-webview": {},
+      "cordova-plugin-background-mode": {}
     },
     "platforms": [
       "android",
