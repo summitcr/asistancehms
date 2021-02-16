@@ -26,6 +26,7 @@ export class AppComponent {
       this.statusBar.backgroundColorByHexString("1D355E");
       this.statusBar.overlaysWebView(false);
       this.splashScreen.hide();
+      this.backgroundMode();
       this.platform.backButton.subscribeWithPriority(9999, () => {
         document.addEventListener('backbutton', function (event) {
           event.preventDefault();
@@ -39,8 +40,8 @@ export class AppComponent {
   backgroundMode() {
     if (this.platform.is('cordova')) {
       cordova.plugins.backgroundMode.setDefaults({ 
-        title: 'Ficoticket',
-        text: '¡Ficoticket se encuentra activo!',
+        title: 'Hospital Monseñor Sanabria',
+        text: '¡HMS se encuentra activo!',
         hidden: false,
         silent: false,
         sticky: true,
