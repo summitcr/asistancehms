@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>MyApp</name>
+<widget id="com.tech-logik.hms" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>hmsApp</name>
     <description>An awesome Ionic/Cordova app.</description>
-    <author email="hi@ionicframework.com" href="http://ionicframework.com/">Ionic Framework Team</author>
+    <author email="hi@tech-logik.com" href="http://tech-logik.com/">Tech-Logik</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-navigation href="*" />
@@ -22,6 +22,8 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="androidLaunchMode" value="singleTask" />
+    <preference name="UseSwiftLanguageVersion" value="5" />
+    <preference name="WKWebViewOnly" value="true" />
     <platform name="android">
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application" xmlns:android="http://schemas.android.com/apk/res/android">
             <application android:networkSecurityConfig="@xml/network_security_config" />
@@ -50,6 +52,9 @@
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
+        <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
+            <string>We use your location for full functionality of certain app features.</string>
+        </edit-config>
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
         <icon height="114" src="resources/ios/icon/icon@2x.png" width="114" />
         <icon height="29" src="resources/ios/icon/icon-small.png" width="29" />
@@ -105,14 +110,18 @@
     <plugin name="cordova-plugin-statusbar" spec="2.4.2" />
     <plugin name="cordova-plugin-device" spec="2.0.2" />
     <plugin name="cordova-plugin-splashscreen" spec="5.0.2" />
-    <plugin name="cordova-plugin-ionic-webview" spec="^4.0.0" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
     <plugin name="cordova-plugin-ble-central" spec="^1.2.4">
         <variable name="BLUETOOTH_USAGE_DESCRIPTION" value=" " />
     </plugin>
     <plugin name="com.unarin.cordova.beacon" spec="~3.8.1" />
-    <engine name="ios" spec="^4.5.5" />
     <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
         <string>We use your location for full functionality of certain app features.</string>
+    </edit-config>
+    <edit-config file="*-Info.plist" mode="merge" target="NSBluetoothPeripheralUsageDescription">
+        <string>We use your Bluetooth for full functionality of certain app features.</string>
+    </edit-config>
+    <edit-config file="*-Info.plist" mode="merge" target="NSBluetoothAlwaysUsageDescription">
+        <string>We use your Bluetooth for full functionality of certain app features.</string>
     </edit-config>
 </widget>

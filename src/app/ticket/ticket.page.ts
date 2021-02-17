@@ -11,6 +11,8 @@ import { Storage } from '@ionic/storage';
 // import { Vibration } from '@ionic-native/vibration/ngx';
 // import { RouterOutletService } from '../services/router-outlet-service.service';
 
+declare var cordova;
+
 @Component({
   selector: 'app-ticket',
   templateUrl: './ticket.page.html',
@@ -76,6 +78,12 @@ export class TicketPage implements OnInit {
         //this.showAlert(res.title, res.text, msg);
 
       });
+
+      if (this.platform.is('cordova')) {
+        cordova.plugins.backgroundMode.on('activate', () => {
+          cordova.plugins.backgroundMode.disableWebViewOptimizations();
+        });
+      }
     });
 
     // if (this.platform.is('cordova')) {
