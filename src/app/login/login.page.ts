@@ -130,8 +130,10 @@ export class LoginPage implements OnInit {
 
     this.service.get(this.params.params.gatewaybeacons+"/shortid").subscribe((resp) => {
       this.beaconsPoints= resp;
+      console.log(this.beaconsPoints);
       this.storeService.localSave(this.localParam.localParam.gatewaybeacons, this.beaconsPoints);
       console.log(this.beaconsPoints);
+     // this.alert(this.beaconsPoints);
     }, (err) => {
       this.alert( "Error:Contacte al adminstrador del sistema");
       console.error(err);

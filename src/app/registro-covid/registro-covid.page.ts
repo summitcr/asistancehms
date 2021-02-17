@@ -8,6 +8,7 @@ import { UtilStorageService } from '../services/util-storage.service';
 import { Router } from '@angular/router';
 import { UbicacionService } from '../services/ubicacion.service';
 import { Storage } from '@ionic/storage';
+import { Toast } from '@ionic-native/toast/ngx';
 
 export interface NoRegisteredDiagnostic {
   identifierType: String,
@@ -79,6 +80,7 @@ export class RegistroCovidPage implements OnInit {
   registroForm: FormGroup;
   enableRegisterForm: boolean = false;
   userModel: UserModel;
+  beaconsPoints: any;
  
 
   constructor(
@@ -93,6 +95,7 @@ export class RegistroCovidPage implements OnInit {
     private apiUbicacion: UbicacionService,
     private changeRef: ChangeDetectorRef,
     private storage: Storage,
+    private toast: Toast
   ) {
     this.myForm = this.createMyForm();
     // this.loger();
@@ -258,7 +261,25 @@ export class RegistroCovidPage implements OnInit {
       this.savePaci();
     }
   }
+  getBeconsPoints() {
 
+    this.storeService.localGet(this.localParam.localParam.gatewaybeacons).then((resp) => {
+      this.beaconsPoints= resp;
+      console.log(this.beaconsPoints);
+     // this.alert("Beacons: "+this.beaconsPoints);
+    }, (err) => {
+      //this.alert( "Error:Contacte al adminstrador del sistema");
+      console.error(err);
+    });
+  }
+
+  alert(msg: string) {
+    this.toast.show(msg, '5000', 'center').subscribe(
+      toast => {
+        console.log(toast);
+      }
+    );
+  }
   async valideteCedula() {
     const ced = this.myForm.controls.cedula.value;
     let resp: boolean;

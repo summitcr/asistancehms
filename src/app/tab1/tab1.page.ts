@@ -95,6 +95,9 @@ export class Tab1Page implements OnInit, AfterViewInit {
     //Obtener el id de la url
     this.urlId = this.route.snapshot.paramMap.get("id");
     console.log("EL ID DE LA RUTA ES: " + this.urlId);
+  //   setTimeout(() => {
+  //   this.getBeaconsPointLocal();
+  // }, 1000);
   }
   ionViewWillLeave() {
     // clearInterval(this.intervalBeacons);
@@ -255,7 +258,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
 
   getUserLogged() {
-    this.storeService.localGet(this.localParam.localParam.userLogged).then((resp) => {
+    this.storeService.localGet(this.localParam.localParam.insuredUser).then((resp) => {
       this.person = resp;
       //console.log(this.person);
     }, (err) => {
@@ -396,12 +399,14 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-
     setTimeout(() => {
+      this.getBeaconsPointLocal();
+    }, 2000);
+    setTimeout(() => {
+    
       this.getUserLogged();
       this.getAlertAmount();
-      this.timerBeacons();
-      this.timerWayFinding();
+     
       MapwizeUI.map({
         apiKey: '439578d65ac560a55bb586feaa299bf7',
         hideMenu: true,
@@ -410,7 +415,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
       }).then(instance => {
         this.mapwizeMap = instance;
-
+    
         //this.personLocation();
         //this.personLoggedLocation();
         //this.asociatedPersonLocation();
@@ -423,22 +428,23 @@ export class Tab1Page implements OnInit, AfterViewInit {
         this.setRoute();
 
         // this.setRouteCovid();
-
+        
       });
     }, 1000);
 
-    this.getBeaconsPointLocal();
+    
 
   }//fin de after
 
   //Metodo que coloca el marcador y el popup de la persona loggeada
   personLocation() {
+   // this.alert("lat:"+this.lastBeaconsLat);
     this.mapwizeMap.removeMarkers();
     const myCustomMarker = new mapboxgl.Marker({ color: '#C51586' });
     myCustomMarker.setPopup(new mapboxgl.Popup({
       closeOnClick: false,
       closeButton: false
-    }).setHTML('<h4>' + this.person.person.name + '</h4><p>' + "Punto: " + this.pointDesc + '<br>' + "Tiempo: " + this.secondSpended + '</p>'));
+    }).setHTML('<h4>' + this.person.name + '</h4><p>' + "Punto: " + this.pointDesc + '<br>' + '</p>'));
 
     this.mapwizeMap.on('mapwize:markerclick', e => {
       alert('marker: ' + e.marker);
@@ -544,9 +550,10 @@ export class Tab1Page implements OnInit, AfterViewInit {
   ScanBeaconsAll() {
     try {
       this.devices = [];
-      this.ble.scan([], 15).subscribe(
-        device => this.onDeviceDiscovered(device)
-
+      this.ble.startScan([]).subscribe(
+        device => this.onDeviceDiscovered(device),
+        error => this.alert("No devices because " + error),
+        
       );
     } catch (Error) {
       this.alert(Error.message);
@@ -566,7 +573,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
     //this.alert('Discovered' + JSON.stringify(device, null, 2));
     this.ngZone.run(() => {
       this.devices.push(device);
-      console.log(device);
+      //this.alert('Lista:'+ JSON.stringify(device));
       this.doBinary();
     })
 
@@ -579,11 +586,21 @@ export class Tab1Page implements OnInit, AfterViewInit {
     );
   }
   getBeaconsPointLocal() {
-    this.storeService.localGet(this.localParam.localParam.gatewaybeacons).then((resp) => {
-      this.beaconsPoints = resp;
-    }, (err) => {
-      console.error(err);
-    });
+    try{
+      this.storeService.localGet(this.localParam.localParam.gatewaybeacons).then((resp) => {
+        this.beaconsPoints = resp;
+
+        this.timerBeacons();
+        this.timerWayFinding();
+      }, (err) => {
+        console.error(err);
+        console.log(err);
+        this.alert("Error: " + err)
+      });
+    } catch (e){
+      console.log(" Error del catch " + e)
+      this.alert("Error del catch "+ e);
+    }
   }
 
   binarySearch(items, value) {
@@ -609,12 +626,12 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }
 
   doBinary() {
-
+    //this.alert("Aqui voy"+ this.beaconsPoints);
     let items = [];
     for (let i = 0; i < this.beaconsPoints.length; i++) {
       items.push(this.beaconsPoints[i].shortid);
     }
-    console.log(items);
+    //this.alert("result:"+ items);
     //let items = ["aguacate", "adriel", "tavo", "jairazo"];
     //console.log(this.devices[0].id);
 
@@ -629,6 +646,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
       value.push(beaconsId[i].replace(/:/g, ""));
       lastFive.push(value[i].substr(value[i].length - 5));
       index = this.binarySearch(items, lastFive[i]);
+      //this.alert('INDEX:'+index);
       if (index > -1) {
 
         var bdata = {
@@ -653,7 +671,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
 
     this.storeService.localSave(this.localParam.localParam.lastBeacon, bdataArray[0]);
-    console.log("entra al if del getLastBeacon");
+    //this.alert("bdArray:"+bdataArray[0]);
 
     //let value = beaconsId[0].replace(/:/g, "");
 
@@ -668,7 +686,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }//fin del dobinary
   testWayFinding() {
 
-    setTimeout(() => {
+   
       this.getLastBeacon();
       let point;
       let beaconMac;
@@ -680,12 +698,13 @@ export class Tab1Page implements OnInit, AfterViewInit {
       for (let i = 0; i < this.beaconsPoints.length; i++) {
         items.push(this.beaconsPoints[i].shortid);
       }
+     // this.alert("lastbeacon:"+this.lastBeacon.id);
       beaconMac = this.lastBeacon.id;
       shortMac = beaconMac.replace(/:/g, "");
       value = shortMac.substr(shortMac.length - 5);
       index = this.binarySearch(items, value);
       console.log(value);
-      console.log(index);
+    // this.alert("index:"+index);
 
       if (index > -1) {
         this.pointDesc = this.beaconsPoints[index].point.description;
@@ -699,7 +718,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
         });
       }
       //this.personLocation();
-    }, 1000);
+   
   }
   //Fin de los metodos de la lectura de beacons
 }// fin

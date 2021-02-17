@@ -355,6 +355,7 @@ timer() {
           this.cancelDisable = true;
           this.postPoneDisable = true;
           this.delay();
+          this.router.navigateByUrl('/menu/first/tabs/tab2');
           // OneSignal.removeExternalUserId();
           // OneSignal.setSubscription(false);
         }
