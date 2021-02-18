@@ -2,18 +2,25 @@ import { Injectable } from '@angular/core';
 import { IBeacon } from '@ionic-native/ibeacon/ngx';
 import { Events, Platform } from '@ionic/angular';
 import { Toast } from '@ionic-native/toast/ngx';
+import { promise } from 'protractor';
+import { resolve } from 'url';
 
 export class BeaconModel {
   uuid: string;
   major: number;
   minor: number;
   rssi: number;
+  accuracy: number;
+  proximity: string;
+
   
   constructor(public beacon: any) {
     this.uuid  = beacon.uuid;
     this.major = beacon.major;
     this.minor = beacon.minor;
     this.rssi  = beacon.rssi;
+    this.accuracy  = beacon.accuracy;
+    this.proximity  = beacon.proximity;
   }
 }
 
@@ -25,7 +32,9 @@ export class BeaconService {
   region: any;
   tracker: string = "Personas Asociadas";
 
-  constructor(public platform: Platform, public events: Events, private ibeacon: IBeacon,private toast: Toast) { }//fin del contructor
+  constructor(public platform: Platform, public events: Events, private ibeacon: IBeacon,private toast: Toast) { 
+
+  }//fin del contructor
 
   alert(msg: string){
     this.toast.show(msg, '5000', 'center').subscribe(
@@ -34,6 +43,7 @@ export class BeaconService {
       }
     );    
   }
+
   initialise(): any {
     //this.alert("Entro al ini");
     let promise = new Promise((resolve, reject) => {
@@ -69,7 +79,7 @@ export class BeaconService {
 
           tercer posible 01120011-2233-4455-6677-8899aabbccdd
         */
-        this.region = this.ibeacon.BeaconRegion('deskBeacon', '00002A00-0000-1000-8000-00805F9B34FB');
+        this.region = this.ibeacon.BeaconRegion('hms', 'F2A20437-23C4-408B-945B-BA33594F3C98');
         
         this.alert(`Scanning has started`);
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import FakeData from './fakedata';
 
 const endpoint = 'http://35.184.147.166/summit/api/';
 /*const httpOptions = {
@@ -82,5 +83,17 @@ export class CrudService {
     });
   }
   
+  fakeApi() {
+    console.log(FakeData);
+    return new Promise((resolve, reject)=>{
+      setTimeout(()=>{
+        try {
+          resolve(FakeData)
+        } catch (error) {
+          reject(error)
+        }
+      }, 1000);
+    });
+  }
 
 }// fin  de la class

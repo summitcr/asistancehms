@@ -127,8 +127,8 @@ export class LoginPage implements OnInit {
   //Extrae todos los beacons relacionados al un punto
 
   getBeconsPoints() {
-
-    this.service.get(this.params.params.gatewaybeacons+"/shortid").subscribe((resp) => {
+    console.log('esta entrando al metodo')
+    this.service.fakeApi().then((resp)=>{
       this.beaconsPoints= resp;
       console.log(this.beaconsPoints);
       this.storeService.localSave(this.localParam.localParam.gatewaybeacons, this.beaconsPoints);
@@ -137,7 +137,18 @@ export class LoginPage implements OnInit {
     }, (err) => {
       this.alert( "Error:Contacte al adminstrador del sistema");
       console.error(err);
-    });
+    })
+
+    // this.service.get(this.params.params.gatewaybeacons+"/shortid").subscribe((resp) => {
+    //   this.beaconsPoints= resp;
+    //   console.log(this.beaconsPoints);
+    //   this.storeService.localSave(this.localParam.localParam.gatewaybeacons, this.beaconsPoints);
+    //   console.log(this.beaconsPoints);
+    //  // this.alert(this.beaconsPoints);
+    // }, (err) => {
+    //   this.alert( "Error:Contacte al adminstrador del sistema");
+    //   console.error(err);
+    // });
   }
 
   startCovidForm(){

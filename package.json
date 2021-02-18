@@ -26,7 +26,7 @@
     "@ionic-native/ble": "^5.15.1",
     "@ionic-native/core": "^5.0.0",
     "@ionic-native/geolocation": "^5.29.0",
-    "@ionic-native/ibeacon": "^5.15.1",
+    "@ionic-native/ibeacon": "^5.31.1",
     "@ionic-native/ionic-webview": "^5.31.1",
     "@ionic-native/local-notifications": "^5.17.0",
     "@ionic-native/location-accuracy": "^5.29.0",

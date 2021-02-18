@@ -14,6 +14,7 @@ import { SeePeoplePage } from '../see-people/see-people.page';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BLE } from '@ionic-native/ble/ngx';
 import { Toast } from '@ionic-native/toast/ngx';
+import { id } from '@swimlane/ngx-charts/release/utils';
 
 //declare var require:any;
 //const Mapwize = require('mapwize');
@@ -84,7 +85,8 @@ export class Tab1Page implements OnInit, AfterViewInit {
     public actionSheetController: ActionSheetController,
     private ngZone: NgZone,
     private ble: BLE,
-    private toast: Toast) {
+    private toast: Toast,
+    private ibeacon: IBeacon,) {
 
     //Mapwize.apiKey("439578d65ac560a55bb586feaa299bf7");
     this.zone = new NgZone({ enableLongStackTrace: false });
@@ -95,15 +97,61 @@ export class Tab1Page implements OnInit, AfterViewInit {
     //Obtener el id de la url
     this.urlId = this.route.snapshot.paramMap.get("id");
     console.log("EL ID DE LA RUTA ES: " + this.urlId);
-  //   setTimeout(() => {
-  //   this.getBeaconsPointLocal();
-  // }, 1000);
+    
+    this.beaconService.initialise().then((isInitialised) => {
+      if (isInitialised) {
+        this.listenToBeaconEvents();
+      }
+    });
+
+    //   setTimeout(() => {
+    //   this.getBeaconsPointLocal();
+    // }, 1000);
   }
   ionViewWillLeave() {
     // clearInterval(this.intervalBeacons);
     // clearInterval(this.intervalFinding);
     // clearInterval(this.interval);
   }
+
+  listenToBeaconEvents() {
+    this.events.subscribe('didRangeBeaconsInRegion', (data) => {
+      // update the UI with the beacon list
+      this.zone.run(() => {
+        this.beacons = [];
+        let beaconList = data.beacons;
+        beaconList.forEach((beacon) => {
+          let beaconObject = new BeaconModel(beacon);
+          this.beacons.push(beaconObject);
+        });
+        // console.warn("sigue la lista ordenada")
+        const orderBeaconList = this.orderByRssi(this.beacons);
+        const lastIBeacon = this.bindMinorWithMac(orderBeaconList[0]);
+        this.storeService.localSave(this.localParam.localParam.lastBeacon,lastIBeacon);
+      });
+
+    });
+  }
+
+  orderByRssi(list:BeaconModel[]){
+    const orderList = list.sort((a,b)=>{
+      return (-a.rssi)-(-b.rssi)
+    });
+    // console.log(orderList);
+    return orderList;
+  }
+
+  bindMinorWithMac(nearIBeacon){
+    const {shortid} = this.beaconsPoints.find((value)=>value.minor === nearIBeacon.minor);
+    // const dataBinded = this.beaconsPoints.find((value)=>value.minor === nearIBeacon.minor);
+    // console.log(dataBinded)
+    return {
+      id:shortid,
+      rssi:nearIBeacon.rssi
+    };
+  }
+
+
   //Metodo que busca el id de la persona loggeada para obtener la informacion.
   personLoggedLocation() {
     this.service.get(this.params.params.beaconurl + "/tracker/person/alert/" + this.person.person.id).subscribe((resp) => {
@@ -403,10 +451,10 @@ export class Tab1Page implements OnInit, AfterViewInit {
       this.getBeaconsPointLocal();
     }, 2000);
     setTimeout(() => {
-    
+
       this.getUserLogged();
       this.getAlertAmount();
-     
+
       MapwizeUI.map({
         apiKey: '439578d65ac560a55bb586feaa299bf7',
         hideMenu: true,
@@ -415,7 +463,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
       }).then(instance => {
         this.mapwizeMap = instance;
-    
+
         //this.personLocation();
         //this.personLoggedLocation();
         //this.asociatedPersonLocation();
@@ -428,17 +476,17 @@ export class Tab1Page implements OnInit, AfterViewInit {
         this.setRoute();
 
         // this.setRouteCovid();
-        
+
       });
     }, 1000);
 
-    
+
 
   }//fin de after
 
   //Metodo que coloca el marcador y el popup de la persona loggeada
   personLocation() {
-   // this.alert("lat:"+this.lastBeaconsLat);
+    // this.alert("lat:"+this.lastBeaconsLat);
     this.mapwizeMap.removeMarkers();
     const myCustomMarker = new mapboxgl.Marker({ color: '#C51586' });
     myCustomMarker.setPopup(new mapboxgl.Popup({
@@ -553,7 +601,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
       this.ble.startScan([]).subscribe(
         device => this.onDeviceDiscovered(device),
         error => this.alert("No devices because " + error),
-        
+
       );
     } catch (Error) {
       this.alert(Error.message);
@@ -563,7 +611,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   getLastBeacon() {
     this.storeService.localGet(this.localParam.localParam.lastBeacon).then((resp) => {
       this.lastBeacon = resp;
-      console.log(this.lastBeacon);
+      console.warn(this.lastBeacon);
     }, (err) => {
       console.error(err);
     });
@@ -586,20 +634,20 @@ export class Tab1Page implements OnInit, AfterViewInit {
     );
   }
   getBeaconsPointLocal() {
-    try{
+    try {
       this.storeService.localGet(this.localParam.localParam.gatewaybeacons).then((resp) => {
         this.beaconsPoints = resp;
 
-        this.timerBeacons();
+        // this.timerBeacons();
         this.timerWayFinding();
       }, (err) => {
         console.error(err);
         console.log(err);
         this.alert("Error: " + err)
       });
-    } catch (e){
+    } catch (e) {
       console.log(" Error del catch " + e)
-      this.alert("Error del catch "+ e);
+      this.alert("Error del catch " + e);
     }
   }
 
@@ -686,39 +734,39 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }//fin del dobinary
   testWayFinding() {
 
-   
-      this.getLastBeacon();
-      let point;
-      let beaconMac;
-      let index;
-      let value;
-      let items = [];
-      let shortMac;
-      //this.alert('last beacons' + this.lastBeacon);
-      for (let i = 0; i < this.beaconsPoints.length; i++) {
-        items.push(this.beaconsPoints[i].shortid);
-      }
-     // this.alert("lastbeacon:"+this.lastBeacon.id);
-      beaconMac = this.lastBeacon.id;
-      shortMac = beaconMac.replace(/:/g, "");
-      value = shortMac.substr(shortMac.length - 5);
-      index = this.binarySearch(items, value);
-      console.log(value);
+
+    this.getLastBeacon();
+    let point;
+    let beaconMac;
+    let index;
+    let value;
+    let items = [];
+    let shortMac;
+    //this.alert('last beacons' + this.lastBeacon);
+    for (let i = 0; i < this.beaconsPoints.length; i++) {
+      items.push(this.beaconsPoints[i].shortid);
+    }
+    // this.alert("lastbeacon:"+this.lastBeacon.id);
+    beaconMac = this.lastBeacon.id;
+    shortMac = beaconMac.replace(/:/g, "");
+    value = shortMac.substr(shortMac.length - 5);
+    index = this.binarySearch(items, value);
+    console.log(value);
     // this.alert("index:"+index);
 
-      if (index > -1) {
-        this.pointDesc = this.beaconsPoints[index].point.description;
-        this.trackBeacons = this.beaconsPoints[index].point.externalid;
-        this.lastBeaconsLat = Number(this.beaconsPoints[index].point.lat);
-        this.lastBeaconsLong = Number(this.beaconsPoints[index].point.lon);
-        this.personLocation();
-        this.mapwizeMap.flyTo({
-          center: { lon: this.lastBeaconsLong, lat: this.lastBeaconsLat },
-          zoom: 18,
-        });
-      }
-      //this.personLocation();
-   
+    if (index > -1) {
+      this.pointDesc = this.beaconsPoints[index].point.description;
+      this.trackBeacons = this.beaconsPoints[index].point.externalid;
+      this.lastBeaconsLat = Number(this.beaconsPoints[index].point.lat);
+      this.lastBeaconsLong = Number(this.beaconsPoints[index].point.lon);
+      this.personLocation();
+      this.mapwizeMap.flyTo({
+        center: { lon: this.lastBeaconsLong, lat: this.lastBeaconsLat },
+        zoom: 18,
+      });
+    }
+    //this.personLocation();
+
   }
   //Fin de los metodos de la lectura de beacons
 }// fin
