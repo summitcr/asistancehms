@@ -30,7 +30,7 @@
           <ion-icon name="person" slot="end"></ion-icon>
           <ion-label position="floating">Cédula:</ion-label>
           <!--pattern="^[1-9]\d{4}\d{4}$"-->
-          <ion-input formControlName="cedula" type="text" placeholder="Cedula" [(ngModel)]="userCed"></ion-input>
+          <ion-input formControlName="cedula" type="text" placeholder="Cedula" [(ngModel)]="credentials.userCed"></ion-input>
         </ion-item>
         <br>
         <ng-template [ngIf]="enableRegisterForm">

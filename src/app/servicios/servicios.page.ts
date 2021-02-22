@@ -37,7 +37,7 @@ export class ServiciosPage implements OnInit {
       this.services = resp;
       this.services = this.iconService.setIconsToServices(this.services);
     })
-    this.presentToastWithOptions()
+   // this.presentToastWithOptions()
   }
 
   toGo(route){
@@ -81,7 +81,9 @@ export class ServiciosPage implements OnInit {
     });
     toast.present();
   }
-
+  goPrenal(){
+    this.router.navigateByUrl("/prenatal-control");
+  }
   async presentModal() {
     const modal = await this.modalController.create({
       component: ModalNotificationPage,

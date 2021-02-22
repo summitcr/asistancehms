@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { UbicacionService } from '../services/ubicacion.service';
 import { Storage } from '@ionic/storage';
 import { Toast } from '@ionic-native/toast/ngx';
+import { AuthenticationService, Token } from '../services/authentication.service';
 
 export interface NoRegisteredDiagnostic {
   identifierType: String,
@@ -82,7 +83,10 @@ export class RegistroCovidPage implements OnInit {
   userModel: UserModel;
   beaconsPoints: any;
  
-
+  credentials: Token = {
+    userCed: '',
+   
+  };
   constructor(
     public navCtrl: NavController,
     public formBuilder: FormBuilder,
@@ -95,7 +99,8 @@ export class RegistroCovidPage implements OnInit {
     private apiUbicacion: UbicacionService,
     private changeRef: ChangeDetectorRef,
     private storage: Storage,
-    private toast: Toast
+    private toast: Toast,
+    private auth: AuthenticationService
   ) {
     this.myForm = this.createMyForm();
     // this.loger();
@@ -283,7 +288,7 @@ export class RegistroCovidPage implements OnInit {
   async valideteCedula() {
     const ced = this.myForm.controls.cedula.value;
     let resp: boolean;
-    await this.services.get(this.params.params.searchById + ced).toPromise().then((data: UserModel) => {
+    await this.auth.login(this.credentials,this.params.params.searchById + ced).toPromise().then((data: UserModel) => {
       if (data === null) {
         resp = false;
       } else {
