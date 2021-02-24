@@ -67,6 +67,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   actionSheet: any = null;
   intervalBeacons: any;
   intervalFinding: any;
+  placesInfo: any;
 
   constructor(private storage: Storage,
     private storeService: StorageService,
@@ -95,9 +96,9 @@ export class Tab1Page implements OnInit, AfterViewInit {
     //Obtener el id de la url
     this.urlId = this.route.snapshot.paramMap.get("id");
     console.log("EL ID DE LA RUTA ES: " + this.urlId);
-  //   setTimeout(() => {
-  //   this.getBeaconsPointLocal();
-  // }, 1000);
+    //   setTimeout(() => {
+    //   this.getBeaconsPointLocal();
+    // }, 1000);
   }
   ionViewWillLeave() {
     // clearInterval(this.intervalBeacons);
@@ -345,11 +346,11 @@ export class Tab1Page implements OnInit, AfterViewInit {
     //el from placeId es el this.trackBeacons, por el momento esta alambrado para probar los tiquetes
     if (this.urlId != 0 && this.urlId.length >= 10) {
       var dir = {
-        "from": { "placeId": "5de81d15dd3e2d00164eb884" },
-        "to": { "placeId": "5e4ef9b6bdadf00016d02b1f" },
+        "from": { "placeId":this.trackBeacons },
+        "to": { "placeId": this.urlId },
         "options": { "isAccessible": false }
       };
-
+      this.getServicesPlaces();
       this.service.save(this.services.mapwizeParams.searchdirection, dir).subscribe((response) => {
         this.mapwizeMap.setDirection(response);
       }, (err) => {
@@ -359,37 +360,40 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
       this.mapwizeMap.removeMarkers();
       //Marcador donde se ubica la persona
-      const myCustomMarker = new mapboxgl.Marker({ color: '#C51586' });
-      myCustomMarker.setPopup(new mapboxgl.Popup({
-        closeOnClick: false,
-        closeButton: false
-      }).setHTML('<p>' + " Entrada principal " + '</p>'));
+      // const myCustomMarker = new mapboxgl.Marker({ color: '#C51586' });
+      // myCustomMarker.setPopup(new mapboxgl.Popup({
+      //   closeOnClick: false,
+      //   closeButton: false
+      // }).setHTML('<p>' + "Punto final "+ '</p>'));
 
-      this.mapwizeMap.on('mapwize:markerclick', e => {
-        alert('marker: ' + e.marker);
-      });
-      this.mapwizeMap.addMarker({
-        latitude: 9.975585796452705,
-        longitude: -84.74963674976945,
-        floor: 0,
-      }, myCustomMarker).then((marker => {
+      // this.mapwizeMap.on('mapwize:markerclick', e => {
+      //   alert('marker: ' + e.marker);
+      // });
+      // this.mapwizeMap.addMarker({
+      //   latitude: this.placesInfo.lat,
+      //   longitude: this.placesInfo.long,
+      //   floor: 0,
+      // }, myCustomMarker).then((marker => {
 
-        var s = "";
-      }));
+      //   var s = "";
+      // }));
 
       //Marcador hacia donde va la persona
-      const goMarker = new mapboxgl.Marker({ color: '#C51586' });
-      goMarker.setPopup(new mapboxgl.Popup({
-        closeOnClick: false,
-        closeButton: false
-      }).setHTML('<p>' + " Sala de medicina  " + '</p>'));
+      const popup= new mapboxgl.Popup({ closeButton: false, offset: 25 })
+      .setHTML('<p>' + " Punto final  " + '</p>');
+      const peopleMarker = document.createElement('div');
+     // peopleMarker.className ="my-custom-marker";
+     // peopleMarker.style.backgroundImage='url(../../assets/img/goPoint.png)';
+      peopleMarker.setAttribute("style", "background-image: url('../../assets/img/goPoint.png');background-size: cover; width: 35px;height: 40px;");
+      const goMarker = new mapboxgl.Marker(peopleMarker);
+      goMarker.setPopup(popup);
 
       this.mapwizeMap.on('mapwize:markerclick', e => {
         alert('marker: ' + e.marker);
       });
       this.mapwizeMap.addMarker({
-        latitude: 9.975263270104705,
-        longitude: -84.74953045762234,
+        latitude: this.placesInfo.lat,
+        longitude: this.placesInfo.long,
         floor: 0,
       }, goMarker).then((marker => {
 
@@ -397,16 +401,26 @@ export class Tab1Page implements OnInit, AfterViewInit {
       }));
     }
   }
-
+  getServicesPlaces() {
+    this.storeService.localGet(this.localParam.localParam.places).then((resp) => {
+      this.placesInfo = resp;
+      console.log(this.placesInfo);
+    }, (err) => {
+      console.error(err);
+    });
+  }
   ngAfterViewInit() {
+    
     setTimeout(() => {
       this.getBeaconsPointLocal();
+     
     }, 2000);
+   
     setTimeout(() => {
-    
+
       this.getUserLogged();
       this.getAlertAmount();
-     
+
       MapwizeUI.map({
         apiKey: '439578d65ac560a55bb586feaa299bf7',
         hideMenu: true,
@@ -415,7 +429,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
       }).then(instance => {
         this.mapwizeMap = instance;
-    
+
         //this.personLocation();
         //this.personLoggedLocation();
         //this.asociatedPersonLocation();
@@ -423,22 +437,23 @@ export class Tab1Page implements OnInit, AfterViewInit {
         // this.timerBeacons();
         //this.timerDoBinary();
         // this.timerWayFinding();
-        this.setRouteCovid();
+       this.setRouteCovid();
         //Metodo de prueba para las rutas de los tiquetes...
-        this.setRoute();
-
+       
+       // this.setRoute();
         // this.setRouteCovid();
-        
+
       });
+      
     }, 1000);
 
-    
+
 
   }//fin de after
 
   //Metodo que coloca el marcador y el popup de la persona loggeada
   personLocation() {
-   // this.alert("lat:"+this.lastBeaconsLat);
+    // this.alert("lat:"+this.lastBeaconsLat);
     this.mapwizeMap.removeMarkers();
     const myCustomMarker = new mapboxgl.Marker({ color: '#C51586' });
     myCustomMarker.setPopup(new mapboxgl.Popup({
@@ -553,7 +568,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
       this.ble.startScan([]).subscribe(
         device => this.onDeviceDiscovered(device),
         error => this.alert("No devices because " + error),
-        
+
       );
     } catch (Error) {
       this.alert(Error.message);
@@ -586,7 +601,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
     );
   }
   getBeaconsPointLocal() {
-    try{
+    try {
       this.storeService.localGet(this.localParam.localParam.gatewaybeacons).then((resp) => {
         this.beaconsPoints = resp;
 
@@ -597,9 +612,9 @@ export class Tab1Page implements OnInit, AfterViewInit {
         console.log(err);
         this.alert("Error: " + err)
       });
-    } catch (e){
+    } catch (e) {
       console.log(" Error del catch " + e)
-      this.alert("Error del catch "+ e);
+      this.alert("Error del catch " + e);
     }
   }
 
@@ -648,15 +663,15 @@ export class Tab1Page implements OnInit, AfterViewInit {
       index = this.binarySearch(items, lastFive[i]);
       //this.alert('INDEX:'+index);
       if (index > -1) {
-
+      if(this.devices[i].rssi>=-85 && this.devices[i].rssi<=0){
         var bdata = {
           id: this.devices[i].id,
           rssi: this.devices[i].rssi
 
         }
         bdataArray.push(bdata);
-
-
+      }
+        
         //sorted.reverse();
       }//fin de if
     }
@@ -679,46 +694,44 @@ export class Tab1Page implements OnInit, AfterViewInit {
     // let index = this.binarySearch(items, value);
     //>
     //<
-
-
-
-
   }//fin del dobinary
   testWayFinding() {
+   // this.setRoute();
 
-   
-      this.getLastBeacon();
-      let point;
-      let beaconMac;
-      let index;
-      let value;
-      let items = [];
-      let shortMac;
-      //this.alert('last beacons' + this.lastBeacon);
-      for (let i = 0; i < this.beaconsPoints.length; i++) {
-        items.push(this.beaconsPoints[i].shortid);
-      }
-     // this.alert("lastbeacon:"+this.lastBeacon.id);
-      beaconMac = this.lastBeacon.id;
-      shortMac = beaconMac.replace(/:/g, "");
-      value = shortMac.substr(shortMac.length - 5);
-      index = this.binarySearch(items, value);
-      console.log(value);
+
+    this.getLastBeacon();
+    let point;
+    let beaconMac;
+    let index;
+    let value;
+    let items = [];
+    let shortMac;
+    //this.alert('last beacons' + this.lastBeacon);
+    for (let i = 0; i < this.beaconsPoints.length; i++) {
+      items.push(this.beaconsPoints[i].shortid);
+    }
+    // this.alert("lastbeacon:"+this.lastBeacon.id);
+    beaconMac = this.lastBeacon.id;
+    shortMac = beaconMac.replace(/:/g, "");
+    value = shortMac.substr(shortMac.length - 5);
+    index = this.binarySearch(items, value);
+    console.log(value);
     // this.alert("index:"+index);
 
-      if (index > -1) {
-        this.pointDesc = this.beaconsPoints[index].point.description;
-        this.trackBeacons = this.beaconsPoints[index].point.externalid;
-        this.lastBeaconsLat = Number(this.beaconsPoints[index].point.lat);
-        this.lastBeaconsLong = Number(this.beaconsPoints[index].point.lon);
-        this.personLocation();
-        this.mapwizeMap.flyTo({
-          center: { lon: this.lastBeaconsLong, lat: this.lastBeaconsLat },
-          zoom: 18,
-        });
-      }
-      //this.personLocation();
-   
+    if (index > -1) {
+      this.pointDesc = this.beaconsPoints[index].point.description;
+      this.trackBeacons = this.beaconsPoints[index].point.externalid;
+      this.lastBeaconsLat = Number(this.beaconsPoints[index].point.lat);
+      this.lastBeaconsLong = Number(this.beaconsPoints[index].point.lon);
+      this.personLocation();
+      this.mapwizeMap.flyTo({
+        center: { lon: this.lastBeaconsLong, lat: this.lastBeaconsLat },
+        zoom: 18,
+      });
+    }
+    this.setRoute();
+    //this.personLocation();
+
   }
   //Fin de los metodos de la lectura de beacons
 }// fin

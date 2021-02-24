@@ -19,6 +19,7 @@ export class UtilStorageService {
     ticketStatus:"",
     ticketServices:"",
     mean:"",
+    places:"",
   }
 
   constructor() { 
@@ -36,5 +37,6 @@ export class UtilStorageService {
     this.localParam.ticketStatus = "ticket-status";
     this.localParam.ticketServices = "ticket-services";
     this.localParam.mean="mean-token";
+    this.localParam.places="placeId";
   }
 }

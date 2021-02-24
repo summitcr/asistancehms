@@ -9,7 +9,12 @@ import { StorageService } from '../services/storage.service';
 import { UtilStorageService } from '../services/util-storage.service';
 import { UtilsService } from '../services/utils.service';
 import { Storage } from '@ionic/storage';
-
+import { AuthenticationService } from '../services/authentication.service';
+export interface PlaceInfo {
+  placeId: String,
+  lat: String,
+  long: String
+}
 @Component({
   selector: 'app-servicios',
   templateUrl: './servicios.page.html',
@@ -17,7 +22,13 @@ import { Storage } from '@ionic/storage';
 })
 export class ServiciosPage implements OnInit {
 
+  placeInfo: PlaceInfo = {
+    placeId: "",
+    lat: "",
+    long: ""
+  }
   services = [];
+
 
   constructor(
     private router: Router,
@@ -29,29 +40,34 @@ export class ServiciosPage implements OnInit {
     private storageService: StorageService,
     private localParams: UtilStorageService,
     private alertCtrl: AlertController,
-    private storage: Storage
+    private storage: Storage,
+    private auth: AuthenticationService,
   ) { }
 
   ngOnInit() {
-    this.crudService.get(this.params.params.ticketServices).subscribe((resp:[]) =>{
+    this.crudService.get(this.params.params.ticketServices).subscribe((resp: []) => {
       this.services = resp;
       this.services = this.iconService.setIconsToServices(this.services);
     })
-   // this.presentToastWithOptions()
+    // this.presentToastWithOptions()
   }
 
-  toGo(route){
+  toGo(route) {
     this.router.navigateByUrl(route);
   }
 
-  getMeATicket(service){
-    this.storage.keys().then(data=>console.log(data))
-    this.hasTicket().then( ticketStatus => {
+  getMeATicket(service) {
+    this.storage.keys().then(data => console.log(data))
+    this.hasTicket().then(ticketStatus => {
       if (ticketStatus == null) {
         let id = service.serviceId;
+        this.placeInfo.placeId=service.icon.placeId;
+        this.placeInfo.lat=service.icon.lat;
+        this.placeInfo.long=service.icon.long;
+        this.storageService.localSave(this.localParams.localParam.places, this.placeInfo);
         this.router.navigate(['/coronavirus'], { state: { data: { id } } });
       } else {
-        this.showAlert("Ya posée un ticket","Por favor revise la informacion de su ticket activo.",null)
+        this.showAlert("Ya posée un ticket", "Por favor revise la informacion de su ticket activo.", null)
       }
     });
   }
@@ -67,7 +83,7 @@ export class ServiciosPage implements OnInit {
           text: 'No',
           role: 'cancel',
           handler: () => {
-            
+
           }
         }, {
           side: 'end',
@@ -81,7 +97,7 @@ export class ServiciosPage implements OnInit {
     });
     toast.present();
   }
-  goPrenal(){
+  goPrenal() {
     this.router.navigateByUrl("/prenatal-control");
   }
   async presentModal() {
@@ -114,8 +130,12 @@ export class ServiciosPage implements OnInit {
     this.router.navigateByUrl('/menu/first/tabs/tab1/0');
   }
 
-  hasTicket(){
+  hasTicket() {
     return this.storageService.localGet(this.localParams.localParam.createdTicket);
+  }
+  logout(){
+    this.auth.logout();
+    this.router.navigateByUrl('/login');
   }
 
 }
