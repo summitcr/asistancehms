@@ -171,6 +171,7 @@ export class TicketPage implements OnInit {
       this.createdTicket = resp;
       if(!this.createdTicket){
         this.ticketNumber = "No hay tiquete";
+        this.cancelDisable = true;
       }else if(this.createdTicket){
         this.ticketNumber = this.createdTicket.ticketNumber;
         
@@ -481,5 +482,26 @@ timer() {
       ]
     });
     await cancelledPopUp.present();
+  }
+  go() {
+    this.storeService.localGet(this.localParam.localParam.places).then((resp) => {
+    let places=resp;
+    this.presentLoadingDefaults();
+    this.router.navigateByUrl('/menu/first/tabs/tab1/' + places.placeId);
+    }, (err) => {
+      console.error(err);
+    });
+   
+  }
+  async presentLoadingDefaults() {
+    let loading = await this.loadingCtrl.create({
+      message: 'Por favor espere...'
+    });
+
+    loading.present();
+
+    setTimeout(() => {
+      loading.dismiss();
+    }, 4000);
   }
 }

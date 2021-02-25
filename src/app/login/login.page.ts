@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams, AlertController } from '@ionic/angular';
+import { NavController, NavParams, AlertController, Platform } from '@ionic/angular';
 import { CrudService } from '../services/crud.service';
 import { Storage } from '@ionic/storage';
 import { UtilsService } from '../services/utils.service';
@@ -8,6 +8,7 @@ import { UtilStorageService } from '../services/util-storage.service';
 import { Router } from '@angular/router';
 import { Toast } from '@ionic-native/toast/ngx';
 import { FormGroup, FormBuilder, Validators,ReactiveFormsModule} from '@angular/forms';
+import { BLE } from '@ionic-native/ble/ngx';
 
 @Component({
   selector: 'app-login',
@@ -39,7 +40,9 @@ export class LoginPage implements OnInit {
     private params: UtilsService,
     private router: Router,
     private toast: Toast,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private ble: BLE,
+    private platform: Platform,
     /*public formBuilder: FormBuilder*/)
      {
       /*this.loginForm = formBuilder.group({
@@ -65,7 +68,17 @@ export class LoginPage implements OnInit {
       }
     );
   }
-
+enableBlue(){
+  this.ble.enable(
+);
+}
+starApp(){
+  this.router.navigateByUrl('/registro-covid');
+  if(this.platform.is('android')){
+    this.enableBlue();
+  }
+  
+}
   login() {
 
     this.service.get(this.params.params.staffurl + "/asocieted/cid/" + this.cedula).subscribe((resp) => {

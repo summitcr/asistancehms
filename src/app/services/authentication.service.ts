@@ -100,10 +100,11 @@ console.log(this.userToken);
   public login(user: Token, url: string): Observable<any> {
     return this.request('get', url, user);
   }
-  logout() {
-    return this.storage.remove(TOKEN_KEY).then(() => {
-      this.authenticationState.next(false);
-    });
+  public logout(): void {
+    this.token = '';
+    this.storage.remove('insured-user');
+    this.storage.remove('mean-token');
+   
   }
 
   isAuthenticated() {

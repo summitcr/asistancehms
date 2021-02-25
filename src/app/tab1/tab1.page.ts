@@ -68,6 +68,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   actionSheet: any = null;
   intervalBeacons: any;
   intervalFinding: any;
+  placesInfo: any;
 
   constructor(private storage: Storage,
     private storeService: StorageService,
@@ -393,11 +394,11 @@ export class Tab1Page implements OnInit, AfterViewInit {
     //el from placeId es el this.trackBeacons, por el momento esta alambrado para probar los tiquetes
     if (this.urlId != 0 && this.urlId.length >= 10) {
       var dir = {
-        "from": { "placeId": "5de81d15dd3e2d00164eb884" },
-        "to": { "placeId": "5e4ef9b6bdadf00016d02b1f" },
+        "from": { "placeId":this.trackBeacons },
+        "to": { "placeId": this.urlId },
         "options": { "isAccessible": false }
       };
-
+      this.getServicesPlaces();
       this.service.save(this.services.mapwizeParams.searchdirection, dir).subscribe((response) => {
         this.mapwizeMap.setDirection(response);
       }, (err) => {
@@ -407,37 +408,40 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
       this.mapwizeMap.removeMarkers();
       //Marcador donde se ubica la persona
-      const myCustomMarker = new mapboxgl.Marker({ color: '#C51586' });
-      myCustomMarker.setPopup(new mapboxgl.Popup({
-        closeOnClick: false,
-        closeButton: false
-      }).setHTML('<p>' + " Entrada principal " + '</p>'));
+      // const myCustomMarker = new mapboxgl.Marker({ color: '#C51586' });
+      // myCustomMarker.setPopup(new mapboxgl.Popup({
+      //   closeOnClick: false,
+      //   closeButton: false
+      // }).setHTML('<p>' + "Punto final "+ '</p>'));
 
-      this.mapwizeMap.on('mapwize:markerclick', e => {
-        alert('marker: ' + e.marker);
-      });
-      this.mapwizeMap.addMarker({
-        latitude: 9.975585796452705,
-        longitude: -84.74963674976945,
-        floor: 0,
-      }, myCustomMarker).then((marker => {
+      // this.mapwizeMap.on('mapwize:markerclick', e => {
+      //   alert('marker: ' + e.marker);
+      // });
+      // this.mapwizeMap.addMarker({
+      //   latitude: this.placesInfo.lat,
+      //   longitude: this.placesInfo.long,
+      //   floor: 0,
+      // }, myCustomMarker).then((marker => {
 
-        var s = "";
-      }));
+      //   var s = "";
+      // }));
 
       //Marcador hacia donde va la persona
-      const goMarker = new mapboxgl.Marker({ color: '#C51586' });
-      goMarker.setPopup(new mapboxgl.Popup({
-        closeOnClick: false,
-        closeButton: false
-      }).setHTML('<p>' + " Sala de medicina  " + '</p>'));
+      const popup= new mapboxgl.Popup({ closeButton: false, offset: 25 })
+      .setHTML('<p>' + " Punto final  " + '</p>');
+      const peopleMarker = document.createElement('div');
+     // peopleMarker.className ="my-custom-marker";
+     // peopleMarker.style.backgroundImage='url(../../assets/img/goPoint.png)';
+      peopleMarker.setAttribute("style", "background-image: url('../../assets/img/goPoint.png');background-size: cover; width: 35px;height: 40px;");
+      const goMarker = new mapboxgl.Marker(peopleMarker);
+      goMarker.setPopup(popup);
 
       this.mapwizeMap.on('mapwize:markerclick', e => {
         alert('marker: ' + e.marker);
       });
       this.mapwizeMap.addMarker({
-        latitude: 9.975263270104705,
-        longitude: -84.74953045762234,
+        latitude: this.placesInfo.lat,
+        longitude: this.placesInfo.long,
         floor: 0,
       }, goMarker).then((marker => {
 
@@ -445,11 +449,21 @@ export class Tab1Page implements OnInit, AfterViewInit {
       }));
     }
   }
-
+  getServicesPlaces() {
+    this.storeService.localGet(this.localParam.localParam.places).then((resp) => {
+      this.placesInfo = resp;
+      console.log(this.placesInfo);
+    }, (err) => {
+      console.error(err);
+    });
+  }
   ngAfterViewInit() {
+    
     setTimeout(() => {
       this.getBeaconsPointLocal();
+     
     }, 2000);
+   
     setTimeout(() => {
 
       this.getUserLogged();
@@ -471,13 +485,14 @@ export class Tab1Page implements OnInit, AfterViewInit {
         // this.timerBeacons();
         //this.timerDoBinary();
         // this.timerWayFinding();
-        this.setRouteCovid();
+       this.setRouteCovid();
         //Metodo de prueba para las rutas de los tiquetes...
-        this.setRoute();
-
+       
+       // this.setRoute();
         // this.setRouteCovid();
 
       });
+      
     }, 1000);
 
 
@@ -696,15 +711,15 @@ export class Tab1Page implements OnInit, AfterViewInit {
       index = this.binarySearch(items, lastFive[i]);
       //this.alert('INDEX:'+index);
       if (index > -1) {
-
+      if(this.devices[i].rssi>=-85 && this.devices[i].rssi<=0){
         var bdata = {
           id: this.devices[i].id,
           rssi: this.devices[i].rssi
 
         }
         bdataArray.push(bdata);
-
-
+      }
+        
         //sorted.reverse();
       }//fin de if
     }
@@ -727,12 +742,9 @@ export class Tab1Page implements OnInit, AfterViewInit {
     // let index = this.binarySearch(items, value);
     //>
     //<
-
-
-
-
   }//fin del dobinary
   testWayFinding() {
+   // this.setRoute();
 
 
     this.getLastBeacon();
@@ -765,6 +777,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
         zoom: 18,
       });
     }
+    this.setRoute();
     //this.personLocation();
 
   }
