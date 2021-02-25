@@ -57,6 +57,17 @@ ion-content {
   ion-item {
     --inner-border-width: 0;
   }
+
+  ion-card.sos-button{
+    width: fit-content;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-evenly;
+    margin: 25px auto;
+    border-radius: 25px;
+    --ion-background-color:palevioletred;
+    --ion-color: #ffffff;
+  }
 }
 
 ion-back-button {

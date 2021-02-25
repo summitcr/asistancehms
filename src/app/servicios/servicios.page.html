@@ -15,6 +15,20 @@
 
 <ion-content>
   <!-- <ion-title>Servicios</ion-title> -->
+  <ion-card mode="ios" class="sos-button">
+    <ion-item (click)="showAlert('¡Estamos en Desarrollo!','Esta caracteristica se encuentra en desarrollo. Por ahora es solo para referencias visuales.')">
+      <!-- <ion-badge slot="start">0</ion-badge>
+      <ion-icon name="pricetag" slot="start"></ion-icon> -->
+      <ion-button mode="ios" class="badge-button">
+        <span style="font-size: x-large; color: white;">
+          <i class="fas fa-hand-holding-heart"></i>
+        </span>
+      </ion-button>
+      <ion-label style="color: white;">Solicitar Asistencia</ion-label>
+      <!-- <ion-button fill="outline" slot="end">Ver</ion-button> -->
+    </ion-item>
+  </ion-card>
+
   <ion-card mode="ios">
     <ion-item (click)="presentModal()">
       <!-- <ion-badge slot="start">0</ion-badge>
