@@ -141,7 +141,7 @@ starApp(){
 
   getBeconsPoints() {
     console.log('esta entrando al metodo')
-    this.service.fakeApi().then((resp)=>{
+    this.service.get(this.params.params.gatewaybeacons+'/shortid').toPromise().then((resp)=>{
       this.beaconsPoints= resp;
       console.log(this.beaconsPoints);
       this.storeService.localSave(this.localParam.localParam.gatewaybeacons, this.beaconsPoints);
