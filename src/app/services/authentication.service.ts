@@ -41,7 +41,7 @@ export class AuthenticationService {
       this.checkToken();
     });
   }
-  private saveToken(token: string): void {
+   saveToken(token: String): void {
     this.storeService.localSave(this.localParam.localParam.mean, token);
   }
   checkToken() {
@@ -88,9 +88,14 @@ console.log(this.userToken);
 
     const request = base.pipe(
       map((datas: TokenResponse) => {
-        if (datas.identifier) {
-          this.saveToken(datas.identifier);
+        if(datas===null){
+          console.log("data=null");
+        }else{
+          if (datas.identifier) {
+            this.saveToken(datas.identifier);
+          }
         }
+      
         return datas;
       })
     );
