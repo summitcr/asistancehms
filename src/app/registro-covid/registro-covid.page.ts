@@ -219,6 +219,7 @@ export class RegistroCovidPage implements OnInit {
       if (resp["id"] != null) {
         this.userModel = resp
         this.storeService.localSave(this.localParam.localParam.insuredUser, this.userModel);
+        this.auth.saveToken(this.userModel.identifier);
         this.presentConfirm();
       }
     }).catch(error => {

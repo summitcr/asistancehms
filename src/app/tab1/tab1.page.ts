@@ -433,9 +433,10 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
       //Marcador hacia donde va la persona
       const popup = new mapboxgl.Popup({ closeButton: false })
-        .setHTML("<p style='text-align: center;'>Ticket Asignado  " + '</p>' + this.ticketNumber +
-         '</br>' + "<p style='text-align: center;'>Servicio:" + '</p>' + this.ticketServices +
-          '</br>' + "<p style='text-align: center;'>Posición: " + '</p>' + this.ticketPosition);
+        .setHTML("<strong style='color:black'>Ticket Asignado:" + this.ticketNumber +
+        "</strong></br><strong style='color:black'>Servicio:" + this.ticketServices +
+        "</strong></br><strong style='color:black'>Posición:" + this.ticketPosition +
+        "</strong>");
       const peopleMarker = document.createElement('div');
       peopleMarker.setAttribute("style", "background-image: url('../../assets/img/goPoint.png');background-size: cover; width: 35px;height: 40px;");
       const goMarker = new mapboxgl.Marker(peopleMarker);
@@ -793,7 +794,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
       this.personLocation();
       this.mapwizeMap.flyTo({
         center: { lon: this.lastBeaconsLong, lat: this.lastBeaconsLat },
-        zoom: 18,
+        zoom: 15,
       });
     }
     this.setRoute();
