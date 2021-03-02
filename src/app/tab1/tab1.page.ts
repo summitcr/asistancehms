@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, NgZone } from '@angular/core';
-import { AlertController, NavController, Platform, Events, ModalController, ActionSheetController } from '@ionic/angular';
+import { AlertController, NavController, Platform, Events, ModalController, ActionSheetController, ToastController } from '@ionic/angular';
 import { from } from 'rxjs';
 import { BeaconService, BeaconModel } from '../services/beacon.service';
 import { UtilsService } from '../services/utils.service';
@@ -91,7 +91,8 @@ export class Tab1Page implements OnInit, AfterViewInit {
     private ngZone: NgZone,
     private ble: BLE,
     private toast: Toast,
-    private ibeacon: IBeacon,) {
+    private ibeacon: IBeacon,
+    private toastController: ToastController) {
 
     //Mapwize.apiKey("439578d65ac560a55bb586feaa299bf7");
     this.zone = new NgZone({ enableLongStackTrace: false });
@@ -299,11 +300,11 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
   //metodo para actualizar la ubicacion de la persona asociada
   timer() {
-    this.personLoggedLocation();
+    //this.personLoggedLocation();
     this.interval = setInterval(() => {
       if (this.urlId != null) {
         this.mapwizeMap.removeMarkers();
-        this.personLoggedLocation();
+        // this.personLoggedLocation();
       }
     }, 8000);
   }
@@ -411,7 +412,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
         console.error(err);
       });
 
-     // this.mapwizeMap.removeMarkers();
+      // this.mapwizeMap.removeMarkers();
       //Marcador donde se ubica la persona
       // const myCustomMarker = new mapboxgl.Marker({ color: '#C51586' });
       // myCustomMarker.setPopup(new mapboxgl.Popup({
@@ -432,11 +433,12 @@ export class Tab1Page implements OnInit, AfterViewInit {
       // }));
 
       //Marcador hacia donde va la persona
+     
       const popup = new mapboxgl.Popup({ closeButton: false })
         .setHTML("<strong style='color:black'>Ticket Asignado:" + this.ticketNumber +
-        "</strong></br><strong style='color:black'>Servicio:" + this.ticketServices +
-        "</strong></br><strong style='color:black'>Posición:" + this.ticketPosition +
-        "</strong>");
+          "</strong></br><strong style='color:black'>Servicio:" + this.ticketServices +
+          "</strong></br><strong style='color:black'>Posición:" + this.ticketPosition +
+          "</strong>");
       const peopleMarker = document.createElement('div');
       peopleMarker.setAttribute("style", "background-image: url('../../assets/img/goPoint.png');background-size: cover; width: 35px;height: 40px;");
       const goMarker = new mapboxgl.Marker(peopleMarker);
@@ -481,7 +483,9 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
     setTimeout(() => {
       this.getBeaconsPointLocal();
-
+      if (this.ticketsInfo){
+        this.presentToastWithOptions();
+      }
     }, 2000);
 
     setTimeout(() => {
@@ -505,7 +509,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
         // this.timerBeacons();
         //this.timerDoBinary();
         // this.timerWayFinding();
-        this.setRouteCovid();
+        // this.setRouteCovid();
         //Metodo de prueba para las rutas de los tiquetes...
 
         // this.setRoute();
@@ -514,9 +518,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
       });
 
     }, 1000);
-
-
-
+   
   }//fin de after
 
   //Metodo que coloca el marcador y el popup de la persona loggeada
@@ -794,12 +796,34 @@ export class Tab1Page implements OnInit, AfterViewInit {
       this.personLocation();
       this.mapwizeMap.flyTo({
         center: { lon: this.lastBeaconsLong, lat: this.lastBeaconsLat },
-        zoom: 15,
+        zoom: 20,
       });
     }
     this.setRoute();
+
     //this.personLocation();
 
   }
   //Fin de los metodos de la lectura de beacons
+  async presentToastWithOptions() {
+    const toast = await this.toastController.create({
+      header: 'Información de ticket',
+      message: "<strong style='color:black'>Ticket Asignado:" + this.ticketNumber +
+        "</strong></br><strong style='color:black'>Servicio:" + this.ticketServices +
+        "</strong></br><strong style='color:black'>Posición:" + this.ticketPosition +
+        "</strong>",
+      position: 'bottom',
+      buttons: [
+        {
+          side: 'end',
+          text: 'Cerrar',
+          role: 'cancel',
+          handler: () => {
+            toast.dismiss();
+          }
+        }
+      ]
+    });
+    toast.present();
+  }
 }// fin
