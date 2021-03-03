@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 
 import { ServiciosPage } from './servicios.page';
 
+import {BottomSheetComponent} from '../bottom-sheet/bottom-sheet.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -19,8 +21,8 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
   ],
-  declarations: [ServiciosPage]
+  declarations: [ServiciosPage, BottomSheetComponent]
 })
 export class ServiciosPageModule {}

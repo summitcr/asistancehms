@@ -16,7 +16,7 @@
 <ion-content>
   <!-- <ion-title>Servicios</ion-title> -->
   <ion-card mode="ios" class="sos-button">
-    <ion-item (click)="showAlert('¡Estamos en Desarrollo!','Esta caracteristica se encuentra en desarrollo. Por ahora es solo para referencias visuales.')">
+    <ion-item (click)="openBottomSheet()">
       <!-- <ion-badge slot="start">0</ion-badge>
       <ion-icon name="pricetag" slot="start"></ion-icon> -->
       <ion-button mode="ios" class="badge-button">
@@ -121,10 +121,14 @@
 
   </div>
 
-  <ion-fab horizontal="end" vertical="bottom" slot="fixed" (click)="goToIndoors()">
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed" (click)="goToIndoors()" style="z-index: 1;">
     <ion-fab-button size="small" color="secondary">
       <ion-icon name="navigate"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+
+  <app-bottom-sheet #bottomSheet>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla facilis ullam distinctio reiciendis quis similique error in, tempore, possimus quaerat cum ducimus quasi, debitis pariatur impedit quas recusandae culpa exercitationem.</p>
+  </app-bottom-sheet>
 
 </ion-content>

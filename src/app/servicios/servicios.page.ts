@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController, ModalController, ToastController } from '@ionic/angular';
+import { ActionSheetController, AlertController, ModalController, ToastController } from '@ionic/angular';
+import {BottomSheetComponent} from '../bottom-sheet/bottom-sheet.component'
 
 import { ModalNotificationPage } from '../modal-notification/modal-notification.page';
 import { CrudService } from '../services/crud.service';
@@ -10,6 +11,7 @@ import { UtilStorageService } from '../services/util-storage.service';
 import { UtilsService } from '../services/utils.service';
 import { Storage } from '@ionic/storage';
 import { AuthenticationService } from '../services/authentication.service';
+
 export interface PlaceInfo {
   placeId: String,
   lat: String,
@@ -29,6 +31,7 @@ export class ServiciosPage implements OnInit {
   }
   services = [];
 
+  @ViewChild("bottomSheet",{static:false}) bottomSheet:BottomSheetComponent;
 
   constructor(
     private router: Router,
@@ -42,6 +45,8 @@ export class ServiciosPage implements OnInit {
     private alertCtrl: AlertController,
     private storage: Storage,
     private auth: AuthenticationService,
+    public actionSheetController: ActionSheetController,
+    // public bottomSheet: BottomSheetComponent,
   ) { }
 
   ngOnInit() {
@@ -136,6 +141,10 @@ export class ServiciosPage implements OnInit {
   logout(){
     this.auth.logout();
     this.router.navigateByUrl('/login');
+  }
+
+  openBottomSheet(){
+    this.bottomSheet.open();
   }
 
 }

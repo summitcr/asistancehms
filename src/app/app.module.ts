@@ -34,10 +34,11 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
+import {BottomSheetComponent} from './bottom-sheet/bottom-sheet.component'
 
 @NgModule({
-  declarations: [ AppComponent, ModalPagePage, ModalNotificationPage,HeartrateComponent,CovidComponent,],
-  entryComponents: [ModalPagePage,ModalNotificationPage],
+  declarations: [ AppComponent, ModalPagePage, ModalNotificationPage,HeartrateComponent,CovidComponent],
+  entryComponents: [ModalPagePage,ModalNotificationPage,],
   imports: [BrowserModule,
     BrowserAnimationsModule,
      IonicModule.forRoot(), 

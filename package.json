@@ -56,6 +56,7 @@
     "cordova-plugin-x-toast": "^2.7.2",
     "cordova-sqlite-storage": "^3.4.0",
     "core-js": "^2.5.4",
+    "ion-bottom-sheet": "^2.0.6",
     "ionic4-auto-complete": "^2.1.4",
     "ionicons": "^4.6.3",
     "mapbox-gl": "^1.5.0",
