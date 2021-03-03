@@ -3,9 +3,9 @@
     <ion-buttons mode="ios" (click)="logout()" slot="start">
       <span style="font-size: 16px; color: white;">
         <i class="fas fa-arrow-left"></i>
-        
+
       </span>
-      <ion-label style="padding: 4px; "> Salir</ion-label> 
+      <ion-label style="padding: 4px; "> Salir</ion-label>
     </ion-buttons>
     <ion-title>
       <img src="assets/img/ccss-logo.png" alt="Es el de summit que representa una dos montañas" style="width: 40px;">
@@ -14,8 +14,53 @@
 </ion-header>
 
 <ion-content>
+
+  <ion-card *ngIf="hasAsist && !asistance" mode="ios" #carta class="ion-no-margin ion-text-left card-asistance">
+    <ion-card-header class="ion-no-padding" >
+      <ion-item style="--border-style: none; padding: 0">
+        <ion-thumbnail slot="start">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-thumbnail>
+        <div class="headerCard" style="width: 100%;">
+          <ion-card-title style="font-size: large;" class="card-title">
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </ion-card-title>
+          <ion-card-subtitle class="card-subtitle">
+            <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+          </ion-card-subtitle>
+        </div>
+        <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
+      </ion-item>
+    </ion-card-header>
+    <ion-card-content style="padding-top: 0; padding-bottom: 0;">
+      <p><ion-skeleton-text animated style="width: 100%"></ion-skeleton-text></p>
+      <p><ion-skeleton-text animated style="width: 80%"></ion-skeleton-text></p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="hasAsist && asistance" mode="ios" #carta class="ion-no-margin ion-text-left card-asistance">
+    <ion-card-header class="ion-no-padding" >
+      <ion-item style="--border-style: none; padding: 0">
+        <ion-thumbnail slot="start">
+          <img src="https://15xh2r248z7d286gcz3i6g1q-wpengine.netdna-ssl.com/wp-content/uploads/2014/11/200158376-001_5.jpg">
+        </ion-thumbnail>
+        <div class="headerCard" style="width: 100%;">
+          <ion-card-title style="font-size: large;" class="card-title">
+            {{asistance['person'].name + ' ' + asistance['person'].lastname}}
+          </ion-card-title>
+          <ion-card-subtitle class="card-subtitle">
+            {{asistance['person'].ocupation}}
+          </ion-card-subtitle>
+        </div>
+      </ion-item>
+    </ion-card-header>
+    <ion-card-content style="padding-top: 0; padding-bottom: 0;">
+      <p>El personal esta por llegar, por favor permanezca en su lugar.</p>
+    </ion-card-content>
+  </ion-card>
+
   <!-- <ion-title>Servicios</ion-title> -->
-  <ion-card mode="ios" class="sos-button">
+  <ion-card mode="ios" class="sos-button" *ngIf="!hasAsist">
     <ion-item (click)="openBottomSheet()">
       <!-- <ion-badge slot="start">0</ion-badge>
       <ion-icon name="pricetag" slot="start"></ion-icon> -->
@@ -53,7 +98,7 @@
     </ion-item>
   </ion-card>
   <h5>Servicios</h5>
-  
+
   <div class="grid-container">
 
     <ion-card *ngFor="let service of services" mode="ios" class="card" (click)="getMeATicket(service)">
@@ -127,8 +172,12 @@
     </ion-fab-button>
   </ion-fab>
 
-  <app-bottom-sheet #bottomSheet>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla facilis ullam distinctio reiciendis quis similique error in, tempore, possimus quaerat cum ducimus quasi, debitis pariatur impedit quas recusandae culpa exercitationem.</p>
+  <app-bottom-sheet #bottomSheet [title]="'Opciones de Asistencia'">
+    <ion-list>
+      <ion-item *ngFor="let option of options" [id]="option.id" (click)="selectOption(option.id)">
+        <ion-label>{{option.name}}</ion-label>
+      </ion-item>
+    </ion-list>
   </app-bottom-sheet>
 
 </ion-content>

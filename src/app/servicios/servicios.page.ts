@@ -30,6 +30,19 @@ export class ServiciosPage implements OnInit {
     long: ""
   }
   services = [];
+  options = [
+    {
+      id:1,
+      name: 'Solicitar silla de Ruedas',
+    },
+    {
+      id:2,
+      name: 'Solicitar Ayudante',
+    },
+  ]
+
+  hasAsist = false;
+  asistance:Object;
 
   @ViewChild("bottomSheet",{static:false}) bottomSheet:BottomSheetComponent;
 
@@ -145,6 +158,23 @@ export class ServiciosPage implements OnInit {
 
   openBottomSheet(){
     this.bottomSheet.open();
+  }
+
+  selectOption(id){
+    console.log("sending to api");
+    this.bottomSheet.close();
+    this.hasAsist=true;
+    setTimeout(()=>{
+      this.asistance = {
+        person:{
+          id:123,
+          name: 'Elias',
+          lastname: 'Guerrero Hernandez',
+          ocupation: 'Enfermero',
+        },
+        type: id == 1 ? 'Silla de ruedas' : 'Ayudante' 
+      }
+    },1500);
   }
 
 }

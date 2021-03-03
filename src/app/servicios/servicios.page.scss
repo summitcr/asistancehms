@@ -54,7 +54,31 @@ ion-content {
     --overflow: visible;
   }
 
-  ion-item {
+  .card-asistance {
+    background-color: white;
+    height: fit-content;
+    overflow: hidden;
+    padding: 5%;
+    width: 90vw;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-evenly;
+    margin: 20px auto;
+  }
+  
+  .card-container-asistance {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    bottom: 5vh;
+    // height: 25vh;
+    overflow: visible;
+    vertical-align: middle;
+    align-items: center;
+    justify-content: center;
+  }
+
+  ion-card ion-item {
     --inner-border-width: 0;
   }
 

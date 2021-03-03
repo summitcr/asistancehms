@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-bottom-sheet',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./bottom-sheet.component.scss'],
 })
 export class BottomSheetComponent implements OnInit {
+
+  @Input() title: string;
 
   currentPosition;
 
