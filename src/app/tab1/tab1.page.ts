@@ -38,7 +38,9 @@ export class Tab1Page implements OnInit, AfterViewInit {
   mapwizeMap: any;
   person: any;
   alertAmount: any;
-  isTest: boolean = true;
+  stopZoom: boolean = false;
+  stopToast: boolean = false;
+  public hidenCard: boolean = false;
   urlId: any;
   trackerPerson: any;
   interval: any;
@@ -73,6 +75,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   ticketNumber: any = "No hay tickets";
   ticketPosition: any = "No hay tickets";
   ticketServices: any = "No hay tickets";
+  btnNombre: any="Mostrar tickets";
 
   constructor(private storage: Storage,
     private storeService: StorageService,
@@ -472,6 +475,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
         this.ticketNumber = this.ticketsInfo[0].ticketId;
         this.ticketPosition = this.ticketsInfo[0].queueSize;
         this.ticketServices = this.ticketsInfo[0].currentServiceName;
+        //this.presentToastWithOptions();
       }
 
 
@@ -483,9 +487,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
     setTimeout(() => {
       this.getBeaconsPointLocal();
-      if (this.ticketsInfo){
-        this.presentToastWithOptions();
-      }
+    
     }, 2000);
 
     setTimeout(() => {
@@ -794,15 +796,22 @@ export class Tab1Page implements OnInit, AfterViewInit {
       this.lastBeaconsLat = Number(this.beaconsPoints[index].point.lat);
       this.lastBeaconsLong = Number(this.beaconsPoints[index].point.lon);
       this.personLocation();
-      this.mapwizeMap.flyTo({
-        center: { lon: this.lastBeaconsLong, lat: this.lastBeaconsLat },
-        zoom: 20,
-      });
+    this.zoomToUser();
     }
     this.setRoute();
 
     //this.personLocation();
 
+  }
+  zoomToUser(){
+    if(this.stopZoom==false){
+      this.mapwizeMap.flyTo({
+        center: { lon: this.lastBeaconsLong, lat: this.lastBeaconsLat },
+        zoom: 20,
+      });
+      this.stopZoom=true;
+    }
+    
   }
   //Fin de los metodos de la lectura de beacons
   async presentToastWithOptions() {
@@ -824,6 +833,23 @@ export class Tab1Page implements OnInit, AfterViewInit {
         }
       ]
     });
-    toast.present();
+    if(this.stopToast==false){
+      toast.present();
+      this.stopToast=true;
+      this.alert("se ejecuta");
+    }
+   
+  }
+  actionInfoTicket(){
+    this.hidenCard = !this.hidenCard;
+    
+    if(this.hidenCard){
+      this.btnNombre="Ocultar tickets"
+    }else{
+      this.btnNombre="Mostrar tickets"
+    }
+  }
+  back(){
+    this.router.navigateByUrl('/servicios');
   }
 }// fin

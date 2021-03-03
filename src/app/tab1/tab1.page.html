@@ -39,3 +39,22 @@
 
    
     </ion-content>
+    <ion-footer class="ion-no-border">
+      <ion-toolbar style="text-align: center;">
+        <ion-card mode="ios" *ngIf="hidenCard">
+          <ion-card-content>
+            <ion-card-title>
+              Información de tickets
+              </ion-card-title>
+            <p> <strong>{{ ticketNumber}}</strong> </p>
+            <p>{{ticketServices}} </p>
+            <p>Su posición en la fila es:  <strong>{{ticketPosition}}</strong>  </p>
+          </ion-card-content>
+        </ion-card>
+       
+          <ion-button  class="btnHidenCard"  (click)="actionInfoTicket()" >
+          {{btnNombre}} <ion-icon name="pricetag"></ion-icon></ion-button>
+           
+      </ion-toolbar>
+      <strong></strong>
+    </ion-footer>

@@ -148,11 +148,8 @@ export class TicketPage implements OnInit {
 
   delay() {
     this.exitDelay = setTimeout(() => {
-      this.storage.forEach((value, key)=>{
-        if(key !== this.localParam.localParam.insuredUser){
-          this.storage.remove(key);
-        }
-      })
+      this.storage.remove("created-ticket");
+      this.storage.remove("ticket-status");
       this.router.navigateByUrl('/servicios');
     }, 60000);
   }
