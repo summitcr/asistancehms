@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-bottom-sheet',
@@ -8,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class BottomSheetComponent implements OnInit {
 
   @Input() title: string;
+  @Output() isOpen = new EventEmitter<boolean>();
 
   currentPosition;
 
@@ -19,19 +20,25 @@ export class BottomSheetComponent implements OnInit {
 
   bottomSheet:HTMLElement;
   bg:HTMLElement;
+  parent: HTMLElement;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
+    this.isOpen.emit(false);
     this.bottomSheet = document.querySelector(".bottomSheet");
     this.bg = document.querySelector(".bg");
     this.height = this.bottomSheet.clientHeight;
     this.close()
   }
 
+  ionViewWillLeave() {
+  }
+
   open() {
     this.bottomSheet.style.bottom = "0px";
     this.bg.style.display = "block";
+    this.isOpen.emit(true);
   }
 
   close() {
@@ -43,9 +50,11 @@ export class BottomSheetComponent implements OnInit {
     this.bottomSheet.style.transform = "translate3d(0px,0px,0px)";
     
     this.bg.style.display = "none";
+    this.isOpen.emit(false);
   }
 
   touchMove(evt: TouchEvent) {
+
     if(this.startPosition == 0){
       this.startPosition = evt.touches[0].clientY;
     }

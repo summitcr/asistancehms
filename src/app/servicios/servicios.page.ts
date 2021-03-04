@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { ActionSheetController, AlertController, ModalController, ToastController } from '@ionic/angular';
+import { ActionSheetController, AlertController, IonBackdrop, ModalController, ToastController } from '@ionic/angular';
 import {BottomSheetComponent} from '../bottom-sheet/bottom-sheet.component'
 
 import { ModalNotificationPage } from '../modal-notification/modal-notification.page';
@@ -40,7 +40,7 @@ export class ServiciosPage implements OnInit {
       name: 'Solicitar Ayudante',
     },
   ]
-
+  backdropBool = false;
   hasAsist = false;
   asistance:Object;
 
@@ -158,6 +158,7 @@ export class ServiciosPage implements OnInit {
 
   openBottomSheet(){
     this.bottomSheet.open();
+    this.backdropBool = true;
   }
 
   selectOption(id){
@@ -175,6 +176,16 @@ export class ServiciosPage implements OnInit {
         type: id == 1 ? 'Silla de ruedas' : 'Ayudante' 
       }
     },1500);
+  }
+
+  consoleado(evt) {
+    const backDrop = <IonBackdrop>evt.srcElement;
+    backDrop.stopPropagation = true;
+    backDrop.tappable = true;
+    backDrop.visible = false;
+
+    console.log(evt);
+    console.log(backDrop.ionBackdropTap);
   }
 
 }

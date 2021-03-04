@@ -1,3 +1,4 @@
+<ion-backdrop *ngIf="backdropBool" [tappable]="true" [stopPropagation]="true" (ionBackdropTap)="consoleado($event)"></ion-backdrop>
 <ion-header>
   <ion-toolbar class="topMenu">
     <ion-buttons mode="ios" (click)="logout()" slot="start">
@@ -172,7 +173,7 @@
     </ion-fab-button>
   </ion-fab>
 
-  <app-bottom-sheet #bottomSheet [title]="'Opciones de Asistencia'">
+  <app-bottom-sheet #bottomSheet (isOpen)="backdropBool = $event" [title]="'Opciones de Asistencia'" style="z-index: 200;" slot="fixed">
     <ion-list>
       <ion-item *ngFor="let option of options" [id]="option.id" (click)="selectOption(option.id)">
         <ion-label>{{option.name}}</ion-label>
