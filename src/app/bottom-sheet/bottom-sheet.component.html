@@ -1,4 +1,4 @@
-<div class="bg" (click)="close()"></div>
+<div class="bg" (click)="close()" scroll="false"></div>
 
 <div class="bottomSheet" (touchmove)="touchMove($event)" (touchend)="touchEnd()">
   <div class="swipe-handler"></div>
@@ -7,5 +7,3 @@
     <ng-content></ng-content>
   </div>
 </div>
-
-

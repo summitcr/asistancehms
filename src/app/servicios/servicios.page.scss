@@ -97,3 +97,10 @@ ion-content {
 ion-back-button {
   --color: white;
 }
+
+ion-backdrop {
+  opacity: 0.1;
+  background: black;
+  z-index: 1 !important;
+}
+
