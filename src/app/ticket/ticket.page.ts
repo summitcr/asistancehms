@@ -48,6 +48,7 @@ export class TicketPage implements OnInit {
   ticketDesti: string;
   interval:any;
   lastPosition: any;
+  nextQueueName: any;
 
   constructor(
     private services: CrudService,
@@ -235,6 +236,7 @@ export class TicketPage implements OnInit {
         }
       
         this.ticketDesti = this.refreshedTicket[0].currentServiceName;
+        this.nextQueueName=this.refreshedTicket[0].queueName;
         this.ticketPosition = "Su posición es: " + positionInQueue;
         this.maxProgressBar = 1 / positionInQueue;
         let calledFrom = this.refreshedTicket[0].servicePointName;
@@ -361,9 +363,10 @@ timer() {
           this.cancelDisable = true;
           this.postPoneDisable = true;
           this.delay();
-          this.router.navigateByUrl('/menu/first/tabs/tab2');
+         // this.router.navigateByUrl('/menu/first/tabs/tab2');
           // OneSignal.removeExternalUserId();
           // OneSignal.setSubscription(false);
+         // this.nextTicket();
         }
       },
       ],
@@ -388,21 +391,21 @@ timer() {
     // this.setVibration();
   }
 
-  async exitTicket() {
+  async nextTicket() {
     let exitPopUp = await this.alertCtrl.create({
       cssClass: 'my-custom-class',
       header: 'CCSS Tickets',
       subHeader: '',
       message:
-        '<img class="my-custom-class" src="assets/img/like.png"></img><br> <br><h6>Ticket Finalizado</h6>Te invitamos a seguir utilizando nuestro servicios.',
+        '<img class="my-custom-class" src="assets/img/like.png"></img><br> <br><h6>Actualización Ticket </h6>Nueva ruta:'+ this.nextQueueName,
 
       buttons: [{
         text: 'Aceptar',
         role: 'OK',
         handler: () => {
-          this.storage.remove("created-ticket");
-          this.storage.remove("ticket-status");
-          this.router.navigateByUrl('/servicios');
+          // this.storage.remove("created-ticket");
+          // this.storage.remove("ticket-status");
+          // this.router.navigateByUrl('/servicios');
         }
       },
       ]
