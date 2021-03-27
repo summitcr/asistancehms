@@ -74,6 +74,8 @@ export class UtilsService {
     searchById:"",
     addOrEditPeople:"",
     deleteTicket:"",
+    assistance_tickets:"",
+    assistance_types:""
   };
 
   mapwizeParams = {
@@ -100,6 +102,8 @@ export class UtilsService {
     var ticketsURL = 'http://18.188.106.125/ticketsHospitalO7/api/'; //dev
     var covidURL = 'http://18.188.106.125/CovidHospital/api/'; //dev
     var summitHospitalServer = 'http://18.188.106.125/covidHospital/api/'; //dev
+    var nodeAPis = 'http://13.58.166.253:3800/'; // dev
+    // var nodeAPis = 'http://192.168.0.10:4000/'; 
 
     //Apis server QA
     //var newserverURL = 'http://3.23.88.169/summit/api/';
@@ -187,6 +191,9 @@ export class UtilsService {
 
     this.params.searchById = summitHospitalServer + "searchPeopleById/id/"
     this.params.addOrEditPeople = summitHospitalServer + "EditOrAddPeople"
+
+    this.params.assistance_tickets = nodeAPis + "assistance/"
+    this.params.assistance_types = nodeAPis + "assistance/type/"
   }//fin de bob
 
 

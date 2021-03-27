@@ -98,6 +98,10 @@ export class BeaconService {
     });
     return promise;
     }
+
+    stop () {
+      this.ibeacon.stopRangingBeaconsInRegion(this.region);
+    }
     
   
 }//fin de la class
