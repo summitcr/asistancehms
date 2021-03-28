@@ -241,7 +241,7 @@ export class CoronavirusPage implements OnInit {
   }
   createTicket() {
     let userId = this.userIdentifier.identifier;
-    this.services.saveTicket(this.params.params.ticketCreate + '/serviceId/' +this.serviceId+'/officeId/'+'1'+'/userId/'+userId, null).subscribe((resp) => {
+    this.services.saveT(this.params.params.ticketCreate + '/serviceId/' +this.serviceId+'/officeId/'+'4'+'/userId/'+userId).subscribe((resp) => {
       console.log(resp)
       this.createdTicket=resp;
       this.storeService.localSave(this.localParam.localParam.createdTicket, resp);

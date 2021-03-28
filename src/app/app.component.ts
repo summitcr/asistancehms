@@ -2,6 +2,10 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform, NavController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { BLE } from '@ionic-native/ble/ngx';
+import { Router } from '@angular/router';
+import { StorageService } from './services/storage.service';
+import { UtilStorageService } from './services/util-storage.service';
 
 declare var cordova;
 
@@ -17,6 +21,10 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
+    private ble: BLE,
+    private router: Router,
+    private storeService: StorageService,
+    private localParam: UtilStorageService,
   ) {
     this.initializeApp();
   }
@@ -34,6 +42,8 @@ export class AppComponent {
         }, false);
       });
       this.preventWebBackButton();
+      this.enableBluetooth();
+      this.canActivate();
     });
   }
 
@@ -57,7 +67,12 @@ export class AppComponent {
       });
     }
   }
-
+  enableBluetooth(){
+    if(this.platform.is('android')){
+      this.ble.enable(
+        );
+    }
+  }
   preventWebBackButton() {
     if (this.platform.is('android') && this.platform.is('mobileweb')) {
       history.pushState(null, null, window.top.location.pathname + window.top.location.search);
@@ -71,5 +86,16 @@ export class AppComponent {
         history.pushState(null, null, document.URL);
       });
     }
+  }
+
+  async canActivate(): Promise<boolean>{
+    const isComplete = await this.storeService.localGet(this.localParam.localParam.tutorial);
+
+    if(!isComplete){
+      this.router.navigateByUrl('/tutorial');
+    }
+
+    return isComplete;
+  
   }
 }

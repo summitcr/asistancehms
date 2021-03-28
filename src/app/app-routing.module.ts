@@ -4,6 +4,7 @@ import { HeartrateComponent } from './heartrate/heartrate.component';
 import { CovidComponent } from './covid/covid.component';
 import { AuthGuardService } from './services/auth-guard.service';
 import { AppComponent } from './app.component';
+import { TutorialComponent } from './tutorial/tutorial.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'servicios', pathMatch: 'full' },
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'prenatal-control', loadChildren: './prenatal-control/prenatal-control.module#PrenatalControlPageModule' },
   { path: 'map-routing', loadChildren: './map-routing/map-routing.module#MapRoutingPageModule' },
   { path: 'servicios', loadChildren: './servicios/servicios.module#ServiciosPageModule',canActivate:[AuthGuardService] },
+  { path: 'tutorial', component: TutorialComponent },
   // { path: 'ticket', loadChildren: './ticket/ticket.module#TicketPageModule' },
   //{ path: 'maps/:id', loadChildren: './tab1/tab1.module#Tab1PageModule' },
 

@@ -8,7 +8,7 @@ export class IconsService {
   colors = ["lightgrey", "lightseagreen", "lightcoral", "lightpink", "lightblue", "lightsalmon"]
 
   icons = {
-    "Emergencias": {
+    "Consulta Social - Con Cita": {
       class: "fas fa-ambulance",
       font: "x-large",
       color: "lightcoral",
@@ -16,7 +16,7 @@ export class IconsService {
       lat: 9.975371438146254,
       long: -84.74963721723189
     },
-    "Farmacia": {
+    "Consulta Social - Sin Cita": {
       class: "fas fa-pills",
       font: "x-large",
       color: "lightseagreen",
@@ -24,7 +24,7 @@ export class IconsService {
       lat: 9.975338565945762 ,
       long: -84.7495056826686
     },
-    "Obstetrícia": {
+    "T.S - Atención Social": {
       class: "fas fa-baby",
       font: "x-large",
       color: "lightsalmon",
@@ -32,7 +32,7 @@ export class IconsService {
       lat: 9.97524757864808,
       long: -84.74967511482737
     },
-    "Psicología": {
+    "T.S - Referencias": {
       class: "fas fa-head-side-virus",
       font: "x-large",
       color: "lightblue",
@@ -40,7 +40,7 @@ export class IconsService {
       lat: 9.975077890814049 ,
       long: -84.74972648988147
     },
-    "Patología": {
+    "Emergencias - Clasificacion": {
       class: "fas fa-biohazard",
       font: "x-large",
       color: "lightgrey",
@@ -48,7 +48,7 @@ export class IconsService {
       lat: 9.975371438146254 ,
       long: -84.74963721723189
     },
-    "Consulta Externa": {
+    "Emergencias - Clasificacion Preferencial": {
       class: "fas fa-user-md",
       font: "x-large",
       color: "lightsalmon",
@@ -56,7 +56,7 @@ export class IconsService {
       lat: 9.975042499326563 ,
       long: -84.74959578171676
     },
-    "Primary Care": {
+    "B.S - Contratación": {
       class: "fas fa-briefcase-medical",
       font: "x-large",
       color: "lightpink",

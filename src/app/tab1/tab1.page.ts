@@ -106,16 +106,18 @@ export class Tab1Page implements OnInit, AfterViewInit {
     //Obtener el id de la url
     this.urlId = this.route.snapshot.paramMap.get("id");
     console.log("EL ID DE LA RUTA ES: " + this.urlId);
-    
+
+    if(this.platform.is('ios')){
     this.beaconService.initialise().then((isInitialised) => {
       if (isInitialised) {
         this.listenToBeaconEvents();
       }
     });
 
-    //   setTimeout(() => {
-    //   this.getBeaconsPointLocal();
-    // }, 1000);
+      setTimeout(() => {
+      this.getBeaconsPointLocal();
+    }, 1000);
+    }
   }
   ionViewWillLeave() {
     // clearInterval(this.intervalBeacons);
@@ -507,7 +509,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
         //this.personLocation();
         //this.personLoggedLocation();
         //this.asociatedPersonLocation();
-        this.timer();
+        //this.timer();
         // this.timerBeacons();
         //this.timerDoBinary();
         // this.timerWayFinding();
@@ -615,10 +617,12 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
   //se está actualizando cada cierto tiempo
   timerBeacons() {
+    if(this.platform.is('android')){
     this.intervalBeacons = setInterval(() => {
       this.ScanBeaconsAll();
       //this.alert('Scanning...');
-    }, 500);
+    }, 1000);
+  }
   }
   timerDoBinary() {
     setTimeout(() => {
@@ -631,7 +635,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   timerWayFinding() {
     this.intervalFinding = setInterval(() => {
       this.testWayFinding();
-    }, 1000);
+    }, 2000);
   }
   //scanea todos los bluetooth de baja carga con los rssi
   ScanBeaconsAll() {
@@ -677,7 +681,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
       this.storeService.localGet(this.localParam.localParam.gatewaybeacons).then((resp) => {
         this.beaconsPoints = resp;
 
-        // this.timerBeacons();
+        this.timerBeacons();
         this.timerWayFinding();
       }, (err) => {
         console.error(err);

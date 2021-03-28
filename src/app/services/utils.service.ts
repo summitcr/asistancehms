@@ -96,8 +96,8 @@ export class UtilsService {
     // var covidURL = 'https://18.188.106.125/CovidHospital/api/'; //dev
     // var summitHospitalServer = 'https://18.188.106.125/covidHospital/api/'; //dev
 
-    var newserverURL = 'https://3.138.134.82/summit/api/'; // dev
-    var ticketsURL = 'https://18.188.106.125/ticketsHospitalO7/api/'; //dev
+    var newserverURL = 'http://18.224.51.222/summitDev/api/'; // dev
+    var ticketsURL = 'http://13.58.166.253/orchestra/api/'; //dev
     var covidURL = 'https://18.188.106.125/CovidHospital/api/'; //dev
     var summitHospitalServer = 'https://18.188.106.125/covidHospital/api/'; //dev
 
