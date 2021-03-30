@@ -28,7 +28,7 @@ export class TicketPage implements OnInit {
   ticket: any;
   ticketServiceName = ""
 
-  ticketPosition:any;
+  ticketPosition: any;
 
   maxProgressBar: number = 0;
   refreshedTicket: any;
@@ -42,13 +42,16 @@ export class TicketPage implements OnInit {
   oldTicketPosition: any;
   exitDelay: any;
   intervalRefresher: any;
-  ticketStatus:any;
+  ticketStatus: any;
   createdTicket: any;
   ticketUbi: string;
   ticketDesti: string;
-  interval:any;
+  interval: any;
   lastPosition: any;
   nextQueueName: any;
+  idPoint: any;
+  queuePoint: any;
+  timeleft: any= 60;
 
   constructor(
     private services: CrudService,
@@ -113,7 +116,7 @@ export class TicketPage implements OnInit {
       this.getTicketUbi();
       this.getTicketDesti();
       this.getTicketPosition();
-     
+
     }, 1000)
     setTimeout(() => {
       this.timer();
@@ -164,15 +167,15 @@ export class TicketPage implements OnInit {
     clearTimeout(this.exitDelay);
   }
   getTicketInfo() {
-    
+
     this.storeService.localGet(this.localParam.localParam.createdTicket).then((resp) => {
       this.createdTicket = resp;
-      if(!this.createdTicket){
+      if (!this.createdTicket) {
         this.ticketNumber = "No hay tiquete";
         this.cancelDisable = true;
-      }else if(this.createdTicket){
+      } else if (this.createdTicket) {
         this.ticketNumber = this.createdTicket.ticketNumber;
-        
+
       }
     }, (err) => {
       console.error(err);
@@ -183,9 +186,9 @@ export class TicketPage implements OnInit {
   getTicketUbi() {
     this.storeService.localGet(this.localParam.localParam.ticketStatus).then((resp) => {
       this.ticketStatus = resp;
-      if(!this.ticketStatus){
+      if (!this.ticketStatus) {
         this.ticketUbi = "No se ha creado un ticket.";
-      }else if(this.ticketStatus){
+      } else if (this.ticketStatus) {
         this.ticketUbi = this.ticketStatus[0].queueName;
       }
     }, (err) => {
@@ -196,9 +199,9 @@ export class TicketPage implements OnInit {
   getTicketDesti() {
     this.storeService.localGet(this.localParam.localParam.ticketStatus).then((resp) => {
       this.ticketStatus = resp;
-      if(!this.ticketStatus){
+      if (!this.ticketStatus) {
         this.ticketDesti = "No se ha creado un ticket.";
-      }else if(this.ticketStatus){
+      } else if (this.ticketStatus) {
         this.ticketDesti = this.ticketStatus[0].currentServiceName;
       }
     }, (err) => {
@@ -209,79 +212,110 @@ export class TicketPage implements OnInit {
   getTicketPosition() {
     this.storeService.localGet(this.localParam.localParam.ticketStatus).then((resp) => {
       this.ticketStatus = resp;
-      if(!this.ticketStatus){
+      if (!this.ticketStatus) {
         this.ticketPosition = "No se ha creado un ticket.";
-      }else if(this.ticketStatus){
-        this.ticketPosition = this.ticketStatus[0].position+" personas adelante";
+      } else if (this.ticketStatus) {
+        this.ticketPosition = this.ticketStatus[0].position + " personas adelante";
       }
     }, (err) => {
       console.error(err);
     });
   }
- //Revisa si existe un tiquete creado, si existe hace un get del tiquete nuevamente para refrescarlo
- refreshTicket(){
-  this.storeService.localGet(this.localParam.localParam.createdTicket).then((resp) => {
-    this.createdTicket = resp;
-    if (this.createdTicket) {
-      let visitId = this.createdTicket.visitId;
-      this.services.getTicket(this.params.params.ticketStatus + '/' + visitId).subscribe((resp) => {
-        this.refreshedTicket = resp;
-        this.storeService.localSave(this.localParam.localParam.ticketStatus, this.refreshedTicket);
-        let positionInQueue = this.refreshedTicket[0].positionInQueue;
-        let currentStatus = this.refreshedTicket[0].currentStatus;
-        if (this.lastPosition != positionInQueue && positionInQueue != null) {
-          this.stopPositionPopUp = false;
-          this.lastPosition = positionInQueue;
-          this.positionUpdated(positionInQueue);
-        }
-      
-        this.ticketDesti = this.refreshedTicket[0].currentServiceName;
-        this.nextQueueName=this.refreshedTicket[0].queueName;
-        this.ticketPosition = "Su posición es: " + positionInQueue;
-        this.maxProgressBar = 1 / positionInQueue;
-        let calledFrom = this.refreshedTicket[0].servicePointName;
-        if (currentStatus == "CALLED") {
-          this.ticketPosition = "Su posición es: " + 0;
-          if (!this.stopPopUp) {
-            //this.stopPopUp = true;
-            if (this.popUp == null) {
-              this.presentAlert(calledFrom);
-              //this.setVibration();
-             
-            } else if (this.popUp != null) {
-              this.popUp.dismiss();
-              this.presentAlert(calledFrom);
-              //this.setVibration();
-          
-            }
+  //Revisa si existe un tiquete creado, si existe hace un get del tiquete nuevamente para refrescarlo
+  refreshTicket() {
+    this.storeService.localGet(this.localParam.localParam.createdTicket).then((resp) => {
+      this.createdTicket = resp;
+      if (this.createdTicket) {
+        let visitId = this.createdTicket.visitId;
+        this.services.getTicket(this.params.params.ticketStatus + '/' + visitId).subscribe((resp) => {
+          this.refreshedTicket = resp;
+          let idQueue = this.refreshedTicket[0].queueId;
+          this.getPointService(idQueue);
+          this.storeService.localSave(this.localParam.localParam.ticketStatus, this.refreshedTicket);
+          let positionInQueue = this.refreshedTicket[0].positionInQueue;
+          let currentStatus = this.refreshedTicket[0].currentStatus;
+          if (this.lastPosition != positionInQueue && positionInQueue != null) {
+            this.stopPositionPopUp = false;
+            this.lastPosition = positionInQueue;
+            this.positionUpdated(positionInQueue);
           }
+
+          this.ticketDesti = this.refreshedTicket[0].currentServiceName;
+          //this.nextQueueName = this.refreshedTicket[0].queueName;
+          this.ticketPosition = "Su posición es: " + positionInQueue;
+          this.maxProgressBar = 1 / positionInQueue;
+          let calledFrom = this.refreshedTicket[0].servicePointName;
+          if (currentStatus == "CALLED") {
+            var downloadTimer = setInterval(function () {
+              if (this.timeleft <= 0) {
+                clearInterval(downloadTimer);
+              this.cancelDisable = true;
+              this.postPoneDisable = true;
+              this.storage.remove("created-ticket");
+              this.storage.remove("ticket-status");
+              this.router.navigateByUrl('/servicios');
+              }this.timeleft -= 1;
+            }, 1000);
+              this.ticketPosition = "Su posición es: " + 0;
+              if (!this.stopPopUp) {
+                //this.stopPopUp = true;
+                if (this.popUp == null) {
+                  this.presentAlert(calledFrom);
+                  //this.setVibration();
+
+                } else if (this.popUp != null) {
+                  this.popUp.dismiss();
+                  this.presentAlert(calledFrom);
+                  //this.setVibration();
+
+                }
+              }
+            }
+          this.ticketNumber = this.refreshedTicket[0].ticketId;
+            //this.ticketDesti = this.refreshedTicket.queueName;
+            //console.log(this.refreshedTicket);
+
+          }, (err) => {
+            if (err.status == 404) {
+              this.storage.remove("created-ticket");
+              this.storage.remove("ticket-status");
+              this.ticketNumber = "Atendido";
+              this.ticketPosition = "Atendido";
+              this.ticketUbi = "Atendido";
+              this.ticketDesti = "Atendido";
+            }
+          });
+      }
+    }, (err) => {
+      console.error(err);
+    });
+  }
+
+  timer() {
+    this.interval = setInterval(() => {
+      this.refreshTicket();
+    }, 5000);
+  }
+  getPointService(id) {
+    this.services.get(this.params.params.getByServiceId + '/' + id).subscribe((resp: []) => {
+      this.idPoint = resp;
+      let queuePointId;
+      if (this.idPoint.length) {
+        //console.log(this.idPoint);
+        queuePointId = this.idPoint[0].ticketpointid;
+        console.log(queuePointId);
+        this.nextQueueName = this.idPoint[0].description;
+        this.storeService.localSave(this.localParam.localParam.idPointTicket, this.idPoint);
+        if (this.queuePoint != queuePointId) {
+          this.queuePoint = queuePointId;
+          this.nextTicket();
         }
-        this.ticketNumber = this.refreshedTicket[0].ticketId;
-        //this.ticketDesti = this.refreshedTicket.queueName;
-        //console.log(this.refreshedTicket);
+      }
 
-      }, (err) => {
-        if (err.status == 404) {
-          this.storage.remove("created-ticket");
-          this.storage.remove("ticket-status");
-          this.ticketNumber = "Atendido";
-          this.ticketPosition = "Atendido";
-          this.ticketUbi = "Atendido";
-          this.ticketDesti = "Atendido";
-        }
-      });
-    }
-  }, (err) => {
-    console.error(err);
-  });
-}
-
-timer() {
-  this.interval = setInterval(() => {
-    this.refreshTicket();
-  }, 10000);
-}
-
+    }, (err) => {
+      console.error(err);
+    });
+  }
 
   positionUpdated(positionInQueue) {
 
@@ -347,7 +381,7 @@ timer() {
   }
 
   async presentAlert(calledFrom) {
-    console.log("Present alert "+calledFrom);
+    console.log("Present alert " + calledFrom);
     this.alertTi();
     this.popUp = await this.alertCtrl.create({
       cssClass: 'my-custom-class',
@@ -360,13 +394,13 @@ timer() {
         role: 'OK',
         handler: () => {
           this.stopPopUp = true;
-          this.cancelDisable = true;
-          this.postPoneDisable = true;
-          this.delay();
-         // this.router.navigateByUrl('/menu/first/tabs/tab2');
+          // this.cancelDisable = true;
+          //this.postPoneDisable = true;
+          //this.delay();
+          // this.router.navigateByUrl('/menu/first/tabs/tab2');
           // OneSignal.removeExternalUserId();
           // OneSignal.setSubscription(false);
-         // this.nextTicket();
+          //this.nextTicket();
         }
       },
       ],
@@ -397,7 +431,7 @@ timer() {
       header: 'CCSS Tickets',
       subHeader: '',
       message:
-        '<img class="my-custom-class" src="assets/img/like.png"></img><br> <br><h6>Actualización Ticket </h6>Nueva ruta:'+ this.nextQueueName,
+        '<img class="my-custom-class" src="assets/img/like.png"></img><br> <br><h6>Actualización Ticket </h6>Nueva ruta:' + this.nextQueueName,
 
       buttons: [{
         text: 'Aceptar',
@@ -454,7 +488,7 @@ timer() {
         this.params.params.deleteTicket + '/services/' + serviceId + '/branches/' + officeId + '/ticket/' + visitId + '/queueId/' + queueId).subscribe((resp) => {
 
           this.cancelledTicket();
-         
+
         }, (err) => {
           console.error(err);
         });
@@ -484,14 +518,14 @@ timer() {
     await cancelledPopUp.present();
   }
   go() {
-    this.storeService.localGet(this.localParam.localParam.places).then((resp) => {
-    let places=resp;
-    this.presentLoadingDefaults();
-    this.router.navigateByUrl('/menu/first/tabs/tab1/' + places.placeId);
+    this.storeService.localGet(this.localParam.localParam.idPointTicket).then((resp) => {
+      let places = resp;
+      this.presentLoadingDefaults();
+      this.router.navigateByUrl('/menu/first/tabs/tab1/' + places.externalid);
     }, (err) => {
       console.error(err);
     });
-   
+
   }
   async presentLoadingDefaults() {
     let loading = await this.loadingCtrl.create({

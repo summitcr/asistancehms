@@ -21,6 +21,7 @@ export class UtilStorageService {
     mean:"",
     places:"",
     tutorial:"",
+    idPointTicket:""
   }
 
   constructor() { 
@@ -40,5 +41,6 @@ export class UtilStorageService {
     this.localParam.mean="mean-token";
     this.localParam.places="placeId";
     this.localParam.tutorial="tutorial";
+    this.localParam.idPointTicket="idPointTicket"
   }
 }

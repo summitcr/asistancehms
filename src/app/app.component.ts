@@ -43,7 +43,7 @@ export class AppComponent {
       });
       this.preventWebBackButton();
       this.enableBluetooth();
-      this.canActivate();
+     // this.canActivate();
     });
   }
 

@@ -463,7 +463,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
     }
   }
   getServicesPlaces() {
-    this.storeService.localGet(this.localParam.localParam.places).then((resp) => {
+    this.storeService.localGet(this.localParam.localParam.idPointTicket).then((resp) => {
       this.placesInfo = resp;
       console.log(this.placesInfo);
     }, (err) => {

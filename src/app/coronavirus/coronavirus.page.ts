@@ -62,6 +62,8 @@ export class CoronavirusPage implements OnInit {
   serviceId: any;
   ticketStatus: Object;
   createdTicket: any;
+  idQueue: any;
+  idPoint: Object;
   constructor(
     private services: CrudService,
     private params: UtilsService,
@@ -232,6 +234,8 @@ export class CoronavirusPage implements OnInit {
   getTicketStatus(visitId) {
     this.services.get(this.params.params.ticketStatus + '/' + visitId).subscribe((resp) => {
       this.ticketStatus = resp;
+      this.idQueue=this.ticketStatus[0].queueId;
+      this.getPointService(this.idQueue);
       this.storeService.localSave(this.localParam.localParam.ticketStatus, this.ticketStatus);
 
       console.log(this.ticketStatus);
@@ -239,9 +243,18 @@ export class CoronavirusPage implements OnInit {
       console.error(err);
     });
   }
+  getPointService(id) {
+    this.services.get(this.params.params.getByServiceId + '/' + id).subscribe((resp) => {
+      this.idPoint= resp;
+      this.storeService.localSave(this.localParam.localParam.idPointTicket, this.idPoint);
+      console.log(this.idPoint);
+    }, (err) => {
+      console.error(err);
+    });
+  }
   createTicket() {
     let userId = this.userIdentifier.identifier;
-    this.services.saveT(this.params.params.ticketCreate + '/serviceId/' +this.serviceId+'/officeId/'+'4'+'/userId/'+userId).subscribe((resp) => {
+    this.services.saveT(this.params.params.ticketCreate + '/serviceId/' +this.serviceId+'/officeId/'+'2'+'/userId/'+userId).subscribe((resp) => {
       console.log(resp)
       this.createdTicket=resp;
       this.storeService.localSave(this.localParam.localParam.createdTicket, resp);
