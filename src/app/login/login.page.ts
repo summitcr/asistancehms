@@ -59,8 +59,18 @@ export class LoginPage implements OnInit {
         this.router.navigateByUrl('/menu/first/tabs/tab2');
       }
     }, 1000);
+    // this.canActivate();
   }
+  // async canActivate(): Promise<boolean>{
+  //   const isComplete = await this.storeService.localGet(this.localParam.localParam.tutorial);
 
+  //   if(!isComplete){
+  //     this.router.navigateByUrl('/tutorial');
+  //   }
+
+  //   return isComplete;
+  
+  // }
   alert(msg: string) {
     this.toast.show(msg, '5000', 'center').subscribe(
       toast => {

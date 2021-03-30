@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.tech-logik.hms" version="0.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.techlogik.hms" version="0.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>hmsApp</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@tech-logik.com" href="http://tech-logik.com/">Tech-Logik</author>

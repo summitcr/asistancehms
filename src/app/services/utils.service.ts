@@ -75,7 +75,8 @@ export class UtilsService {
     addOrEditPeople:"",
     deleteTicket:"",
     assistance_tickets:"",
-    assistance_types:""
+    assistance_types:"",
+    getByServiceId:"",
   };
 
   mapwizeParams = {
@@ -98,13 +99,11 @@ export class UtilsService {
     // var covidURL = 'https://18.188.106.125/CovidHospital/api/'; //dev
     // var summitHospitalServer = 'https://18.188.106.125/covidHospital/api/'; //dev
 
-    var newserverURL = 'http://3.138.134.82/summit/api/'; // dev
-    var ticketsURL = 'http://18.188.106.125/ticketsHospitalO7/api/'; //dev
-    var covidURL = 'http://18.188.106.125/CovidHospital/api/'; //dev
-    var summitHospitalServer = 'http://18.188.106.125/covidHospital/api/'; //dev
-    var nodeAPis = 'http://13.58.166.253:3800/'; // dev
-    // var nodeAPis = 'http://192.168.0.10:4000/'; 
-
+    var newserverURL = 'http://18.224.51.222/summitDev/api/'; // dev
+    var ticketsURL = 'http://18.224.51.222/orchestra/api/'; //dev
+    var covidURL = 'http://18.224.51.222/CovidHospitalDev/api/'; //dev
+    var summitHospitalServer = 'http://18.224.51.222/covidHospitalDev/api/'; //dev
+    var nodeAPis = 'http://18.224.51.222/'; // dev
     //Apis server QA
     //var newserverURL = 'http://3.23.88.169/summit/api/';
     //var ticketsURL = 'http://3.23.88.169/ticketsHospital/api/';
@@ -162,6 +161,7 @@ export class UtilsService {
     var mapwizeurl = "https://api.mapwize.io/v1/";
     var apikey = "?api_key=439578d65ac560a55bb586feaa299bf7";
     this.mapwizeParams.searchdirection = mapwizeurl + "directions" + apikey;
+    this.params.getByServiceId= newserverURL+"/points/getbyserviceid/";
 
     this.params.ticketCreate = ticketsURL + "orchestra_createTicket";
     this.params.ticketServices = ticketsURL + "orchestra_services";

@@ -4,7 +4,7 @@
       <ion-back-button defaultHref="" text="Salir"></ion-back-button>
     </ion-buttons>
     <ion-title>
-      <img src="assets/img/ccss-logo.png" alt="Es el de summit que representa una dos montañas" style="width: 40px;">
+      <img src="assets/img/ccss-logo.png" alt="Es logo de la caja costarricense de seguro social" style="width: 40px;">
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -53,6 +53,14 @@
             <ion-label position="floating">Teléfono:</ion-label>
             <ion-input formControlName="telefono" type="number" placeholder="Telefono" [(ngModel)]="userTel"></ion-input>
           </ion-item>
+          <br>
+          <!-- <ion-item formGroupName="genero">
+            <ion-label position="floating">Genero:</ion-label>
+          <ion-select interface="popover" [(ngModel)]="userGenero" formControlName="genero">
+            <ion-select-option value="Femenino">Femenino</ion-select-option>
+            <ion-select-option value="Masculino">Masculino</ion-select-option>
+          </ion-select>
+          </ion-item> -->
           <br>
           <ion-item formGroupName="registro">
             <ion-icon name="locate" slot="end"></ion-icon>

@@ -18,6 +18,7 @@ export interface NoRegisteredDiagnostic {
   age: String,
   telephone: String,
   address: String,
+  //genre: String,
 
 }
 
@@ -27,6 +28,7 @@ export interface UserModel {
   identifier: String,
   name: String,
   age: String,
+  //genre: String,
   telephone: String,
   provincia: String,
   canton: String,
@@ -55,7 +57,7 @@ export class RegistroCovidPage implements OnInit {
     age: '',
     telephone: '',
     address: '',
-
+    //genre:''
   }
 
   statuses: any;
@@ -205,6 +207,7 @@ export class RegistroCovidPage implements OnInit {
       name: this.registroForm.controls.name.value,
       telephone: this.registroForm.controls.telefono.value,
       age: this.registroForm.controls.edad.value,
+     // genre:this.registroForm.controls.genero.value,
       provincia: this.registroForm.controls.provincia.value.value,
       canton: this.registroForm.controls.canton.value.value,
       distrito: this.registroForm.controls.distrito.value.value,
@@ -313,6 +316,7 @@ export class RegistroCovidPage implements OnInit {
         telefono: new FormControl(''),
         direccion: new FormControl(''),
         edad: new FormControl(''),
+        //genero: new FormControl(''),
         provincia: new FormControl(undefined),
         canton: new FormControl(undefined),
         distrito: new FormControl(undefined),
@@ -325,6 +329,7 @@ export class RegistroCovidPage implements OnInit {
     this.registroForm.controls.telefono.setValidators([Validators.required, Validators.minLength(8)]);
     this.registroForm.controls.direccion.setValidators(Validators.required);
     this.registroForm.controls.edad.setValidators(Validators.required);
+   // this.registroForm.controls.genero.setValidators(Validators.required);
     this.registroForm.controls.provincia.setValidators(Validators.required);
     this.registroForm.controls.canton.setValidators(Validators.required);
     this.registroForm.controls.distrito.setValidators(Validators.required);

@@ -67,6 +67,9 @@ export class CrudService {
     return this.http.put(url, data, { headers:{} });
   }
 
+  saveT(url) {
+    return this.http.post(url, { headers: {} });
+  }
   delete(url){
     return this.http.delete(url, { headers: {} });
   }
