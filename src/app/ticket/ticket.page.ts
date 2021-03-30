@@ -51,7 +51,8 @@ export class TicketPage implements OnInit {
   nextQueueName: any;
   idPoint: any;
   queuePoint: any;
-  timeleft: any= 60;
+  timeleft: number= 60;
+  downloadTimer: NodeJS.Timer;
 
   constructor(
     private services: CrudService,
@@ -245,16 +246,20 @@ export class TicketPage implements OnInit {
           this.ticketPosition = "Su posición es: " + positionInQueue;
           this.maxProgressBar = 1 / positionInQueue;
           let calledFrom = this.refreshedTicket[0].servicePointName;
-          if (currentStatus == "CALLED") {
-            var downloadTimer = setInterval(function () {
+          //console.log( this.downloadTimer);
+          if (currentStatus == "CALLED" && this.downloadTimer==undefined) {
+            this.downloadTimer= setInterval(() => {
+              console.log(this.timeleft);
               if (this.timeleft <= 0) {
-                clearInterval(downloadTimer);
+                clearInterval(this.downloadTimer);
               this.cancelDisable = true;
               this.postPoneDisable = true;
               this.storage.remove("created-ticket");
               this.storage.remove("ticket-status");
               this.router.navigateByUrl('/servicios');
-              }this.timeleft -= 1;
+              }
+              this.timeleft -= 1;
+              console.log(this.timeleft);
             }, 1000);
               this.ticketPosition = "Su posición es: " + 0;
               if (!this.stopPopUp) {
@@ -270,6 +275,11 @@ export class TicketPage implements OnInit {
 
                 }
               }
+            }else if (currentStatus == "IN_QUEUE"){
+              console.log("entro al  if-in_queue");
+              clearInterval(this.downloadTimer);
+              this.downloadTimer=undefined;
+              this.timeleft=60;
             }
           this.ticketNumber = this.refreshedTicket[0].ticketId;
             //this.ticketDesti = this.refreshedTicket.queueName;
