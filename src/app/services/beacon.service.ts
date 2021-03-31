@@ -59,7 +59,7 @@ export class BeaconService {
         //this.alert("Entro la linea 49");
         /* Subscribe to some of the delegate's event handlers */
         this.delegate.didRangeBeaconsInRegion().subscribe( data => {
-          console.log("Ranging result: "+JSON.stringify(data));
+          // console.log("Ranging result: "+JSON.stringify(data));
           //this.alert("Entro la linea 52");
           this.events.publish('didRangeBeaconsInRegion', data);
           //this.alert("Entro la linea 55");

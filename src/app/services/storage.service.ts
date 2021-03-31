@@ -22,7 +22,6 @@ export class StorageService {
   localSave(key, data: any): void {
     this.storage.ready().then(() => {
       this.storage.set(key, data);
-      console.log(data);
     },(err) => {
       this.storage.clear();
       this.router.navigateByUrl('/login');

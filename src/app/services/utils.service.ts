@@ -103,7 +103,7 @@ export class UtilsService {
     var ticketsURL = 'http://18.224.51.222/orchestra/api/'; //dev
     var covidURL = 'http://18.224.51.222/CovidHospitalDev/api/'; //dev
     var summitHospitalServer = 'http://18.224.51.222/covidHospitalDev/api/'; //dev
-    var nodeAPis = 'http://18.224.51.222/'; // dev
+    var nodeAPis = 'http://18.224.51.222:3800/'; // dev
     //Apis server QA
     //var newserverURL = 'http://3.23.88.169/summit/api/';
     //var ticketsURL = 'http://3.23.88.169/ticketsHospital/api/';
