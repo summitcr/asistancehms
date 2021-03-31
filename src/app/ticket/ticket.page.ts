@@ -51,7 +51,7 @@ export class TicketPage implements OnInit {
   nextQueueName: any;
   idPoint: any;
   queuePoint: any;
-  timeleft: number= 60;
+  timeleft: number = 90;
   downloadTimer: NodeJS.Timer;
 
   constructor(
@@ -247,54 +247,58 @@ export class TicketPage implements OnInit {
           this.maxProgressBar = 1 / positionInQueue;
           let calledFrom = this.refreshedTicket[0].servicePointName;
           //console.log( this.downloadTimer);
-          if (currentStatus == "CALLED" && this.downloadTimer==undefined) {
-            this.downloadTimer= setInterval(() => {
-              console.log(this.timeleft);
-              if (this.timeleft <= 0) {
-                clearInterval(this.downloadTimer);
-              this.cancelDisable = true;
-              this.postPoneDisable = true;
-              this.storage.remove("created-ticket");
-              this.storage.remove("ticket-status");
-              this.router.navigateByUrl('/servicios');
-              }
-              this.timeleft -= 1;
-              console.log(this.timeleft);
-            }, 1000);
-              this.ticketPosition = "Su posición es: " + 0;
-              if (!this.stopPopUp) {
-                //this.stopPopUp = true;
-                if (this.popUp == null) {
-                  this.presentAlert(calledFrom);
-                  //this.setVibration();
-
-                } else if (this.popUp != null) {
-                  this.popUp.dismiss();
-                  this.presentAlert(calledFrom);
-                  //this.setVibration();
-
+          if (currentStatus == "CALLED") {
+            if (this.downloadTimer == undefined) {
+              this.downloadTimer = setInterval(() => {
+                console.log(this.timeleft);
+                if (this.timeleft <= 0) {
+                  clearInterval(this.downloadTimer);
+                  this.cancelDisable = true;
+                  this.postPoneDisable = true;
+                  this.storage.remove("created-ticket");
+                  this.storage.remove("ticket-status");
+                  this.router.navigateByUrl('/servicios');
                 }
-              }
-            }else if (currentStatus == "IN_QUEUE"){
-              console.log("entro al  if-in_queue");
-              clearInterval(this.downloadTimer);
-              this.downloadTimer=undefined;
-              this.timeleft=60;
+                this.timeleft -= 1;
+                console.log(this.timeleft);
+              }, 1000);
             }
-          this.ticketNumber = this.refreshedTicket[0].ticketId;
-            //this.ticketDesti = this.refreshedTicket.queueName;
-            //console.log(this.refreshedTicket);
+            this.ticketPosition = "Su posición es: " + 0;
+            if (!this.stopPopUp) {
+              //this.stopPopUp = true;
+              if (this.popUp == null) {
+                this.presentAlert(calledFrom);
+                //this.setVibration();
 
-          }, (err) => {
-            if (err.status == 404) {
-              this.storage.remove("created-ticket");
-              this.storage.remove("ticket-status");
-              this.ticketNumber = "Atendido";
-              this.ticketPosition = "Atendido";
-              this.ticketUbi = "Atendido";
-              this.ticketDesti = "Atendido";
+              } else if (this.popUp != null) {
+                this.popUp.dismiss();
+                this.presentAlert(calledFrom);
+                //this.setVibration();
+
+              }
             }
-          });
+          } else if (currentStatus == "IN_QUEUE") {
+            console.log("entro al  if-in_queue");
+            clearInterval(this.downloadTimer);
+            this.downloadTimer = undefined;
+            this.timeleft = 60;
+            this.stopPopUp = false;
+
+          }
+          this.ticketNumber = this.refreshedTicket[0].ticketId;
+          //this.ticketDesti = this.refreshedTicket.queueName;
+          //console.log(this.refreshedTicket);
+
+        }, (err) => {
+          if (err.status == 404) {
+            this.storage.remove("created-ticket");
+            this.storage.remove("ticket-status");
+            this.ticketNumber = "Atendido";
+            this.ticketPosition = "Atendido";
+            this.ticketUbi = "Atendido";
+            this.ticketDesti = "Atendido";
+          }
+        });
       }
     }, (err) => {
       console.error(err);
