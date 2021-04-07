@@ -97,10 +97,10 @@ export class UtilsService {
     // var covidURL = 'https://18.188.106.125/CovidHospital/api/'; //dev
     // var summitHospitalServer = 'https://18.188.106.125/covidHospital/api/'; //dev
 
-    var newserverURL = 'http://18.224.51.222/summitDev/api/'; // dev
-    var ticketsURL = 'http://18.224.51.222/orchestra/api/'; //dev
-    var covidURL = 'http://18.224.51.222/CovidHospitalDev/api/'; //dev
-    var summitHospitalServer = 'http://18.224.51.222/covidHospitalDev/api/'; //dev
+    var newserverURL = 'https://18.224.51.222/summitDev/api/'; // dev
+    var ticketsURL = 'https://18.224.51.222/orchestra/api/'; //dev
+    var covidURL = 'https://18.224.51.222/CovidHospitalDev/api/'; //dev
+    var summitHospitalServer = 'https://18.224.51.222/covidHospitalDev/api/'; //dev
 
     //Apis server QA
     //var newserverURL = 'http://3.23.88.169/summit/api/';

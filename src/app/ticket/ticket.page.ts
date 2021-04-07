@@ -51,7 +51,7 @@ export class TicketPage implements OnInit {
   nextQueueName: any;
   idPoint: any;
   queuePoint: any;
-  timeleft: number = 90;
+  timeleft: number = 180;
   downloadTimer: NodeJS.Timer;
 
   constructor(
@@ -281,7 +281,7 @@ export class TicketPage implements OnInit {
             console.log("entro al  if-in_queue");
             clearInterval(this.downloadTimer);
             this.downloadTimer = undefined;
-            this.timeleft = 60;
+            this.timeleft = 180;
             this.stopPopUp = false;
 
           }
@@ -535,7 +535,7 @@ export class TicketPage implements OnInit {
     this.storeService.localGet(this.localParam.localParam.idPointTicket).then((resp) => {
       let places = resp;
       this.presentLoadingDefaults();
-      this.router.navigateByUrl('/menu/first/tabs/tab1/' + places.externalid);
+      this.router.navigateByUrl('/menu/first/tabs/tab1/' + places[0].externalid);
     }, (err) => {
       console.error(err);
     });
