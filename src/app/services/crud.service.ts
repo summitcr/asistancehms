@@ -62,6 +62,11 @@ export class CrudService {
   saveTicket(url, data: any) {
     return this.http.post(url, data, { headers: {} });
   }
+
+  put (url:string , data:any) {
+    return this.http.put(url, data, { headers:{} });
+  }
+
   saveT(url) {
     return this.http.post(url, { headers: {} });
   }

@@ -89,9 +89,25 @@ ion-content {
     justify-content: space-evenly;
     margin: 25px auto;
     border-radius: 25px;
+    overflow: hidden;
     --ion-background-color:palevioletred;
     --ion-color: #ffffff;
   }
+
+  .sos_buttons_container {
+    padding-top: 0; 
+    padding-bottom: 0;
+    justify-content: flex-start;
+  }
+  .sos_buttons {
+
+  }
+  .sos_thumbnail {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
 }
 
 ion-back-button {

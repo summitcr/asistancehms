@@ -230,6 +230,7 @@ export class TicketPage implements OnInit {
         let visitId = this.createdTicket.visitId;
         this.services.getTicket(this.params.params.ticketStatus + '/' + visitId).subscribe((resp) => {
           this.refreshedTicket = resp;
+          console.log(resp)
           let idQueue = this.refreshedTicket[0].queueId;
           this.getPointService(idQueue);
           this.storeService.localSave(this.localParam.localParam.ticketStatus, this.refreshedTicket);
@@ -278,7 +279,7 @@ export class TicketPage implements OnInit {
               }
             }
           } else if (currentStatus == "IN_QUEUE") {
-            console.log("entro al  if-in_queue");
+            // console.log("entro al  if-in_queue");
             clearInterval(this.downloadTimer);
             this.downloadTimer = undefined;
             this.timeleft = 180;
@@ -534,6 +535,7 @@ export class TicketPage implements OnInit {
   go() {
     this.storeService.localGet(this.localParam.localParam.idPointTicket).then((resp) => {
       let places = resp;
+      console.log(resp)
       this.presentLoadingDefaults();
       this.router.navigateByUrl('/menu/first/tabs/tab1/' + places[0].externalid);
     }, (err) => {

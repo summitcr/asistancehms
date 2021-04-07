@@ -16,7 +16,7 @@
 
 <ion-content>
 
-  <ion-card *ngIf="hasAsist && !asistance" mode="ios" #carta class="ion-no-margin ion-text-left card-asistance">
+  <ion-card *ngIf="hasAsist && !assistance" mode="ios" #carta class="ion-no-margin ion-text-left card-asistance">
     <ion-card-header class="ion-no-padding" >
       <ion-item style="--border-style: none; padding: 0">
         <ion-thumbnail slot="start">
@@ -39,37 +39,46 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngIf="hasAsist && asistance" mode="ios" #carta class="ion-no-margin ion-text-left card-asistance">
+  <ion-card *ngIf="hasAsist && assistance" mode="ios" #carta class="ion-no-margin ion-text-left card-asistance">
     <ion-card-header class="ion-no-padding" >
-      <ion-item style="--border-style: none; padding: 0">
-        <ion-thumbnail slot="start">
-          <img src="https://15xh2r248z7d286gcz3i6g1q-wpengine.netdna-ssl.com/wp-content/uploads/2014/11/200158376-001_5.jpg">
+      <ion-item *ngIf="assistance['status'] != 'PENDING' " style="--border-style: none; padding: 0">
+        <ion-thumbnail slot="start" class="sos_thumbnail">
+          <span style="font-size: xx-large; color: black;">
+            <i *ngIf="assistance['type'].category === 'STAFF'" class="fas fa-hospital-user"></i>
+            <i *ngIf="assistance['type'].category === 'ASSET'" class="fas fa-wheelchair"></i>
+          </span>
         </ion-thumbnail>
         <div class="headerCard" style="width: 100%;">
           <ion-card-title style="font-size: large;" class="card-title">
-            {{asistance['person'].name + ' ' + asistance['person'].lastname}}
+            <ion-skeleton-text *ngIf="!assistance['title']" animated style="width: 80%"></ion-skeleton-text>
+            {{this.assistance['title'] ? this.assistance['title'] : ''}}
           </ion-card-title>
           <ion-card-subtitle class="card-subtitle">
-            {{asistance['person'].ocupation}}
+            <ion-skeleton-text *ngIf="!assistance['description']" animated style="width: 40%"></ion-skeleton-text>
+            {{this.assistance['description'] ? this.assistance['description'] : ''}}
           </ion-card-subtitle>
         </div>
       </ion-item>
     </ion-card-header>
     <ion-card-content style="padding-top: 0; padding-bottom: 0;">
-      <p>El personal esta por llegar, por favor permanezca en su lugar.</p>
+      <p>{{this.assistance['status'] != 'PENDING' ? 'El personal esta por llegar, por favor permanezca en su lugar.' : 'El personal se encuentra resolviendo su solicitud. Pronto tendrá respuesta.'}}</p>
+      <ion-button *ngIf="assistance['status'] === 'PENDING'; else btnFinalizar" size="small" expand="block" style="margin-top: 10px;" 
+      (click)="closeSOSEvent('CANCELED')">Cancelar</ion-button>
+      <ng-template #btnFinalizar>
+        <ion-button size="small" expand="block" style="margin-top: 10px;" 
+        (click)="closeSOSEvent('FINISHED')">Finalizar</ion-button>
+    </ng-template>
     </ion-card-content>
   </ion-card>
 
   <!-- <ion-title>Servicios</ion-title> -->
   <ion-card mode="ios" class="sos-button" *ngIf="!hasAsist">
-    <ion-item (click)="openBottomSheet()">
+    <ion-item (click)="openBottomSheet()" style="border-radius: 25px;">
       <!-- <ion-badge slot="start">0</ion-badge>
       <ion-icon name="pricetag" slot="start"></ion-icon> -->
-      <ion-button mode="ios" class="badge-button">
-        <span style="font-size: x-large; color: white;">
+        <span style="font-size: x-large; color: white; margin-right: 10px;">
           <i class="fas fa-hand-holding-heart"></i>
         </span>
-      </ion-button>
       <ion-label style="color: white;">Solicitar Asistencia</ion-label>
       <!-- <ion-button fill="outline" slot="end">Ver</ion-button> -->
     </ion-item>
@@ -175,7 +184,7 @@
 
   <app-bottom-sheet #bottomSheet (isOpen)="backdropBool = $event" [title]="'Opciones de Asistencia'" style="z-index: 200;" slot="fixed">
     <ion-list>
-      <ion-item *ngFor="let option of options" [id]="option.id" (click)="selectOption(option.id)">
+      <ion-item *ngFor="let option of options" [id]="option.id" (click)="selectOption(option._id)">
         <ion-label>{{option.name}}</ion-label>
       </ion-item>
     </ion-list>

@@ -655,7 +655,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   getLastBeacon() {
     this.storeService.localGet(this.localParam.localParam.lastBeacon).then((resp) => {
       this.lastBeacon = resp;
-      console.warn(this.lastBeacon);
+      // console.warn(this.lastBeacon);
     }, (err) => {
       console.error(err);
     });
@@ -792,7 +792,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
     shortMac = beaconMac.replace(/:/g, "");
     value = shortMac.substr(shortMac.length - 5);
     index = this.binarySearch(items, value);
-    console.log(value);
+    // console.log(value);
     // this.alert("index:"+index);
 
     if (index > -1) {
