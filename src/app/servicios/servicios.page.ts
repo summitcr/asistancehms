@@ -1,6 +1,6 @@
 import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { ActionSheetController, AlertController, Events, IonBackdrop, ModalController, ToastController } from '@ionic/angular';
+import { ActionSheetController, AlertController, Events, IonBackdrop, ModalController, Platform, ToastController } from '@ionic/angular';
 import { BottomSheetComponent } from '../bottom-sheet/bottom-sheet.component'
 
 import { ModalNotificationPage } from '../modal-notification/modal-notification.page';
@@ -13,6 +13,8 @@ import { Storage } from '@ionic/storage';
 import { AuthenticationService } from '../services/authentication.service';
 import { BeaconService } from '../services/beacon.service';
 import { timeout } from 'rxjs/operators';
+import { BLE } from '@ionic-native/ble/ngx';
+import { Toast } from '@ionic-native/toast/ngx';
 
 export interface PlaceInfo {
   placeId: String,
@@ -44,7 +46,7 @@ export class ServiciosPage implements OnInit {
     long: ""
   }
   services = [];
-  options:any = [
+  options: any = [
     {
       id: 1,
       name: 'Solicitar silla de Ruedas',
@@ -66,9 +68,13 @@ export class ServiciosPage implements OnInit {
   beaconLocationInfo: any;
   waitingAssignInterval: NodeJS.Timer;
   waitingAssignTimeOut: NodeJS.Timer;
-
+  devices: any[] = [];
   ticketTitle: String;
   ticketDescription: String;
+  beaconsPoints: any;
+  lastBeacon: any;
+  intervalBeacons: any;
+  stopBeaconsCan: boolean=false;
 
   constructor(
     private router: Router,
@@ -85,8 +91,12 @@ export class ServiciosPage implements OnInit {
     public actionSheetController: ActionSheetController,
     public beaconService: BeaconService,
     public events: Events,
+    private ngZone: NgZone,
+    private ble: BLE,
+    public platform: Platform,
+    private toast: Toast
     // public bottomSheet: BottomSheetComponent,
-  ) { 
+  ) {
     this.zone = new NgZone({ enableLongStackTrace: false });
   }
 
@@ -96,12 +106,12 @@ export class ServiciosPage implements OnInit {
       this.services = resp;
       this.services = this.iconService.setIconsToServices(this.services);
     })
-    this.crudService.get(this.params.params.assistance_types+'all').subscribe( res => {
+    this.crudService.get(this.params.params.assistance_types + 'all').subscribe(res => {
       console.log('entro a la lista de asistentes')
       console.log(res)
       this.options = res;
     });
-    this.storageService.localGet(this.localParams.localParam.insuredUser).then( user => {
+    this.storageService.localGet(this.localParams.localParam.insuredUser).then(user => {
       this.loggedUser = user;
       console.log(this.loggedUser);
     });
@@ -206,23 +216,29 @@ export class ServiciosPage implements OnInit {
     this.searchUserLocation();
   }
 
-  searchUserLocation () {
-    let userLocation:any = {};
-    let makeRequest = true
+  searchUserLocation() {
+    if (this.platform.is('ios')) {
+      let userLocation: any = {};
+      let makeRequest = true
       this.beaconService.initialise()
       this.events.subscribe('didRangeBeaconsInRegion', (res) => {
         this.zone.run(() => {
-          if(res.beacons.length && makeRequest){
+          if (res.beacons.length && makeRequest) {
             makeRequest = false;
             this.searchBeaconInfoCreateTicket(res.beacons[0].minor)
           }
         });
       });
+    }
+    if (this.platform.is('android')) {
+      this.stopBeaconsCan=false;
+        this.getBeaconsPointLocal();    
+    }
   }
 
-  searchBeaconInfoCreateTicket(minor){
-    this.storageService.localGet(this.localParams.localParam.gatewaybeacons).then((beaconsArray:[])=>{
-      beaconsArray.map((beacon)=>{
+  searchBeaconInfoCreateTicket(minor) {
+    this.storageService.localGet(this.localParams.localParam.gatewaybeacons).then((beaconsArray: []) => {
+      beaconsArray.map((beacon) => {
         if (beacon['minor'] === minor) {
           console.log(beacon);
           this.beaconLocationInfo = beacon;
@@ -232,8 +248,8 @@ export class ServiciosPage implements OnInit {
     });
   }
 
-  createAssistanceTicket () {
-    const newAssitanceTicket:AssitanceTicket = {
+  createAssistanceTicket() {
+    const newAssitanceTicket: AssitanceTicket = {
       assistance_type: this.assistanceTypeId,
       patient: this.loggedUser,
       init_location: this.beaconLocationInfo.point.description,
@@ -241,27 +257,30 @@ export class ServiciosPage implements OnInit {
       long: this.beaconLocationInfo.point.lon,
     }
     console.log(newAssitanceTicket);
-    this.crudService.post(this.params.params.assistance_tickets, newAssitanceTicket).then( (assistanceTicket:Object) => {
+    this.crudService.post(this.params.params.assistance_tickets, newAssitanceTicket).then((assistanceTicket: Object) => {
       console.log(assistanceTicket);
       this.assistance = {
         status: assistanceTicket['status'],
         ticketId: assistanceTicket['_id'],
-        type: {...assistanceTicket['assistance_type']}
+        type: { ...assistanceTicket['assistance_type'] }
       }
+      this.ble.stopScan();
       this.beaconService.stop();
-      this.waitingAssignInterval = setInterval(()=>{this.catChangesOnAssign()}, 3000);
-      this.waitingAssignTimeOut = setTimeout(()=>{
+      this.waitingAssignInterval = setInterval(() => { this.catChangesOnAssign() }, 3000);
+      this.waitingAssignTimeOut = setTimeout(() => {
         this.stopTimers();
         this.closeSOSEvent('UNRESOLVED');
-      },300000);
-    }).catch(()=>{
+      }, 300000);
+    }).catch((err) => {
+      this.alert("error:"+err);
       this.beaconService.stop();
+      this.ble.stopScan();
     });
   }
 
   catChangesOnAssign() {
     console.log('entrando al metodo catChangesOnAssign')
-    this.crudService.get(`${this.params.params.assistance_tickets}/${this.assistance['ticketId']}`).subscribe((data)=>{
+    this.crudService.get(`${this.params.params.assistance_tickets}/${this.assistance['ticketId']}`).subscribe((data) => {
       console.log(data);
       if (data['status'] !== 'PENDING') {
         console.log('No esta pendiente el ticket')
@@ -285,19 +304,19 @@ export class ServiciosPage implements OnInit {
       }
     });
   }
-  
+
   stopTimers() {
     console.log('entrando al metodo stopTimers')
     clearInterval(this.waitingAssignInterval)
   }
 
-  closeSOSEvent (action:string) {
+  closeSOSEvent(action: string) {
     const ticketId = this.assistance['ticketId'];
     const body = {
       status: action
     }
     this.crudService.put(`${this.params.params.assistance_tickets}${ticketId}`, body).subscribe(res => {
-      if(res['status'] === action) {
+      if (res['status'] === action) {
         this.stopTimers();
         this.assistance = null;
         this.hasAsist = false;
@@ -314,5 +333,145 @@ export class ServiciosPage implements OnInit {
     console.log(evt);
     console.log(backDrop.ionBackdropTap);
   }
+  //metodo para scannear beacons en android
+  ScanBeaconsAll() {
+    try {
+      this.devices = [];
+      this.ble.startScan([]).subscribe(
+        device => this.onDeviceDiscovered(device),
+        error => console.log("No devices because " + error),
+      );
+    } catch (Error) {
+      console.log(Error.message);
+    }
+  }//fin del metodo scan
+  onDeviceDiscovered(device) {
 
+    this.ngZone.run(() => {
+      this.devices.push(device);
+      this.doBinary();
+     // this.alert("esta scanneado"+this.devices);
+    })
+  }
+  getLastBeacon() {
+    this.storageService.localGet(this.localParams.localParam.lastBeacon).then((resp) => {
+      this.lastBeacon = resp;
+      // console.warn(this.lastBeacon);
+    }, (err) => {
+      console.error(err);
+    });
+  }
+  binarySearch(items, value) {
+    let startIndex = 0,
+      stopIndex = items.length - 1,
+      middle = Math.floor((stopIndex + startIndex) / 2);
+
+    while (items[middle] != value && startIndex < stopIndex) {
+      //adjust search area
+      if (value < items[middle]) {
+        stopIndex = middle - 1;
+      } else if (value > items[middle]) {
+        startIndex = middle + 1;
+      }
+      //recalculate middle
+      middle = Math.floor((stopIndex + startIndex) / 2);
+    }
+    //make sure it's the right value
+    return (items[middle] != value) ? -1 : middle;
+  }
+  getBeaconsPointLocal() {
+    try {
+      this.storageService.localGet(this.localParams.localParam.gatewaybeacons).then((resp) => {
+        this.beaconsPoints = resp;
+        this.timerScanBeacons();
+        
+      }, (err) => {
+        console.log(err);
+       
+      });
+    } catch (e) {
+      console.log(" Error del catch " + e)
+    }
+  }
+  timerScanBeacons() {
+    if(this.platform.is('android')){
+      if(this.stopBeaconsCan==false){
+    this.intervalBeacons = setInterval(() => {
+      this.ScanBeaconsAll();
+      //this.alert('Scanning...');
+    }, 1000);
+  }
 }
+  }
+  doBinary() {
+
+    let items = [];
+    for (let i = 0; i < this.beaconsPoints.length; i++) {
+      items.push(this.beaconsPoints[i].shortid);
+    }
+    let beaconsId = [];
+    let value = [];
+    let lastFive = [];
+    let index;
+    let bdataArray = [];
+
+    for (let i = 0; i < this.devices.length; i++) {
+      beaconsId.push(this.devices[i].id);
+      value.push(beaconsId[i].replace(/:/g, ""));
+      lastFive.push(value[i].substr(value[i].length - 5));
+      index = this.binarySearch(items, lastFive[i]);
+      if (index > -1) {
+        if (this.devices[i].rssi >= -85 && this.devices[i].rssi <= 0) {
+          var bdata = {
+            id: this.devices[i].id,
+            rssi: this.devices[i].rssi
+
+          }
+          bdataArray.push(bdata);
+        }
+      }//fin de if
+    }
+    bdataArray.sort((a, b) => a.rssi - b.rssi);
+    bdataArray.reverse();
+
+    this.storageService.localSave(this.localParams.localParam.lastBeacon, bdataArray[0]);
+    this.testWayFinding();
+  }//fin del dobinary
+  testWayFinding() {
+    this.getLastBeacon();
+    let point;
+    let beaconMac;
+    let index;
+    let value;
+    let items = [];
+    let shortMac;
+ 
+    for (let i = 0; i < this.beaconsPoints.length; i++) {
+      items.push(this.beaconsPoints[i].shortid);
+    }
+    
+    beaconMac = this.lastBeacon.id;
+    shortMac = beaconMac.replace(/:/g, "");
+    value = shortMac.substr(shortMac.length - 5);
+    index = this.binarySearch(items, value);
+
+
+    if (index > -1) {
+      this.beaconLocationInfo=this.beaconsPoints[index];
+      if(!this.stopBeaconsCan){
+        this.stopBeaconsCan=true;
+        this.createAssistanceTicket();
+      }
+      clearInterval(this.intervalBeacons);
+      //this.alert(this.beaconLocationInfo.point.description);
+    }
+    
+  }
+  alert(msg: string) {
+    this.toast.show(msg, '5000', 'center').subscribe(
+      toast => {
+        console.log(toast);
+      }
+    );
+  }
+}//fin
