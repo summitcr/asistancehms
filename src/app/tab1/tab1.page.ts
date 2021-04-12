@@ -465,7 +465,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   getServicesPlaces() {
     this.storeService.localGet(this.localParam.localParam.idPointTicket).then((resp) => {
       this.placesInfo = resp;
-      this.urlId = this.placesInfo[0].externalid;
+      this.urlId=this.placesInfo[0].externalid;
       console.log(this.placesInfo);
     }, (err) => {
       console.error(err);
@@ -644,11 +644,11 @@ export class Tab1Page implements OnInit, AfterViewInit {
       this.devices = [];
       this.ble.startScan([]).subscribe(
         device => this.onDeviceDiscovered(device),
-        error => this.alert("No devices because " + error),
+        error => console.log("No devices because " + error),
 
       );
     } catch (Error) {
-      this.alert(Error.message);
+      console.log(Error.message);
     }
   }//fin del metodo scan
 
@@ -686,12 +686,12 @@ export class Tab1Page implements OnInit, AfterViewInit {
         this.timerWayFinding();
       }, (err) => {
         console.error(err);
-        // console.log(err);
-        this.alert("Error: " + err)
+        console.log(err);
+       // this.alert("Error: " + err)
       });
     } catch (e) {
       console.log(" Error del catch " + e)
-      this.alert("Error del catch " + e);
+     // this.alert("Error del catch " + e);
     }
   }
 
@@ -841,7 +841,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
     if(this.stopToast==false){
       toast.present();
       this.stopToast=true;
-      this.alert("se ejecuta");
+      //this.alert("se ejecuta");
     }
    
   }
