@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { TutorialComponent } from './tutorial/tutorial.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'servicios', pathMatch: 'full' },
+  { path: '', redirectTo: 'staff', pathMatch: 'full' },
   { path: 'login', loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)},
   { path: 'menu', loadChildren: './menu/menu.module#MenuPageModule' },
 
@@ -21,8 +21,11 @@ const routes: Routes = [
   { path: 'registro-covid', loadChildren: './registro-covid/registro-covid.module#RegistroCovidPageModule', },
   { path: 'prenatal-control', loadChildren: './prenatal-control/prenatal-control.module#PrenatalControlPageModule' },
   { path: 'map-routing', loadChildren: './map-routing/map-routing.module#MapRoutingPageModule' },
-  { path: 'servicios', loadChildren: './servicios/servicios.module#ServiciosPageModule',canActivate:[AuthGuardService] },
+  // { path: 'servicios', loadChildren: './servicios/servicios.module#ServiciosPageModule',canActivate:[AuthGuardService] },
   { path: 'tutorial', component: TutorialComponent },
+  { path: 'staff', loadChildren: './staff/staff.module#StaffPageModule',canActivate:[AuthGuardService] },  { path: 'staff-ticket', loadChildren: './staff-ticket/staff-ticket.module#StaffTicketPageModule' },
+
+
   // { path: 'ticket', loadChildren: './ticket/ticket.module#TicketPageModule' },
   //{ path: 'maps/:id', loadChildren: './tab1/tab1.module#Tab1PageModule' },
 

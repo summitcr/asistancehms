@@ -403,7 +403,7 @@ export class RegistroCovidPage implements OnInit {
     
     console.log(this.userModel)
     if (this.userModel.areaDeSalud === "Hospital Monseñor Sanabria") {
-      this.router.navigateByUrl('/servicios');
+      this.router.navigateByUrl('/staff');
     } else {
       this.router.navigate(['/map-routing'], { state: { data: { centro: this.userModel.areaDeSalud } } });
     }

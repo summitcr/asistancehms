@@ -36,10 +36,11 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 import {BottomSheetComponent} from './bottom-sheet/bottom-sheet.component'
 import { TutorialComponent } from './tutorial/tutorial.component';
+import { StaffTicketPage } from './staff-ticket/staff-ticket.page';
 
 @NgModule({
-  declarations: [ AppComponent, ModalPagePage, ModalNotificationPage,HeartrateComponent,CovidComponent, TutorialComponent],
-  entryComponents: [ModalPagePage,ModalNotificationPage,],
+  declarations: [ AppComponent, ModalPagePage, ModalNotificationPage,HeartrateComponent,CovidComponent, TutorialComponent, StaffTicketPage],
+  entryComponents: [ModalPagePage,ModalNotificationPage, StaffTicketPage],
   imports: [BrowserModule,
     BrowserAnimationsModule,
      IonicModule.forRoot(), 

@@ -1,0 +1,96 @@
+<ion-header>
+  <ion-toolbar class="topMenu">
+    <!-- <ion-buttons mode="ios" (click)="logout()" slot="start">
+      <span style="font-size: 16px; color: white;">
+        <i class="fas fa-arrow-left"></i>
+
+      </span>
+      <ion-label style="padding: 4px; "> Salir</ion-label>
+    </ion-buttons> -->
+    <ion-title>
+      Asistencias
+    </ion-title>
+    <img slot="end" src="assets/img/ccss-logo.png" alt="Logo de la Caja Costarricense del Seguro Social" style="width: 40px;">
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <h5 margin-start="5px"></h5>
+  <ion-segment value="All" padding-horizontal="15px">
+    <ion-segment-button value="All">
+      <ion-label>Todos</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="Persona">
+      <ion-label>Personas</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="Activos">
+      <ion-label>Activos</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-list margin-top="5px">
+    <ion-list-header>
+      Recent Notifications
+    </ion-list-header>
+    <ion-item padding-horizontal="10px" (click)="goToStaffTicket()">
+      <span style=" font-size: large; color: lightcoral;" slot="start">
+        <i class="fas fa-ambulance"></i>
+      </span>
+      <ion-label>
+        <h2>Asistencia</h2>
+        <h3>Nombre de la ubicacion</h3>
+      </ion-label>
+      <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
+    </ion-item>
+
+    <ion-item padding-horizontal="10px">
+      <span style=" font-size: large; color: lightcoral;" slot="start">
+        <i class="fas fa-ambulance"></i>
+      </span>
+      <ion-label>
+        <h2>Silla de Ruedas</h2>
+        <h3>Nombre de la ubicacion</h3>
+      </ion-label>
+      <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
+    </ion-item>
+
+    <ion-list-header>
+      Older Notifications
+    </ion-list-header>
+
+    <ion-item padding-horizontal="10px">
+      <span style=" font-size: large; color: lightcoral;" slot="start">
+        <i class="fas fa-ambulance"></i>
+      </span>
+      <ion-label>
+        <h2>Asistencia</h2>
+        <h3>Nombre de la ubicacion</h3>
+      </ion-label>
+      <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
+    </ion-item>
+
+    <ion-item padding-horizontal="10px">
+      <span style=" font-size: large; color: lightcoral;" slot="start">
+        <i class="fas fa-ambulance"></i>
+      </span>
+      <ion-label>
+        <h2>Silla de Ruedas</h2>
+        <h3>Nombre de la ubicacion</h3>
+      </ion-label>
+      <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
+    </ion-item>
+
+    <ion-item padding-horizontal="10px">
+      <span style=" font-size: large; color: lightcoral;" slot="start">
+        <i class="fas fa-ambulance"></i>
+      </span>
+      <ion-label>
+        <h2>Asistencia</h2>
+        <h3>Nombre de la ubicacion</h3>
+      </ion-label>
+      <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
+    </ion-item>
+
+    </ion-list>
+
+</ion-content>
