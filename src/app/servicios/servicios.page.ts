@@ -213,6 +213,7 @@ export class ServiciosPage implements OnInit {
     this.assistanceTypeId = assistanceTypeId;
     this.bottomSheet.close();
     this.hasAsist = true;
+    this.stopBeaconsCan=false;
     this.searchUserLocation();
   }
 
@@ -271,10 +272,12 @@ export class ServiciosPage implements OnInit {
         this.stopTimers();
         this.closeSOSEvent('UNRESOLVED');
       }, 300000);
+      this.stopBeaconsCan=true;
     }).catch((err) => {
-      this.alert("error:"+err);
+      //this.alert("error:"+err);
       this.beaconService.stop();
       this.ble.stopScan();
+      this.stopBeaconsCan=true;
     });
   }
 
@@ -460,6 +463,7 @@ export class ServiciosPage implements OnInit {
       this.beaconLocationInfo=this.beaconsPoints[index];
       if(!this.stopBeaconsCan){
         this.stopBeaconsCan=true;
+        //this.alert(this.beaconLocationInfo.point.description);
         this.createAssistanceTicket();
       }
       clearInterval(this.intervalBeacons);
