@@ -77,6 +77,10 @@ export class UtilsService {
     assistance_tickets:"",
     assistance_types:"",
     getByServiceId:"",
+    people:"",
+    searchAssets:"",
+    searchAssetsGetgeojson:"",
+    searchStatus:""
   };
 
   mapwizeParams = {
@@ -192,8 +196,12 @@ export class UtilsService {
     this.params.searchById = summitHospitalServer + "searchPeopleById/id/"
     this.params.addOrEditPeople = summitHospitalServer + "EditOrAddPeople"
 
-    this.params.assistance_tickets = nodeAPis + "assistance/"
-    this.params.assistance_types = nodeAPis + "assistance/type/"
+    this.params.assistance_tickets = nodeAPis + "assistance/";
+    this.params.assistance_types = nodeAPis + "assistance/type/";
+    this.params.people=nodeAPis+"searchPeople";
+    this.params.searchAssets=nodeAPis+"searchAssets";
+    this.params.searchAssetsGetgeojson=nodeAPis+"searchAssetsGetgeojson";
+    this.params.searchStatus=nodeAPis+"searchStatus";
   }//fin de bob
 
 

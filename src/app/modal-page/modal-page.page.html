@@ -1,20 +1,31 @@
 <ion-header>
-    <ion-toolbar class="topMenu">
-       
-      <ion-title>Ejemplo modals</ion-title>
-  
-    </ion-toolbar>
-  </ion-header>
+  <ion-toolbar class="topMenu">
+
+    <ion-title>Editar Activo</ion-title>
+
+  </ion-toolbar>
+</ion-header>
 
 <ion-content>
+  <ion-item>
+    <h3>{{data.name}}</h3>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Status</ion-label>
+    <ion-select   [(ngModel)]="selectedStatus" [value]="selectedStatus"  interface="popover" placeholder="seleciona el status" >
+      <ion-select-option *ngFor="let status of statues" [value]="status.id">{{status.description}}</ion-select-option>
 
+    </ion-select>
+  </ion-item> <br>
+  <ion-item>
+    <ion-button shape="round" class="btnAceptar" (click)="editStatus()" expand="block" color="primary">Aceptar</ion-button>
+  </ion-item>
 
-    <div id="mapwize"></div>
 </ion-content>
 <ion-footer>
   <ion-toolbar>
     <ion-button expand="full" fill="clear" color="ligth" (click)="closeModal()">
-      Close
+      Cerrar
     </ion-button>
   </ion-toolbar>
 </ion-footer>

@@ -33,7 +33,7 @@
   .secondary{
     color: white !important;
     text-align: center !important;
-    background-color: #203B69 !important;
+    --background-color: #203B69 !important;
     
   }
   .sc-ion-alert-md{
@@ -69,4 +69,19 @@ p{
     margin:auto;
   }
   
+}
+.myclass {
+  img{
+   display:block; 
+   width:90px;
+    margin:auto;
+  }
+  h6{
+    text-align: center ;
+  }
+  
+}
+.modal-class{
+  --height:60%;
+  align-items: flex-end;
 }
