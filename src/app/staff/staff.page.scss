@@ -1,7 +1,8 @@
 .topMenu {
     --background: #203b69;
     --color: #fff;
-    text-align: right;
+    text-align: left;
+    padding: 7px;
   }
   
   ion-content {
@@ -11,3 +12,9 @@
   ion-back-button {
     --color: white;
   }
+
+  .btn{
+    width: 50px;
+    height: 33xp;
+  }
+ 

@@ -1,9 +1,18 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Asistencia</ion-title>
+  <ion-toolbar class="topMenu">
+    <ion-buttons mode="ios" (click)="closeModal()" slot="start">
+      <span style="font-size: 16px; color: white;">
+        <i class="fas fa-arrow-left"></i>
+
+      </span>
+    
+    </ion-buttons>
+    <ion-title>
+      Asistencias
+    </ion-title>
+    <img slot="end" src="assets/img/ccss-logo.png" alt="Logo de la Caja Costarricense del Seguro Social" style="width: 40px;">
   </ion-toolbar>
 </ion-header>
-
 <ion-content>
   <p>Acá va todo lo referente al ticket de asistencia,
     -> Status de la Asistencia

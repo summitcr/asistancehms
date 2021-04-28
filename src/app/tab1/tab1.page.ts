@@ -9,7 +9,7 @@ import { Vibration } from '@ionic-native/vibration/ngx';
 import { Storage } from '@ionic/storage';
 import { StorageService } from '../services/storage.service';
 import { UtilStorageService } from '../services/util-storage.service';
-import mapboxgl from 'mapbox-gl';
+import * as mapboxgl from 'mapbox-gl';
 import { SeePeoplePage } from '../see-people/see-people.page';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BLE } from '@ionic-native/ble/ngx';
@@ -76,6 +76,9 @@ export class Tab1Page implements OnInit, AfterViewInit {
   ticketPosition: any = "No hay tickets";
   ticketServices: any = "No hay tickets";
   btnNombre: any="Mostrar tickets";
+  resultAsset: any;
+  goMarker: any;
+  popup: any;
 
   constructor(private storage: Storage,
     private storeService: StorageService,
@@ -343,10 +346,18 @@ export class Tab1Page implements OnInit, AfterViewInit {
     console.log(this.person.personasocieted);
   }
   setRouteCovid() {
-    if (this.urlId != 0 && this.urlId.length >= 10) {
-      var dir = {
-        "from": { "placeId": "5de81d15dd3e2d00164eb884" },
-        "to": { "placeId": this.urlId },
+    if (this.urlId != 0 ) {
+      this.service.get(this.params.params.searchAssetsGetgeojson + '/' + this.urlId).subscribe((resp) => {
+        this.resultAsset = resp;
+        let lon=this.resultAsset.features[0].geometry.coordinates[0];
+        let lat=this.resultAsset.features[0].geometry.coordinates[1];
+        let desc= this.resultAsset.features[0].properties.pointInfo.description;
+        let name=this.resultAsset.features[0].properties.generalInfo.name;
+        let status=this.resultAsset.features[0].properties.generalInfo.status;
+        this.mapwizeMap.removeMarkers();
+           var dir = {
+        "from": { "placeId": "6060d5c647528a001470791a" },
+        "to": { "placeId": "60621539914ace0014132552" },
         "options": { "isAccessible": false }
       };
 
@@ -357,48 +368,81 @@ export class Tab1Page implements OnInit, AfterViewInit {
         console.error(err);
       });
 
-      this.mapwizeMap.removeMarkers();
-      //Marcador donde se ubica la persona
-      const myCustomMarker = new mapboxgl.Marker({ color: '#C51586' });
-      myCustomMarker.setPopup(new mapboxgl.Popup({
-        closeOnClick: false,
-        closeButton: false
-      }).setHTML('<p>' + " Entrada principal " + '</p>'));
-
-      this.mapwizeMap.on('mapwize:markerclick', e => {
-        alert('marker: ' + e.marker);
+        //Marcador donde se ubica la persona
+       this.popup= new mapboxgl.Popup({ closeButton: false })
+        .setHTML("<strong style='color:black'>Nombre:" + name +
+          "</strong></br><strong style='color:black'>Punto:" + desc +
+          "</strong></br><strong style='color:black'>Status:" + status +
+          "</strong>");
+      const peopleMarker = document.createElement('div');
+      peopleMarker.setAttribute("style", "background-image: url('../../assets/img/SR.png');background-size: cover; width: 35px;height: 40px;");
+      this.goMarker = new mapboxgl.Marker(peopleMarker);
+      this.goMarker.setPopup(this.popup);
+        this.mapwizeMap.on('mapwize:markerclick', e => {
+          alert('marker: ' + e.marker);
+        });
+        if(this.stopZoom==false){
+          this.mapwizeMap.flyTo({
+            center: { lon: lon, lat: lat },
+            //zoom: 20,
+          });
+          this.stopZoom=true;
+        }
+       
+        this.mapwizeMap.addMarker({
+          latitude: lat,
+          longitude: lon,
+          floor: 0,
+        },this.goMarker).then((marker => {
+  
+          var s = "";
+        }));
+        this.popup.addTo(this.mapwizeMap);
+      }, (err) => {
+        console.error(err);
       });
-      this.mapwizeMap.addMarker({
-        latitude: 9.975585796452705,
-        longitude: -84.74963674976945,
-        floor: 0,
-      }, myCustomMarker).then((marker => {
+      // var dir = {
+      //   "from": { "placeId": "5de81d15dd3e2d00164eb884" },
+      //   "to": { "placeId": this.urlId },
+      //   "options": { "isAccessible": false }
+      // };
 
-        var s = "";
-      }));
+      // this.service.save(this.services.mapwizeParams.searchdirection, dir).subscribe((response) => {
+      //   this.mapwizeMap.setDirection(response);
+      // }, (err) => {
+
+      //   console.error(err);
+      // });
+
+      
 
       //Marcador hacia donde va la persona
-      const goMarker = new mapboxgl.Marker({ color: '#C51586' });
-      goMarker.setPopup(new mapboxgl.Popup({
-        closeOnClick: false,
-        closeButton: false
-      }).setHTML('<p>' + " Pasillo  " + '</p>'));
+      // const goMarker = new mapboxgl.Marker({ color: '#C51586' });
+      // goMarker.setPopup(new mapboxgl.Popup({
+      //   closeOnClick: false,
+      //   closeButton: false
+      // }).setHTML('<p>' + " Pasillo  " + '</p>'));
 
-      this.mapwizeMap.on('mapwize:markerclick', e => {
-        alert('marker: ' + e.marker);
-      });
-      this.mapwizeMap.addMarker({
-        latitude: 9.975855958410477,
-        longitude: -84.74947979513465,
-        floor: 0,
-      }, goMarker).then((marker => {
+      // this.mapwizeMap.on('mapwize:markerclick', e => {
+      //   alert('marker: ' + e.marker);
+      // });
+      // this.mapwizeMap.addMarker({
+      //   latitude: 9.975855958410477,
+      //   longitude: -84.74947979513465,
+      //   floor: 0,
+      // }, goMarker).then((marker => {
 
-        var s = "";
-      }));
+      //   var s = "";
+      // }));
     }
   }
   //this.mapwizeMap.removeMarkers();
-
+  togglePopup() {
+    var popup = this.popup;
+    if (!popup) return;
+    else if (popup.isOpen()) popup.remove();
+    else popup.addTo(this.mapwizeMap);
+  }
   //Metodo con el que se esta probando la creacion de ruta y marcador de los tiquetes
   setRoute() {
     //el from placeId es el this.trackBeacons, por el momento esta alambrado para probar los tiquetes
@@ -502,7 +546,9 @@ export class Tab1Page implements OnInit, AfterViewInit {
         apiKey: '439578d65ac560a55bb586feaa299bf7',
         hideMenu: true,
         floor: 0,
-        centerOnVenue: '5de813dcc85b5500169609d6'
+        centerOnVenue: '5de813dcc85b5500169609d6',
+        mapboxToken: 'pk.eyJ1Ijoic3VtbWl0aG9zcGkiLCJhIjoiY2tka2VxOWltMGh5djJ4bHQ1OHN1bWNsaCJ9.swh_-0GuocXTLOfcLFaktw', 
+        style: 'mapbox://styles/mapbox/dark-v10'
 
       }).then(instance => {
         this.mapwizeMap = instance;
@@ -518,7 +564,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
         //Metodo de prueba para las rutas de los tiquetes...
 
         // this.setRoute();
-        // this.setRouteCovid();
+        this.setRouteCovid();
 
       });
 
@@ -682,8 +728,8 @@ export class Tab1Page implements OnInit, AfterViewInit {
       this.storeService.localGet(this.localParam.localParam.gatewaybeacons).then((resp) => {
         this.beaconsPoints = resp;
 
-        this.timerBeacons();
-        this.timerWayFinding();
+        // this.timerBeacons();
+        // this.timerWayFinding();
       }, (err) => {
         console.error(err);
         console.log(err);

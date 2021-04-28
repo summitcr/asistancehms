@@ -10,87 +10,176 @@
     <ion-title>
       Asistencias
     </ion-title>
-    <img slot="end" src="assets/img/ccss-logo.png" alt="Logo de la Caja Costarricense del Seguro Social" style="width: 40px;">
+    <img slot="end" src="assets/img/ccss-logo.png" alt="Logo de la Caja Costarricense del Seguro Social"
+      style="width: 40px;">
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <h5 margin-start="5px"></h5>
-  <ion-segment value="All" padding-horizontal="15px">
+  <ion-segment value="All" padding-horizontal="15px" (ionChange)="segmentChanged($event)">
     <ion-segment-button value="All">
-      <ion-label>Todos</ion-label>
+      <ion-icon name="list"></ion-icon>
     </ion-segment-button>
     <ion-segment-button value="Persona">
-      <ion-label>Personas</ion-label>
+      <ion-icon name="walk"></ion-icon>
     </ion-segment-button>
     <ion-segment-button value="Activos">
-      <ion-label>Activos</ion-label>
+      <ion-icon name="desktop"></ion-icon>
+    </ion-segment-button>
+    <ion-segment-button value="listaActivos">
+      <ion-icon name="clipboard"></ion-icon>
     </ion-segment-button>
   </ion-segment>
 
-  <ion-list margin-top="5px">
-    <ion-list-header>
-      Recent Notifications
-    </ion-list-header>
-    <ion-item padding-horizontal="10px" (click)="goToStaffTicket()">
-      <span style=" font-size: large; color: lightcoral;" slot="start">
-        <i class="fas fa-ambulance"></i>
-      </span>
-      <ion-label>
-        <h2>Asistencia</h2>
-        <h3>Nombre de la ubicacion</h3>
-      </ion-label>
-      <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
-    </ion-item>
+  <div [ngSwitch]="type">
+    <ion-list margin-top="5px" *ngSwitchCase="'All'">
+      <ion-list-header>
+        Notificaciones Recientes
+      </ion-list-header>
+      <ion-item padding-horizontal="10px" (click)="goToStaffTicket()">
+        <span style=" font-size: large; color: lightcoral;" slot="start">
+          <i class="fas fa-ambulance"></i>
+        </span>
+        <ion-label>
+          <h2>Asistencia</h2>
+          <h3>Nombre de la ubicacion</h3>
+        </ion-label>
+        <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
+      </ion-item>
 
-    <ion-item padding-horizontal="10px">
-      <span style=" font-size: large; color: lightcoral;" slot="start">
-        <i class="fas fa-ambulance"></i>
-      </span>
-      <ion-label>
-        <h2>Silla de Ruedas</h2>
-        <h3>Nombre de la ubicacion</h3>
-      </ion-label>
-      <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
-    </ion-item>
+      <ion-item padding-horizontal="10px">
+        <span style=" font-size: large; color: lightcoral;" slot="start">
+          <i class="fas fa-wheelchair"></i>
+        </span>
+        <ion-label>
+          <h2>Silla de Ruedas</h2>
+          <h3>Nombre de la ubicacion</h3>
+        </ion-label>
+        <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
+      </ion-item>
 
-    <ion-list-header>
-      Older Notifications
-    </ion-list-header>
+      <ion-list-header>
+        Notificaciones Antiguas
+      </ion-list-header>
 
-    <ion-item padding-horizontal="10px">
-      <span style=" font-size: large; color: lightcoral;" slot="start">
-        <i class="fas fa-ambulance"></i>
-      </span>
-      <ion-label>
-        <h2>Asistencia</h2>
-        <h3>Nombre de la ubicacion</h3>
-      </ion-label>
-      <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
-    </ion-item>
+      <ion-item padding-horizontal="10px">
+        <span style=" font-size: large; color: lightcoral;" slot="start">
+          <i class="fas fa-ambulance"></i>
+        </span>
+        <ion-label>
+          <h2>Asistencia</h2>
+          <h3>Nombre de la ubicacion</h3>
+        </ion-label>
+        <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
+      </ion-item>
 
-    <ion-item padding-horizontal="10px">
-      <span style=" font-size: large; color: lightcoral;" slot="start">
-        <i class="fas fa-ambulance"></i>
-      </span>
-      <ion-label>
-        <h2>Silla de Ruedas</h2>
-        <h3>Nombre de la ubicacion</h3>
-      </ion-label>
-      <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
-    </ion-item>
+      <ion-item padding-horizontal="10px">
+        <span style=" font-size: large; color: lightcoral;" slot="start">
+          <i class="fas fa-wheelchair"></i>
+        </span>
+        <ion-label>
+          <h2>Silla de Ruedas</h2>
+          <h3>Nombre de la ubicacion</h3>
+        </ion-label>
+        <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
+      </ion-item>
 
-    <ion-item padding-horizontal="10px">
-      <span style=" font-size: large; color: lightcoral;" slot="start">
-        <i class="fas fa-ambulance"></i>
-      </span>
-      <ion-label>
-        <h2>Asistencia</h2>
-        <h3>Nombre de la ubicacion</h3>
-      </ion-label>
-      <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
-    </ion-item>
-
+      <ion-item padding-horizontal="10px">
+        <span style=" font-size: large; color: lightcoral;" slot="start">
+          <i class="fas fa-ambulance"></i>
+        </span>
+        <ion-label>
+          <h2>Asistencia</h2>
+          <h3>Nombre de la ubicacion</h3>
+        </ion-label>
+        <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
+      </ion-item>
     </ion-list>
 
+    <!-- Lista de las Personas -->
+    <ion-list margin-top="5px" *ngSwitchCase="'Persona'">
+      <ion-list-header>
+        Personas
+      </ion-list-header>
+      <ion-item padding-horizontal="10px" (click)="goToStaffTicket()">
+        <span style=" font-size: large; color: lightcoral;" slot="start">
+          <i class="fas fa-ambulance"></i>
+        </span>
+        <ion-label>
+          <h2>Asistencia</h2>
+          <h3>Nombre de la ubicacion</h3>
+        </ion-label>
+        <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
+      </ion-item>
+      <ion-item padding-horizontal="10px" (click)="goToStaffTicket()">
+        <span style=" font-size: large; color: lightcoral;" slot="start">
+          <i class="fas fa-ambulance"></i>
+        </span>
+        <ion-label>
+          <h2>Asistencia</h2>
+          <h3>Nombre de la ubicacion</h3>
+        </ion-label>
+        <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
+      </ion-item>
+
+      
+    </ion-list>
+
+    <!-- Activos -->
+    <ion-list margin-top="5px" *ngSwitchCase="'Activos'">
+      <ion-list-header>
+         Activos
+      </ion-list-header>
+ 
+      <ion-item padding-horizontal="10px">
+        <span style=" font-size: large; color: lightcoral;" slot="start">
+          <i class="fas fa-wheelchair"></i>
+        </span>
+        <ion-label>
+          <h2>Silla de Ruedas</h2>
+          <h3>Nombre de la ubicacion</h3>
+        </ion-label>
+        <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
+      </ion-item>
+      <ion-item padding-horizontal="10px">
+        <span style=" font-size: large; color: lightcoral;" slot="start">
+          <i class="fas fa-wheelchair"></i>
+        </span>
+        <ion-label>
+          <h2>Silla de Ruedas 2</h2>
+          <h3>Nombre de la ubicacion</h3>
+        </ion-label>
+        <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
+      </ion-item>
+     
+    </ion-list>
+
+    <!-- Total de activos -->
+    <ion-list *ngSwitchCase="'listaActivos'">
+      <ion-list-header>
+        Lista de Activos
+      </ion-list-header>
+      <ion-item padding-horizontal="5px" *ngFor="let item of peopleAssets">
+        <span style=" font-size: large; color: lightcoral;" slot="start">
+          <i class="fab fa-accessible-icon"></i>
+        </span>
+        <ion-label>
+          {{item.identifier}}
+        </ion-label>
+
+        <ion-button shape="round" class="secondary btn" (click)="presentEditModal(item)" >
+          <ion-icon slot="icon-only" name="create"></ion-icon>
+        </ion-button>
+        <ion-button shape="round" class="secondary btn" (click)="goMap(item)" >
+          <ion-icon slot="icon-only" name="paper-plane"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+  </div>
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed" (click)="goToIndoors()" style="z-index: 1;">
+    <ion-fab-button size="small" color="primary">
+      <ion-icon name="navigate"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
