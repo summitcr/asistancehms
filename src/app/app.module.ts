@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Injectable, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
@@ -37,6 +37,10 @@ import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 import {BottomSheetComponent} from './bottom-sheet/bottom-sheet.component'
 import { TutorialComponent } from './tutorial/tutorial.component';
 import { StaffTicketPage } from './staff-ticket/staff-ticket.page';
+import { SocketIoModule } from 'ngx-socket-io';
+import { SocketStaffService } from './services/socket-staff.service'
+
+
 
 @NgModule({
   declarations: [ AppComponent, ModalPagePage, ModalNotificationPage,HeartrateComponent,CovidComponent, TutorialComponent, StaffTicketPage],
@@ -51,8 +55,10 @@ import { StaffTicketPage } from './staff-ticket/staff-ticket.page';
      IonicStorageModule.forRoot(),
      FormsModule, 
      ReactiveFormsModule,
+     SocketIoModule,
     ],
   providers: [
+    SocketStaffService,
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

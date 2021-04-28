@@ -64,6 +64,7 @@
     "mapwize-cordova": "git+https://github.com/Mapwize/mapwize-cordova.git",
     "mapwize-ui": "^1.0.9",
     "ng2-charts": "^2.3.0",
+    "ngx-socket-io": "^4.0.0",
     "rxjs": "~6.5.1",
     "tslib": "^1.9.0",
     "zone.js": "~0.9.1"

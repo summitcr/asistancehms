@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { StaffTicketPage } from '../staff-ticket/staff-ticket.page';
+import { SocketStaffService } from '../services/socket-staff.service'
 
 @Component({
   selector: 'app-staff',
@@ -9,9 +10,21 @@ import { StaffTicketPage } from '../staff-ticket/staff-ticket.page';
 })
 export class StaffPage implements OnInit {
 
-  constructor(public modalController: ModalController) {}
+  socket:SocketStaffService;
+
+  constructor(public modalController: ModalController,) {
+    this.socket = new SocketStaffService('6050efce420fd8003292aa83');
+  }
 
   ngOnInit() {
+    this.socket.connect();
+    this.socket.on('on conection', (data)=>{
+      console.log(data)
+    })
+    this.socket.on('change', (data)=>{
+      console.log(data)
+    })
+    
   }
 
   async presentModal() {
