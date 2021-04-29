@@ -80,7 +80,8 @@ export class UtilsService {
     people:"",
     searchAssets:"",
     searchAssetsGetgeojson:"",
-    searchStatus:""
+    searchStatus:"",
+    socketAsisstance:""
   };
 
   mapwizeParams = {
@@ -108,6 +109,7 @@ export class UtilsService {
     var covidURL = 'http://3.15.146.53/CovidHospitalDev/api/'; //dev
     var summitHospitalServer = 'http://3.15.146.53/covidHospitalDev/api/'; //dev
     var nodeAPis = 'http://3.15.146.53:3800/'; // dev
+    // var nodeAPis = 'http://localhost:4000/'; // dev
     //Apis server QA
     //var newserverURL = 'http://3.23.88.169/summit/api/';
     //var ticketsURL = 'http://3.23.88.169/ticketsHospital/api/';
@@ -197,6 +199,7 @@ export class UtilsService {
     this.params.addOrEditPeople = summitHospitalServer + "EditOrAddPeople"
 
     this.params.assistance_tickets = nodeAPis + "assistance/";
+    this.params.socketAsisstance = nodeAPis + "assistance";
     this.params.assistance_types = nodeAPis + "assistance/type/";
     this.params.people=nodeAPis+"searchPeople";
     this.params.searchAssets=nodeAPis+"searchAssets";
