@@ -5,7 +5,7 @@ import { ModalPagePage } from '../modal-page/modal-page.page';
 import { CrudService } from '../services/crud.service';
 import { UtilsService } from '../services/utils.service';
 import { StaffTicketPage } from '../staff-ticket/staff-ticket.page';
-import { SocketStaffService } from '../services/socket-staff.service'
+import { SocketStaffService, SocketStaff } from '../services/socket-staff.service'
 
 @Component({
   selector: 'app-staff',
@@ -16,24 +16,32 @@ export class StaffPage implements OnInit {
   type: string;
   peopleAssets: any;
   selected:any;
-
-  socket:SocketStaffService;
+  socket: SocketStaff
     
-  constructor(public modalController: ModalController,
+  constructor(
+    public modalController: ModalController,
     private router: Router,
     private services: CrudService,
-    private params: UtilsService,) {
-    this.socket = new SocketStaffService('6050efce420fd8003292aa83');
+    private params: UtilsService,
+    public socketService: SocketStaffService
+    ) { 
+
     }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.type='All';
     this.filterAssetStaff('Silla de Ruedas'); 
-   
+    this.socket = await this.socketService.createSocket();
     this.socket.connect();
-    this.socket.on('on conection', (data)=>{
-      console.log(data)
-    })
+
+    console.log(this.socket)
+   
+    // this.socket.on('connection', (data)=>{
+    //   console.log(data)
+    // })
+    // this.socket.on('on connection', (data)=>{
+    //   console.log(data)
+    // })
     this.socket.on('change', (data)=>{
       console.log(data)
     })
