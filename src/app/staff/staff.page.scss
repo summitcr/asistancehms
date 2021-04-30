@@ -9,6 +9,16 @@
     h4{
       font-size: x-small;
     }
+    .badge {
+      position: absolute;
+      height: 6px;
+      width: 6px;
+      top: 12px;
+      left: 8px;
+      border-radius: 50%;
+      background-color: red;
+      font-size: 0.8em;
+    }
   
   }
   

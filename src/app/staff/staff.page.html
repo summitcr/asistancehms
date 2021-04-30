@@ -34,79 +34,43 @@
 
   <div [ngSwitch]="type">
     <ion-list margin-top="5px" *ngSwitchCase="'All'">
-      <ion-list-header>
-        Notificaciones Recientes
-      </ion-list-header>
+      <ng-container *ngFor="let ticket of convertMapToArray(notificationsChanges)">
+        <ion-list-header>
+          Notificaciones Recientes
+        </ion-list-header>
+        
+        <ion-item *ngIf="isRecent(ticket[1])" (click)="goToStaffTicket(ticket)">
+          <span style=" font-size: large; color: lightcoral;" slot="start">
+            <i class="fas fa-ambulance"></i>
+            <div *ngIf="!ticket[1].viewed" mode="ios" class="badge"></div>
+          </span>
+          <ion-label>
+            <h2>{{ticket[1].assistance_type.name}}</h2>
+            <!-- <h3>{{ticket[1].patient.name}}</h3> -->
+            <h4>{{ticket[1].init_location}}</h4>
+          </ion-label>
+        </ion-item>
+        
+        <ion-list-header>
+          Notificaciones Antiguas
+        </ion-list-header>
+
+        <ion-item *ngIf="!isRecent(ticket[1])" padding-horizontal="10px" (click)="goToStaffTicket(ticket)">
+          <span style=" font-size: large; color: lightcoral;" slot="start">
+            <i class="fas fa-ambulance"></i>
+            <div *ngIf="!ticket[1].viewed" mode="ios" class="badge"></div>
+          </span>
+          <ion-label>
+            <h2>{{ticket[1].assistance_type.name}}</h2>
+            <!-- <h3>{{ticket[1].patient.name}}</h3> -->
+            <h4>{{ticket[1].init_location}}</h4>
+          </ion-label>
+        </ion-item>
+
+      </ng-container>
       
-      <ion-item *ngFor="let ticket of convertMapToArray(notificationsChanges)" padding-horizontal="10px" (click)="goToStaffTicket(ticket)">
-        <span style=" font-size: large; color: lightcoral;" slot="start">
-          <i class="fas fa-ambulance"></i>
-        </span>
-        <ion-label>
-          <h2>{{ticket[1].assistance_type.name}}</h2>
-          <!-- <h3>{{ticket[1].patient.name}}</h3> -->
-          <h4>{{ticket[1].init_location}}</h4>
-        </ion-label>
-      </ion-item>
 
-      <ion-item padding-horizontal="10px" (click)="goToStaffTicket()">
-        <span style=" font-size: large; color: lightcoral;" slot="start">
-          <i class="fas fa-ambulance"></i>
-        </span>
-        <ion-label>
-          <h2>Asistencia</h2>
-          <h3>Nombre de la ubicacion</h3>
-        </ion-label>
-        <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
-      </ion-item>
 
-      <ion-item padding-horizontal="10px">
-        <span style=" font-size: large; color: lightcoral;" slot="start">
-          <i class="fas fa-wheelchair"></i>
-        </span>
-        <ion-label>
-          <h2>Silla de Ruedas</h2>
-          <h3>Nombre de la ubicacion</h3>
-        </ion-label>
-        <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
-      </ion-item>
-
-      <ion-list-header>
-        Notificaciones Antiguas
-      </ion-list-header>
-
-      <ion-item padding-horizontal="10px">
-        <span style=" font-size: large; color: lightcoral;" slot="start">
-          <i class="fas fa-ambulance"></i>
-        </span>
-        <ion-label>
-          <h2>Asistencia</h2>
-          <h3>Nombre de la ubicacion</h3>
-        </ion-label>
-        <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
-      </ion-item>
-
-      <ion-item padding-horizontal="10px">
-        <span style=" font-size: large; color: lightcoral;" slot="start">
-          <i class="fas fa-wheelchair"></i>
-        </span>
-        <ion-label>
-          <h2>Silla de Ruedas</h2>
-          <h3>Nombre de la ubicacion</h3>
-        </ion-label>
-        <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
-      </ion-item>
-
-      <ion-item padding-horizontal="10px">
-        <span style=" font-size: large; color: lightcoral;" slot="start">
-          <i class="fas fa-ambulance"></i>
-        </span>
-        <ion-label>
-          <h2>Asistencia</h2>
-          <h3>Nombre de la ubicacion</h3>
-        </ion-label>
-        <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
-      </ion-item>
     </ion-list>
 
     <!-- Lista de las Personas -->
