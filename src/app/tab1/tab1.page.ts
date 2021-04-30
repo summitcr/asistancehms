@@ -374,8 +374,17 @@ export class Tab1Page implements OnInit, AfterViewInit {
           "</strong></br><strong style='color:black'>Punto:" + desc +
           "</strong></br><strong style='color:black'>Status:" + status +
           "</strong>");
-      const peopleMarker = document.createElement('div');
-      peopleMarker.setAttribute("style", "background-image: url('../../assets/img/SR.png');background-size: cover; width: 35px;height: 40px;");
+          
+        if (status == "Ninguno                                 ") {
+          var peopleMarker = document.createElement('div');
+          peopleMarker.setAttribute("style", "background-image: url('../../assets/img/none.png');background-size: cover; width: 35px;height: 40px;");
+        }else if(status == "Ocupado                                 "){//ocupado
+          var peopleMarker = document.createElement('div');
+          peopleMarker.setAttribute("style", "background-image: url('../../assets/img/SR02.png');background-size: cover; width: 35px;height: 40px;");
+        }else if (status == "Desocupado                              ") {//desocupado
+         var peopleMarker = document.createElement('div');
+          peopleMarker.setAttribute("style", "background-image: url('../../assets/img/SR.png');background-size: cover; width: 35px;height: 40px;");
+        }
       this.goMarker = new mapboxgl.Marker(peopleMarker);
       this.goMarker.setPopup(this.popup);
         this.mapwizeMap.on('mapwize:markerclick', e => {
