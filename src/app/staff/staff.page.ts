@@ -37,6 +37,7 @@ export class StaffPage implements OnInit {
     this.socket.connect();
 
     this.socket.on('change', (data) => {
+      console.log(data);
       const { _id: id, ...rest } = data
       this.notificationsChanges.set(id, rest)
     })
