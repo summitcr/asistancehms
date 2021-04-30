@@ -7,8 +7,12 @@
 </ion-header>
 
 <ion-content>
+  <ion-card-content >
   <ion-item>
-    <h3>{{data.name}}</h3>
+    <div class="titleAsset">
+      <p>{{data.name}}</p>
+    </div>
+   
   </ion-item>
   <ion-item>
     <ion-label position="floating">Status</ion-label>
@@ -17,10 +21,10 @@
 
     </ion-select>
   </ion-item> <br>
-  <ion-item>
-    <ion-button shape="round" class="btnAceptar" (click)="editStatus()" expand="block" color="primary">Aceptar</ion-button>
-  </ion-item>
 
+    <ion-button shape="round" class="btnAceptar" (click)="editStatus()" expand="block" color="primary">Aceptar</ion-button>
+  
+</ion-card-content>
 </ion-content>
 <ion-footer>
   <ion-toolbar>
