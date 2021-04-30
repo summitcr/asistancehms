@@ -1,5 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+
+interface TicketStaffInterface {
+  _id?: string,
+  status: string,
+  assistance_type: {
+    _id: string,
+    name: string,
+  },
+  patient: {
+    id: Number,
+    identifier: string,
+    identifierType: string,
+    name: string,
+    telephone: string,
+  },
+  init_location: string,
+  lat: string,
+  long: string,
+  createdAt: string,
+  updatedAt: string,
+  assistant?: {
+    name: string,
+    _id: string,
+    identifier: string,
+  }
+}
 
 @Component({
   selector: 'app-staff-ticket',
@@ -8,11 +34,16 @@ import { ModalController } from '@ionic/angular';
 })
 export class StaffTicketPage implements OnInit {
 
-  constructor(private modalController:ModalController) { }
+  @Input() id: string;
+  @Input() value: Object;
+
+  constructor(private modalController: ModalController) { }
 
   ngOnInit() {
   }
-  closeModal(){
-    this.modalController.dismiss();
-      }
+  closeModal() {
+    this.modalController.dismiss({
+      'dismissed': true
+    });
+  }
 }

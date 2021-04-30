@@ -15,57 +15,61 @@ import { SocketStaffService, SocketStaff } from '../services/socket-staff.servic
 export class StaffPage implements OnInit {
   type: string;
   peopleAssets: any;
-  selected:any;
+  selected: any;
   socket: SocketStaff
-    
+  notificationsChanges = new Map();
+
+
   constructor(
     public modalController: ModalController,
     private router: Router,
     private services: CrudService,
     private params: UtilsService,
     public socketService: SocketStaffService
-    ) { 
+  ) {
 
-    }
+  }
 
   async ngOnInit() {
-    this.type='All';
-    this.filterAssetStaff('Silla de Ruedas'); 
+    this.type = 'All';
+    this.filterAssetStaff('Silla de Ruedas');
     this.socket = await this.socketService.createSocket();
     this.socket.connect();
 
-    console.log(this.socket)
-   
-    // this.socket.on('connection', (data)=>{
-    //   console.log(data)
-    // })
-    // this.socket.on('on connection', (data)=>{
-    //   console.log(data)
-    // })
-    this.socket.on('change', (data)=>{
-      console.log(data)
+    this.socket.on('change', (data) => {
+      const { _id: id, ...rest } = data
+      this.notificationsChanges.set(id, rest)
     })
   }
 
-  async presentModal() {
+  async presentModal(id, value) {
     const modal = await this.modalController.create({
       component: StaffTicketPage,
+      componentProps: {id, value}
     });
     return await modal.present();
   }
-goMap(item){
-  //console.log(item)
-  this.router.navigateByUrl('/menu/first/tabs/tab1/'+item.id);
-}
 
-  goToStaffTicket(){
-    this.presentModal()
+  convertMapToArray (map) {
+    return [...map]
+  }
+
+  goMap(item) {
+    //console.log(item)
+    this.router.navigateByUrl('/menu/first/tabs/tab1/' + item.id);
+  }
+
+  goToStaffTicket(ticketFromMap) {
+    const [id, value] = ticketFromMap
+    console.log(id)
+    console.log(value)
+    this.presentModal(id, value)
   }
   goToIndoors() {
     this.router.navigateByUrl('/menu/first/tabs/tab1/0');
   }
   segmentChanged(ev: any) {
-    this.type=ev.detail.value;
+    this.type = ev.detail.value;
     console.log('Segment changed', ev);
   }
   filterAssetStaff(datos: string) {
@@ -95,7 +99,7 @@ goMap(item){
         data: items
       }
     });
-    modal.onWillDismiss().then((data)=>{
+    modal.onWillDismiss().then((data) => {
       console.log(data);
       //custom code
     });

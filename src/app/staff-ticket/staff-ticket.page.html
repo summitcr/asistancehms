@@ -14,6 +14,14 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  <h4>{{id}}</h4>
+  <h2>{{value['assistance_type'].name}}</h2>
+  <h3>Nombre: {{value['status']}}</h3>
+  <h3>Nombre: {{value['patient'].name}}</h3>
+  <h3>Ced: {{value['patient'].identifier}}</h3>
+  <h3>Telefono: {{value['patient'].telephone}}</h3>
+  <h3>Localizacion: {{value['init_location']}}</h3>
+  <h3>Hora de solicitud: {{value['createdAt']}}</h3>
   <p>Acá va todo lo referente al ticket de asistencia,
     -> Status de la Asistencia
     -> Nombre del Paciente

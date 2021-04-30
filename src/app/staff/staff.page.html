@@ -37,6 +37,18 @@
       <ion-list-header>
         Notificaciones Recientes
       </ion-list-header>
+      
+      <ion-item *ngFor="let ticket of convertMapToArray(notificationsChanges)" padding-horizontal="10px" (click)="goToStaffTicket(ticket)">
+        <span style=" font-size: large; color: lightcoral;" slot="start">
+          <i class="fas fa-ambulance"></i>
+        </span>
+        <ion-label>
+          <h2>{{ticket[1].assistance_type.name}}</h2>
+          <!-- <h3>{{ticket[1].patient.name}}</h3> -->
+          <h4>{{ticket[1].init_location}}</h4>
+        </ion-label>
+      </ion-item>
+
       <ion-item padding-horizontal="10px" (click)="goToStaffTicket()">
         <span style=" font-size: large; color: lightcoral;" slot="start">
           <i class="fas fa-ambulance"></i>
