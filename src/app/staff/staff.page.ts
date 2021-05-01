@@ -6,6 +6,7 @@ import { CrudService } from '../services/crud.service';
 import { UtilsService } from '../services/utils.service';
 import { StaffTicketPage } from '../staff-ticket/staff-ticket.page';
 import { SocketStaffService, SocketStaff } from '../services/socket-staff.service'
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-staff',
@@ -18,6 +19,8 @@ export class StaffPage implements OnInit {
   selected: any;
   socket: SocketStaff
   notificationsChanges = new Map();
+  recentList = [];
+  previousList = [];
 
   constructor(
     public modalController: ModalController,
@@ -42,8 +45,19 @@ export class StaffPage implements OnInit {
       rest['updatedAt'] = this.convertDateTimeZone(rest['updatedAt']);
       rest['createdAt'] = this.convertDateTimeZone(rest['createdAt']);
       this.notificationsChanges.set(id, rest)
-      console.log(data);
+      this.serpareteRecentPrevious()
     })
+  }
+
+  serpareteRecentPrevious () {
+    this.recentList = [];
+    this.previousList = [];
+    this.notificationsChanges.forEach((value,key)=>{
+      if (this.isRecent(value['updatedAt'])) this.recentList.push([key,value])
+      if (!this.isRecent(value['updatedAt'])) this.previousList.push([key,value])
+    });
+    this.sortArrayByDate(this.recentList);
+    this.sortArrayByDate(this.previousList);
   }
 
   async presentModal(id, value) {
@@ -55,26 +69,19 @@ export class StaffPage implements OnInit {
     return await modal.present();
   }
 
-  convertMapToArray (map) {
-    return [...map].sort((a, b)=>{
+  sortArrayByDate (array) {
+    return array.sort((a, b)=>{
       const aDate = new Date(a[1].updatedAt).getTime();
       const bDate = new Date(b[1].updatedAt).getTime();
       return bDate - aDate;
     });
   }
 
-  isRecent (ticket) {
-    console.log(ticket['updatedAt'])
-    const notiTime = new Date(ticket['updatedAt']).getTime();
-    const nowDate = this.convertDateTimeZone();
-    const nowTime = new Date(nowDate).getTime();
-    const diffTime = nowTime - notiTime
-    const diffSeconds = Math.floor( diffTime / 1000 );
-    const diffMinutes = diffSeconds / 60;
-    // console.log(diffMinutes)
-    if (diffTime <= 0) return true;
-    if (diffMinutes <= 10) return true;
-    if (diffMinutes > 10) return false;
+  isRecent (ticketTime) {
+    const minuteDiff = moment().diff(moment(ticketTime),'minute')
+    if (minuteDiff == 0) return true;
+    if (minuteDiff <= 10) return true;
+    if (minuteDiff > 10) return false;
   }
 
   convertDateTimeZone (stringDate=undefined) {

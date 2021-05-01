@@ -34,12 +34,11 @@
 
   <div [ngSwitch]="type">
     <ion-list margin-top="5px" *ngSwitchCase="'All'">
-      <ng-container *ngFor="let ticket of convertMapToArray(notificationsChanges)">
         <ion-list-header>
           Notificaciones Recientes
         </ion-list-header>
         
-        <ion-item *ngIf="isRecent(ticket[1])" (click)="goToStaffTicket(ticket)">
+        <ion-item *ngFor="let ticket of recentList" (click)="goToStaffTicket(ticket)">
           <span style=" font-size: large; color: lightcoral;" slot="start">
             <i class="fas fa-ambulance"></i>
             <div *ngIf="!ticket[1].viewed" mode="ios" class="badge"></div>
@@ -55,7 +54,7 @@
           Notificaciones Antiguas
         </ion-list-header>
 
-        <ion-item *ngIf="!isRecent(ticket[1])" padding-horizontal="10px" (click)="goToStaffTicket(ticket)">
+        <ion-item *ngFor="let ticket of previousList" padding-horizontal="10px" (click)="goToStaffTicket(ticket)">
           <span style=" font-size: large; color: lightcoral;" slot="start">
             <i class="fas fa-ambulance"></i>
             <div *ngIf="!ticket[1].viewed" mode="ios" class="badge"></div>
@@ -66,10 +65,6 @@
             <h4>{{ticket[1].init_location}}</h4>
           </ion-label>
         </ion-item>
-
-      </ng-container>
-      
-
 
     </ion-list>
 
