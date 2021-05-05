@@ -42,28 +42,33 @@ export class StaffPage implements OnInit {
     this.socket.connect();
 
     await this.getNotificationsFromStorage();
+    this.serpareteRecentPrevious();
     
     this.socket.on('change', (data) => {
       console.log('esta entrando al socket')
-      this.saveNotificationsToStorage();
       data['viewed'] = false;
       let { _id: id, ...rest } = data
       rest['updatedAt'] = this.convertDateTimeZone(rest['updatedAt']);
       rest['createdAt'] = this.convertDateTimeZone(rest['createdAt']);
       this.notificationsChanges.set(id, rest)
       this.serpareteRecentPrevious();
+      this.saveNotificationsToStorage();
     })
   }
 
   async getNotificationsFromStorage(){
     const resp = await this.storage.localGet(this.utilStorage.localParam.notifications);
+    if (resp instanceof Array) this.notificationsChanges = new Map(resp)
     console.log(resp)
-    this.notificationsChanges = resp == Map ? resp : this.notificationsChanges 
+    console.log(this.notificationsChanges)
   }
 
   saveNotificationsToStorage () {
-    console.log('esta guardando')
-    this.storage.localSave(this.utilStorage.localParam.notifications, 'guarda informacion')
+    let allNorificationsArray = [];
+    this.notificationsChanges.forEach((value, key) => {
+      allNorificationsArray.push([key,value])
+    });
+    this.storage.localSave(this.utilStorage.localParam.notifications, allNorificationsArray)
   }
 
   serpareteRecentPrevious () {
@@ -79,6 +84,7 @@ export class StaffPage implements OnInit {
 
   async presentModal(id, value) {
     value['viewed'] = true
+    this.saveNotificationsToStorage()
     const modal = await this.modalController.create({
       component: StaffTicketPage,
       componentProps: {id, value}
@@ -97,8 +103,8 @@ export class StaffPage implements OnInit {
   isRecent (ticketTime) {
     const minuteDiff = moment().diff(moment(ticketTime),'minute')
     if (minuteDiff == 0) return true;
-    if (minuteDiff <= 10) return true;
-    if (minuteDiff > 10) return false;
+    if (minuteDiff <= 5) return true;
+    if (minuteDiff > 5) return false;
   }
 
   convertDateTimeZone (stringDate=undefined) {
