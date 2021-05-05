@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import * as moment from 'moment';
 
 interface TicketStaffInterface {
   _id?: string,
@@ -65,6 +66,12 @@ date: any;
     this.date = day + '-' + month + '-' + year + ' a las: ' + hour + ':' + minutes + ' ' + ampm;
     
   }
+
+  humanizeDate (date) {
+    moment.locale('es')
+    return moment(date).fromNow();
+  }
+
   closeModal() {
     this.modalController.dismiss({
       'dismissed': true

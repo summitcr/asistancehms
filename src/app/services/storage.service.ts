@@ -20,6 +20,7 @@ export class StorageService {
   }
 
   localSave(key, data: any): void {
+    console.log('Entra a la funcion de local save')
     this.storage.ready().then(() => {
       this.storage.set(key, data);
     },(err) => {

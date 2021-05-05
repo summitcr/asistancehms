@@ -6,6 +6,8 @@ import { CrudService } from '../services/crud.service';
 import { UtilsService } from '../services/utils.service';
 import { StaffTicketPage } from '../staff-ticket/staff-ticket.page';
 import { SocketStaffService, SocketStaff } from '../services/socket-staff.service'
+import { StorageService } from '../services/storage.service'
+import { UtilStorageService } from '../services/util-storage.service'
 import * as moment from 'moment';
 
 @Component({
@@ -27,9 +29,10 @@ export class StaffPage implements OnInit {
     private router: Router,
     private services: CrudService,
     private params: UtilsService,
-    public socketService: SocketStaffService
+    public socketService: SocketStaffService,
+    private storage: StorageService,
+    private utilStorage: UtilStorageService
   ) {
-
   }
 
   async ngOnInit() {
@@ -38,15 +41,29 @@ export class StaffPage implements OnInit {
     this.socket = await this.socketService.createSocket();
     this.socket.connect();
 
+    await this.getNotificationsFromStorage();
+    
     this.socket.on('change', (data) => {
       console.log('esta entrando al socket')
+      this.saveNotificationsToStorage();
       data['viewed'] = false;
       let { _id: id, ...rest } = data
       rest['updatedAt'] = this.convertDateTimeZone(rest['updatedAt']);
       rest['createdAt'] = this.convertDateTimeZone(rest['createdAt']);
       this.notificationsChanges.set(id, rest)
-      this.serpareteRecentPrevious()
+      this.serpareteRecentPrevious();
     })
+  }
+
+  async getNotificationsFromStorage(){
+    const resp = await this.storage.localGet(this.utilStorage.localParam.notifications);
+    console.log(resp)
+    this.notificationsChanges = resp == Map ? resp : this.notificationsChanges 
+  }
+
+  saveNotificationsToStorage () {
+    console.log('esta guardando')
+    this.storage.localSave(this.utilStorage.localParam.notifications, 'guarda informacion')
   }
 
   serpareteRecentPrevious () {
