@@ -15,9 +15,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <h5 margin-start="5px"></h5>
-  <ion-segment value="All" padding-horizontal="15px" (ionChange)="segmentChanged($event)">
+<ion-content class="ion-padding">
+  <ion-segment value="All" (ionChange)="segmentChanged($event)">
     <ion-segment-button value="All">
       <ion-icon name="list"></ion-icon>
     </ion-segment-button>
@@ -32,9 +31,9 @@
     </ion-segment-button>
   </ion-segment>
 
-  <div [ngSwitch]="type">
-    <ion-list margin-top="5px" *ngSwitchCase="'All'">
-        <ion-list-header>
+  <div [ngSwitch]="type" class="ion-margin-vertical">
+    <ion-list *ngSwitchCase="'All'">
+        <ion-list-header class="ion-no-padding">
           Notificaciones Recientes
         </ion-list-header>
         
@@ -50,11 +49,11 @@
           </ion-label>
         </ion-item>
         
-        <ion-list-header>
+        <ion-list-header class="ion-no-padding">
           Notificaciones Antiguas
         </ion-list-header>
 
-        <ion-item *ngFor="let ticket of previousList" padding-horizontal="10px" (click)="goToStaffTicket(ticket)">
+        <ion-item *ngFor="let ticket of previousList" (click)="goToStaffTicket(ticket)">
           <span style=" font-size: large; color: lightcoral;" slot="start">
             <i class="fas fa-ambulance"></i>
             <div *ngIf="!ticket[1].viewed" mode="ios" class="badge"></div>
@@ -69,11 +68,11 @@
     </ion-list>
 
     <!-- Lista de las Personas -->
-    <ion-list margin-top="5px" *ngSwitchCase="'Persona'">
+    <ion-list *ngSwitchCase="'Persona'">
       <ion-list-header>
         Personas
       </ion-list-header>
-      <ion-item padding-horizontal="10px" (click)="goToStaffTicket()">
+      <ion-item (click)="goToStaffTicket()">
         <span style=" font-size: large; color: lightcoral;" slot="start">
           <i class="fas fa-ambulance"></i>
         </span>
@@ -83,7 +82,7 @@
         </ion-label>
         <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
       </ion-item>
-      <ion-item padding-horizontal="10px" (click)="goToStaffTicket()">
+      <ion-item (click)="goToStaffTicket()">
         <span style=" font-size: large; color: lightcoral;" slot="start">
           <i class="fas fa-ambulance"></i>
         </span>
@@ -98,12 +97,12 @@
     </ion-list>
 
     <!-- Activos -->
-    <ion-list margin-top="5px" *ngSwitchCase="'Activos'">
+    <ion-list *ngSwitchCase="'Activos'">
       <ion-list-header>
          Activos
       </ion-list-header>
  
-      <ion-item padding-horizontal="10px">
+      <ion-item>
         <span style=" font-size: large; color: lightcoral;" slot="start">
           <i class="fas fa-wheelchair"></i>
         </span>
@@ -113,7 +112,7 @@
         </ion-label>
         <!-- <ion-button fill="outline" slot="end" (click)="goToTicket(1)">ticket</ion-button> -->
       </ion-item>
-      <ion-item padding-horizontal="10px">
+      <ion-item>
         <span style=" font-size: large; color: lightcoral;" slot="start">
           <i class="fas fa-wheelchair"></i>
         </span>
@@ -131,7 +130,7 @@
       <ion-list-header>
         Lista de Activos
       </ion-list-header>
-      <ion-item padding-horizontal="5px" *ngFor="let item of peopleAssets">
+      <ion-item *ngFor="let item of peopleAssets">
         <span style=" font-size: large; color: lightcoral;" slot="start">
           <i class="fab fa-accessible-icon"></i>
         </span>
