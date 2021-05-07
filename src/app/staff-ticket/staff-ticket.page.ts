@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import * as moment from 'moment';
+import { CrudService } from '../services/crud.service';
+import { UtilsService } from '../services/utils.service';
 
 interface TicketStaffInterface {
   _id?: string,
@@ -38,7 +40,7 @@ date: any;
   @Input() id: string;
   @Input() value: Object;
 
-  constructor(private modalController: ModalController) { }
+  constructor(private modalController: ModalController, private service:CrudService, private utils:UtilsService ) { }
 
   ngOnInit() {
     this.createDate();
@@ -65,6 +67,13 @@ date: any;
     this.date=this.value['createdAt'];
     this.date = day + '-' + month + '-' + year + ' a las: ' + hour + ':' + minutes + ' ' + ampm;
     
+  }
+
+  finishedTicket () {
+    console.log(`${this.utils.params.assistance_tickets}${this.id}`)
+    this.service.put(`${this.utils.params.assistance_tickets}${this.id}`, {status: "FINISHED"}).subscribe((response) => {
+      if (response['status'] == "FINISHED") this.closeModal();
+    });
   }
 
   humanizeDate (date) {

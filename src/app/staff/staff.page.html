@@ -40,11 +40,11 @@
         <ion-item *ngFor="let ticket of recentList" (click)="goToStaffTicket(ticket)">
           <span style=" font-size: large; color: lightcoral;" slot="start">
             <i class="fas fa-ambulance"></i>
-            <div *ngIf="!ticket[1].viewed" mode="ios" class="badge"></div>
+            <div *ngIf="!ticket[1].viewed && ticket[1].status !=='FINISHED'" mode="ios" class="badge"></div>
           </span>
           <ion-label>
-            <h2>{{ticket[1].assistance_type.name}}</h2>
-            <!-- <h3>{{ticket[1].patient.name}}</h3> -->
+            <h2 *ngIf="ticket[1].status == 'FINISHED'" style="text-decoration-line: line-through;">{{ticket[1].assistance_type.name}}</h2>
+            <h2 *ngIf="ticket[1].status !== 'FINISHED'">{{ticket[1].assistance_type.name}}</h2>
             <h4>{{ticket[1].init_location}}</h4>
           </ion-label>
         </ion-item>
@@ -56,11 +56,11 @@
         <ion-item *ngFor="let ticket of previousList" (click)="goToStaffTicket(ticket)">
           <span style=" font-size: large; color: lightcoral;" slot="start">
             <i class="fas fa-ambulance"></i>
-            <div *ngIf="!ticket[1].viewed" mode="ios" class="badge"></div>
+            <div *ngIf="!ticket[1].viewed && ticket[1].status !=='FINISHED'" mode="ios" class="badge"></div>
           </span>
           <ion-label>
-            <h2>{{ticket[1].assistance_type.name}}</h2>
-            <!-- <h3>{{ticket[1].patient.name}}</h3> -->
+            <h2 *ngIf="ticket[1].status == 'FINISHED'" style="text-decoration-line: line-through;">{{ticket[1].assistance_type.name}}</h2>
+            <h2 *ngIf="ticket[1].status !== 'FINISHED'">{{ticket[1].assistance_type.name}}</h2>
             <h4>{{ticket[1].init_location}}</h4>
           </ion-label>
         </ion-item>
