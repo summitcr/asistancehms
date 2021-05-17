@@ -87,8 +87,11 @@ export class StaffPage implements OnInit {
     this.saveNotificationsToStorage()
     const modal = await this.modalController.create({
       component: StaffTicketPage,
-      componentProps: {id, value}
+      componentProps: {id, value, goMap: this.goMap}
     });
+    // modal.onDidDismiss().then((resp)=>{
+    //   this.goMap(resp.data['placeId'])
+    // });
     return await modal.present();
   }
 
@@ -113,8 +116,7 @@ export class StaffPage implements OnInit {
   }
 
   goMap(item) {
-    //console.log(item)
-    this.router.navigateByUrl('/menu/first/tabs/tab1/' + item.id);
+    this.router.navigateByUrl('/menu/first/tabs/tab1/' + item.placeId);
   }
 
   goToStaffTicket(ticketFromMap) {

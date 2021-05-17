@@ -3,6 +3,7 @@ import { ModalController } from '@ionic/angular';
 import * as moment from 'moment';
 import { CrudService } from '../services/crud.service';
 import { UtilsService } from '../services/utils.service';
+import { Router } from '@angular/router';
 
 interface TicketStaffInterface {
   _id?: string,
@@ -23,6 +24,7 @@ interface TicketStaffInterface {
   long: string,
   createdAt: string,
   updatedAt: string,
+  placeId,
   assistant?: {
     name: string,
     _id: string,
@@ -39,8 +41,9 @@ export class StaffTicketPage implements OnInit {
 date: any;
   @Input() id: string;
   @Input() value: Object;
+  @Input() goMap: Function;
 
-  constructor(private modalController: ModalController, private service:CrudService, private utils:UtilsService ) { }
+  constructor(private router:Router, private modalController: ModalController, private service:CrudService, private utils:UtilsService ) { }
 
   ngOnInit() {
     this.createDate();
@@ -81,9 +84,15 @@ date: any;
     return moment(date).fromNow();
   }
 
+  goToMap () {
+    this.router.navigateByUrl(`/menu/first/tabs/tab1/${this.value['placeId']}`);
+    this.closeModal();
+  }
+
   closeModal() {
     this.modalController.dismiss({
-      'dismissed': true
+      'dismissed': true,
+      'placeId': this.value['placeId']
     });
   }
 }
