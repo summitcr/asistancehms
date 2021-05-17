@@ -502,11 +502,51 @@ export class Tab1Page implements OnInit, AfterViewInit {
         apiKey: '439578d65ac560a55bb586feaa299bf7',
         hideMenu: true,
         floor: 0,
-        centerOnVenue: '5de813dcc85b5500169609d6'
+        centerOnVenue: '5de813dcc85b5500169609d6',
+       lenguaje:'es',
+       preferredLanguage:'es'
 
       }).then(instance => {
         this.mapwizeMap = instance;
-
+  
+    
+        this.mapwizeMap.on('mapwize:directionstart', e => {
+          if(this.trackBeacons===e.to.placeId){
+            this.mapwizeMap.removeDirection();
+            //this.mapwizeMap.removeMarkers();
+            this.mapwizeMap.removeRoutes();
+            this.mapwizeMap.removeWaypoint();
+            
+          }
+          if(this.urlId=='0' && this.trackBeacons){
+          console.log('directionstart: ', e);
+          console.log(e.to.placeId);
+          var dir = {
+            "from": { "placeId": this.trackBeacons },
+            "to": { "placeId": e.to.placeId },
+            "options": { "isAccessible": false }
+          };
+          this.service.save(this.services.mapwizeParams.searchdirection, dir).subscribe((response) => {
+            
+            this.mapwizeMap.setDirection(response);
+          }, (err) => {
+    
+            console.error(err);
+          });
+         
+        }
+         
+       
+      });
+    //   this.mapwizeMap.on('mapwize:directionstop', e => {
+    //     console.log('directionstop');
+    //     if(this.trackBeacons==e.to.placeId){
+    //       this.mapwizeMap.removeDirection();
+    //       this.mapwizeMap.refresh();
+    //     }
+        
+    // });
+    
         //this.personLocation();
         //this.personLoggedLocation();
         //this.asociatedPersonLocation();

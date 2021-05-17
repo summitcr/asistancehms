@@ -61,7 +61,7 @@
       </ion-item>
     </ion-card-header>
     <ion-card-content style="padding-top: 0; padding-bottom: 0;">
-      <p>{{this.assistance['status'] != 'PENDING' ? 'El personal esta por llegar, por favor permanezca en su lugar.' : 'El personal se encuentra resolviendo su solicitud. Pronto tendrá respuesta.'}}</p>
+      <p>{{this.assistance['status'] != 'PENDING' ? 'El personal esta por llegar, por favor permanezca en el sitio.' : 'El personal se encuentra resolviendo su solicitud. Pronto tendrá respuesta.'}}</p>
       <ion-button *ngIf="assistance['status'] === 'PENDING'; else btnFinalizar" size="small" expand="block" style="margin-top: 10px;" 
       (click)="closeSOSEvent('CANCELED')">Cancelar</ion-button>
       <ng-template #btnFinalizar>

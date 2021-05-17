@@ -352,8 +352,10 @@ export class ServiciosPage implements OnInit {
 
     this.ngZone.run(() => {
       this.devices.push(device);
+      setTimeout(() => {
       this.doBinary();
-     // this.alert("esta scanneado"+this.devices);
+    }, 2000);
+     //this.alert("esta scanneado"+this.devices);
     })
   }
   getLastBeacon() {
@@ -411,7 +413,9 @@ export class ServiciosPage implements OnInit {
     let items = [];
     for (let i = 0; i < this.beaconsPoints.length; i++) {
       items.push(this.beaconsPoints[i].shortid);
+      
     }
+   // this.alert("items: "+JSON.stringify(items));
     let beaconsId = [];
     let value = [];
     let lastFive = [];
@@ -463,7 +467,6 @@ export class ServiciosPage implements OnInit {
       this.beaconLocationInfo=this.beaconsPoints[index];
       if(!this.stopBeaconsCan){
         this.stopBeaconsCan=true;
-        //this.alert(this.beaconLocationInfo.point.description);
         this.createAssistanceTicket();
       }
       clearInterval(this.intervalBeacons);
