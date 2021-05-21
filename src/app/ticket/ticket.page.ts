@@ -264,7 +264,7 @@ export class TicketPage implements OnInit {
                 console.log(this.timeleft);
               }, 1000);
             }
-            this.ticketPosition = "Su posición es: " + 0;
+            this.ticketPosition = "Atendido" ;
             if (!this.stopPopUp) {
               //this.stopPopUp = true;
               if (this.popUp == null) {
