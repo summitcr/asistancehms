@@ -572,7 +572,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
         // this.setRouteCovid();
         //Metodo de prueba para las rutas de los tiquetes...
 
-        // this.setRoute();
+         this.setRoute();
         this.setRouteCovid();
 
       });
@@ -737,8 +737,8 @@ export class Tab1Page implements OnInit, AfterViewInit {
       this.storeService.localGet(this.localParam.localParam.gatewaybeacons).then((resp) => {
         this.beaconsPoints = resp;
 
-        // this.timerBeacons();
-        // this.timerWayFinding();
+         this.timerBeacons();
+        this.timerWayFinding();
       }, (err) => {
         console.error(err);
         console.log(err);
