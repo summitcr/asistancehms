@@ -30,7 +30,8 @@ export interface AssitanceTicket {
   init_location: String,
   lat: String,
   long: String,
-  assistance_type: String
+  assistance_type: String,
+  placeId: String
 }
 
 @Component({
@@ -255,6 +256,7 @@ export class ServiciosPage implements OnInit {
       init_location: this.beaconLocationInfo.point.description,
       lat: this.beaconLocationInfo.point.lat,
       long: this.beaconLocationInfo.point.lon,
+      placeId: this.beaconLocationInfo.point.externalid
     }
     console.log(newAssitanceTicket);
     this.crudService.post(this.params.params.assistance_tickets, newAssitanceTicket).then((assistanceTicket: Object) => {
