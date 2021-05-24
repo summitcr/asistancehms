@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, NgZone } from '@angular/core';
+import { Component, OnInit, AfterViewInit, NgZone, OnDestroy } from '@angular/core';
 import { AlertController, NavController, Platform, Events, ModalController, ActionSheetController, ToastController } from '@ionic/angular';
 import { from } from 'rxjs';
 import { BeaconService, BeaconModel } from '../services/beacon.service';
@@ -26,7 +26,7 @@ declare var MapwizeUI: any;
   templateUrl: './tab1.page.html',
   styleUrls: ['./tab1.page.scss'],
 })
-export class Tab1Page implements OnInit, AfterViewInit {
+export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
   pages = [
     {
       title: 'Notificacion',
@@ -119,9 +119,9 @@ export class Tab1Page implements OnInit, AfterViewInit {
     }, 1000);
     }
   }
-  ionViewWillLeave() {
-    // clearInterval(this.intervalBeacons);
-    // clearInterval(this.intervalFinding);
+  ngOnDestroy() {
+    clearInterval(this.intervalBeacons);
+    clearInterval(this.intervalFinding);
     // clearInterval(this.interval);
   }
 
