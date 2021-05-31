@@ -35,12 +35,6 @@ export class AppComponent {
       this.statusBar.overlaysWebView(false);
       this.splashScreen.hide();
       this.backgroundMode();
-      this.platform.backButton.subscribeWithPriority(9999, () => {
-        document.addEventListener('backbutton', function (event) {
-          event.preventDefault();
-          event.stopPropagation();
-        }, false);
-      });
       this.preventWebBackButton();
       this.enableBluetooth();
      // this.canActivate();

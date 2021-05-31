@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { NavController, AlertController, IonSelect } from '@ionic/angular';
+import { NavController, AlertController, IonSelect, Platform } from '@ionic/angular';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CrudService } from '../services/crud.service';
 import { UtilsService } from '../services/utils.service';
@@ -10,6 +10,7 @@ import { UbicacionService } from '../services/ubicacion.service';
 import { Storage } from '@ionic/storage';
 import { Toast } from '@ionic-native/toast/ngx';
 import { AuthenticationService, Token } from '../services/authentication.service';
+import { BLE } from '@ionic-native/ble/ngx';
 
 export interface NoRegisteredDiagnostic {
   identifierType: String,
@@ -102,10 +103,13 @@ export class RegistroCovidPage implements OnInit {
     private changeRef: ChangeDetectorRef,
     private storage: Storage,
     private toast: Toast,
-    private auth: AuthenticationService
+    private auth: AuthenticationService,
+    public platform: Platform,
+    private ble: BLE
   ) {
     this.myForm = this.createMyForm();
     // this.loger();
+    this.enableBluetooth();
   }
 
   ngOnInit() {
@@ -120,7 +124,12 @@ export class RegistroCovidPage implements OnInit {
     this.userStatus = value;
     console.log(this.userStatus);
   }
-
+  enableBluetooth(){
+    if(this.platform.is('android')){
+      this.ble.enable(
+        );
+    }
+  }
   GenerateCantones() {
     this.cantonesList = [];
     if (this.provinciaSelect !== undefined && this.provinciaSelect.value !== undefined){

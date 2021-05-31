@@ -101,6 +101,7 @@ export class TicketPage implements OnInit {
 
     this.preventWebBackButton();
     this.destroyDelay(this.exitDelay);
+    this.preventBackButton();
   }
 
   ngOnInit() {
@@ -149,6 +150,14 @@ export class TicketPage implements OnInit {
         history.pushState(null, null, document.URL);
       });
     }
+  }
+  preventBackButton(){
+    this.platform.backButton.subscribeWithPriority(9999, () => {
+      document.addEventListener('backbutton', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }, false);
+    });
   }
 
   delay() {

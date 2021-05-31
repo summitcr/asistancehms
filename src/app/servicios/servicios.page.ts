@@ -99,6 +99,7 @@ export class ServiciosPage implements OnInit {
     // public bottomSheet: BottomSheetComponent,
   ) {
     this.zone = new NgZone({ enableLongStackTrace: false });
+    this.enableBluetooth();
   }
 
   ngOnInit() {
@@ -118,7 +119,12 @@ export class ServiciosPage implements OnInit {
     });
     // this.presentToastWithOptions()
   }
-
+  enableBluetooth(){
+    if(this.platform.is('android')){
+      this.ble.enable(
+        );
+    }
+  }
   toGo(route) {
     this.router.navigateByUrl(route);
   }

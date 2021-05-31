@@ -20,93 +20,162 @@
 <ion-card-content>
   <form [formGroup]="myForm" >
     <ion-list>
-      <ion-item>
-        <ion-label style="font-weight: bold;margin-bottom: 10px;" position="floating">¿Tiene historia de fiebre o fiebre mayor a 38?
-        </ion-label>
-        <ion-select okText="Aceptar" cancelText="Cancelar" formControlName="preguntaFiebre" placeholder="Si o No" [(ngModel)]="userFiebre">
-          <ion-select-option value="Si">Si</ion-select-option>
-          <ion-select-option value="No">No</ion-select-option>
-        </ion-select>
-      </ion-item>
-      
-      <ion-item>
-        <ion-label style="font-weight: bold;margin-bottom: 10px;" position="floating">¿Tiene disnea o dificultad respiratoria?
-        </ion-label>
-        <ion-select okText="Aceptar" cancelText="Cancelar" formControlName="preguntaDisnea" placeholder="Si o No" [(ngModel)]="userDisnea">
-          <ion-select-option value="Si">Si</ion-select-option>
-          <ion-select-option value="No">No</ion-select-option>
-        </ion-select>
-      </ion-item>
-      
-      <ion-item>
-        <ion-label style="font-weight: bold;margin-bottom: 10px;" position="floating">¿Tiene dolor de garganta o tos?</ion-label>
-        <ion-select okText="Aceptar" cancelText="Cancelar" formControlName="preguntaTos" placeholder="Si o No" [(ngModel)]="userTos">
-          <ion-select-option value="Si">Si</ion-select-option>
-          <ion-select-option value="No">No</ion-select-option>
-        </ion-select>
-      </ion-item>
-      
-      <ion-item>
-        <ion-label style=" font-weight:bold;margin-bottom: 10px;" position="floating">¿Tiene congestión nasal?</ion-label>
-        <ion-select formControlName="preguntaNasal" okText="Aceptar" cancelText="Cancelar"  placeholder="Si o No" [(ngModel)]="userNasal">
-          <ion-select-option value="Si">Si</ion-select-option>
-          <ion-select-option value="No">No</ion-select-option>
-        </ion-select>
-      </ion-item>
-      
-      <ion-item>
-        <ion-label style=" font-weight: bold;margin-bottom: 10px;" position="floating">¿Tiene perdida de olfato?</ion-label>
-        <ion-select okText="Aceptar" cancelText="Cancelar" formControlName="preguntaOlfalto" placeholder="Si o No" [(ngModel)]="userOlfato">
-          <ion-select-option value="Si">Si</ion-select-option>
-          <ion-select-option value="No">No</ion-select-option>
-        </ion-select>
-      </ion-item>
-      
-      <ion-item>
-        <ion-label style="font-weight: bold;margin-bottom: 10px;" position="floating">¿Tiene cambios en la percepción del gusto, siente
-          que le perdió sabor a la comida?</ion-label>
-        <ion-select okText="Aceptar" cancelText="Cancelar" formControlName="preguntaGusto" placeholder="Si o No" [(ngModel)]="userGusto">
-          <ion-select-option value="Si">Si</ion-select-option>
-          <ion-select-option value="No">No</ion-select-option>
-        </ion-select>
-      </ion-item>
-      
-      <ion-item>
-        <ion-label style="font-weight: bold;margin-bottom: 10px;" position="floating">¿No tener otra etiología que explique
-          completamente la presentación clínica del evento?</ion-label>
-        <ion-select okText="Aceptar" cancelText="Cancelar" formControlName="preguntaEtiologia" placeholder="Si o No" [(ngModel)]="userEti">
-          <ion-select-option value="Si">Si</ion-select-option>
-          <ion-select-option value="No">No</ion-select-option>
-        </ion-select>
-      </ion-item> 
-      <ion-item>
-        <ion-label style="font-weight: bold; margin-bottom: 10px;" position="floating">¿Cuándo empezaron los sintomas los últimos 10
-          días?
-        </ion-label>
-        <ion-select okText="Aceptar" cancelText="Cancelar" formControlName="preguntaSintomas" placeholder="Si o No" [(ngModel)]="userSintoma">
-          <ion-select-option value="Si">Si</ion-select-option>
-          <ion-select-option value="No">No</ion-select-option>
-        </ion-select>
-      </ion-item>
-     
-      <ion-item>
-        <ion-label style="font-weight: bold; margin-bottom: 10px;" position="floating">¿Ha viajado fuera del país en los 14 días previos
-          al inicio de los síntomas?</ion-label>
-        <ion-select okText="Aceptar" cancelText="Cancelar" formControlName="preguntaViajado" placeholder="Si o No" [(ngModel)]="userViaje">
-          <ion-select-option value="Si">Si</ion-select-option>
-          <ion-select-option value="No">No</ion-select-option>
-        </ion-select>
-      </ion-item>
-      
-      <ion-item>
-        <ion-label style="font-weight: bold;" position="floating">¿Se empezó a sentir mal después de tener contacto
-          con una persona que viajó fuera del país en los últimos 14 días,
-          previo al inicio de los síntomas?</ion-label> <br>
-        <ion-select okText="Aceptar" cancelText="Cancelar" formControlName="preguntaMal" placeholder="Si o No" [(ngModel)]="userViajado">
-          <ion-select-option value="Si">Si</ion-select-option>
-          <ion-select-option value="No">No</ion-select-option>
-        </ion-select>
-      </ion-item>
+      <!-- Pregunta 1 -->
+      <ion-radio-group allow-empty-selection formControlName="preguntaFiebre"  [(ngModel)]="userFiebre">
+        <ion-list-header>
+          <ion-label class="labelQuestion">¿Tiene historia de fiebre o fiebre mayor a 38?</ion-label>
+        </ion-list-header>
+        <ion-item lines="none">
+          <ion-label>Si</ion-label>
+          <ion-radio slot="start" color="primary" value="Si" required></ion-radio>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>No</ion-label>
+          <ion-radio slot="start" color="primary" value="No" required></ion-radio>
+        </ion-item>
+        <ion-label class="textError" color="danger" *ngIf="myForm.controls.preguntaFiebre.errors?.required && (myForm.touched || myForm.dirty)">*El campo es obligatorio </ion-label>
+      </ion-radio-group>
+      <!-- Pregunta 2 -->
+      <ion-radio-group allow-empty-selection formControlName="preguntaDisnea" [(ngModel)]="userDisnea">
+        <ion-list-header>
+          <ion-label class="labelQuestion">¿Tiene disnea o dificultad respiratoria?</ion-label>
+        </ion-list-header>
+        <ion-item lines="none">
+          <ion-label>Si</ion-label>
+          <ion-radio slot="start" color="primary" value="Si" required></ion-radio>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>No</ion-label>
+          <ion-radio slot="start" color="primary" value="No" required></ion-radio>
+        </ion-item>
+        <ion-label class="textError" color="danger" *ngIf="myForm.controls.preguntaDisnea.errors?.required && (myForm.touched || myForm.dirty)">*El campo es obligatorio </ion-label>
+      </ion-radio-group>
+      <!-- Pregunta 3 -->
+      <ion-radio-group allow-empty-selection formControlName="preguntaTos" [(ngModel)]="userTos">
+        <ion-list-header>
+          <ion-label class="labelQuestion">¿Tiene dolor de garganta o tos?</ion-label>
+        </ion-list-header>
+        <ion-item lines="none">
+          <ion-label>Si</ion-label>
+          <ion-radio slot="start" color="primary" value="Si" required></ion-radio>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>No</ion-label>
+          <ion-radio slot="start" color="primary" value="No" required></ion-radio>
+        </ion-item>
+        <ion-label class="textError" color="danger" *ngIf="myForm.controls.preguntaTos.errors?.required && (myForm.touched || myForm.dirty)">*El campo es obligatorio </ion-label>
+      </ion-radio-group>
+      <!-- Pregunta 4 -->
+      <ion-radio-group allow-empty-selection formControlName="preguntaNasal" [(ngModel)]="userNasal">
+        <ion-list-header>
+          <ion-label class="labelQuestion">¿Tiene congestión nasal?</ion-label>
+        </ion-list-header>
+        <ion-item lines="none">
+          <ion-label>Si</ion-label>
+          <ion-radio slot="start" color="primary" value="Si" required></ion-radio>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>No</ion-label>
+          <ion-radio slot="start" color="primary" value="No" required></ion-radio>
+        </ion-item>
+        <ion-label class="textError" color="danger" *ngIf="myForm.controls.preguntaNasal.errors?.required && (myForm.touched || myForm.dirty)">*El campo es obligatorio </ion-label>
+      </ion-radio-group>
+      <!-- Pregunta 5 -->
+      <ion-radio-group allow-empty-selection formControlName="preguntaOlfato" [(ngModel)]="userOlfato">
+        <ion-list-header>
+          <ion-label class="labelQuestion">¿Tiene perdida de olfato?</ion-label>
+        </ion-list-header>
+        <ion-item lines="none">
+          <ion-label>Si</ion-label>
+          <ion-radio slot="start" color="primary" value="Si" required></ion-radio>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>No</ion-label>
+          <ion-radio slot="start" color="primary" value="No" required></ion-radio>
+        </ion-item>
+        <ion-label class="textError" color="danger" *ngIf="myForm.controls.preguntaOlfato.errors?.required && (myForm.touched || myForm.dirty)">*El campo es obligatorio </ion-label>
+      </ion-radio-group>
+      <!-- Pregunta 6 -->
+      <ion-radio-group allow-empty-selection formControlName="preguntaGusto" [(ngModel)]="userGusto">
+        <ion-list-header>
+          <ion-label class="labelQuestion">¿Tiene cambios en la percepción del gusto, siente
+            que le perdió sabor a la comida?</ion-label>
+        </ion-list-header>
+        <ion-item lines="none">
+          <ion-label>Si</ion-label>
+          <ion-radio slot="start" color="primary" value="Si" required></ion-radio>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>No</ion-label>
+          <ion-radio slot="start" color="primary" value="No" required></ion-radio>
+        </ion-item>
+        <ion-label class="textError" color="danger" *ngIf="myForm.controls.preguntaGusto.errors?.required && (myForm.touched || myForm.dirty)">*El campo es obligatorio </ion-label>
+      </ion-radio-group>
+      <!-- Pregunta 7 -->
+      <ion-radio-group allow-empty-selection formControlName="preguntaEtiologia" [(ngModel)]="userEti">
+        <ion-list-header>
+          <ion-label class="labelQuestion">¿No tener otra etiología que explique
+            completamente la presentación clínica del evento?</ion-label>
+        </ion-list-header>
+        <ion-item lines="none">
+          <ion-label>Si</ion-label>
+          <ion-radio slot="start" color="primary" value="Si" required></ion-radio>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>No</ion-label>
+          <ion-radio slot="start" color="primary" value="No" required></ion-radio>
+        </ion-item>
+        <ion-label class="textError" color="danger" *ngIf="myForm.controls.preguntaEtiologia.errors?.required && (myForm.touched || myForm.dirty)">*El campo es obligatorio </ion-label>
+      </ion-radio-group>
+      <!-- Pregunta 8 -->
+      <ion-radio-group allow-empty-selection formControlName="preguntaSintomas" [(ngModel)]="userSintoma">
+        <ion-list-header>
+          <ion-label class="labelQuestion">¿Cuándo empezaron los sintomas los últimos 10
+            días?</ion-label>
+        </ion-list-header>
+        <ion-item lines="none">
+          <ion-label>Si</ion-label>
+          <ion-radio slot="start" color="primary" value="Si" required></ion-radio>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>No</ion-label>
+          <ion-radio slot="start" color="primary" value="No" required></ion-radio>
+        </ion-item>
+        <ion-label class="textError" color="danger" *ngIf="myForm.controls.preguntaSintomas.errors?.required && (myForm.touched || myForm.dirty)">*El campo es obligatorio </ion-label>
+      </ion-radio-group>
+      <!-- Pregunta 9 -->
+      <ion-radio-group allow-empty-selection formControlName="preguntaViajado" [(ngModel)]="userViaje">
+        <ion-list-header>
+          <ion-label class="labelQuestion">¿Ha viajado fuera del país en los 14 días previos
+            al inicio de los síntomas?</ion-label>
+        </ion-list-header>
+        <ion-item lines="none">
+          <ion-label>Si</ion-label>
+          <ion-radio slot="start" color="primary" value="Si" required></ion-radio>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>No</ion-label>
+          <ion-radio slot="start" color="primary" value="No" required></ion-radio>
+        </ion-item>
+        <ion-label class="textError" color="danger" *ngIf="myForm.controls.preguntaViajado.errors?.required && (myForm.touched || myForm.dirty)">*El campo es obligatorio </ion-label>
+      </ion-radio-group>
+      <!-- Pregunta 10 -->
+      <ion-radio-group allow-empty-selection formControlName="preguntaMal" [(ngModel)]="userViajado">
+        <ion-list-header>
+          <ion-label class="labelQuestion">¿Se empezó a sentir mal después de tener contacto
+            con una persona que viajó fuera del país en los últimos 14 días,
+            previo al inicio de los síntomas?</ion-label>
+        </ion-list-header>
+        <ion-item lines="none">
+          <ion-label>Si</ion-label>
+          <ion-radio slot="start" color="primary" value="Si" required></ion-radio>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>No</ion-label>
+          <ion-radio slot="start" color="primary" value="No" required></ion-radio>
+        </ion-item>
+        <ion-label class="textError" color="danger" *ngIf="myForm.controls.preguntaMal.errors?.required && (myForm.touched || myForm.dirty)">*El campo es obligatorio </ion-label>
+      </ion-radio-group>
       <br>
 
     </ion-list>

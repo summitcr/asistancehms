@@ -26,7 +26,7 @@
   <ion-header>
     <ion-toolbar class="topMenu">
       <ion-buttons slot="start">
-        <ion-back-button defaultHref="/servicios" [text]="Salir"></ion-back-button>
+        <ion-button (click)="goBack()"><ion-icon name="arrow-back"></ion-icon></ion-button>
       </ion-buttons>
       <ion-title>
         <img src="assets/img/ccss-logo.png" alt="Es el de summit que representa una dos montañas" style="width: 40px;">
@@ -44,7 +44,7 @@
         <ion-card mode="ios" *ngIf="hidenCard">
           <ion-card-content>
             <ion-card-title>
-              Información de tickets
+              Información de tiquete
               </ion-card-title>
             <p> <strong>{{ ticketNumber}}</strong> </p>
             <p>{{ticketServices}} </p>

@@ -40,3 +40,16 @@
 ion-icon {
     color: white !important;
   }
+
+  .mapwizeui #mwz-searchBar .mwz-search input{
+    :language(es){
+        font-size: 85%;
+        font-family: arial, verdana, sans-serif;
+    }
+   
+}
+.mapwizeui #mwz-searchBar .mwz-search input{
+    content: "Buscar" !important;
+    font-size: 14px !important;
+ }
+

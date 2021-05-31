@@ -72,10 +72,15 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
   intervalFinding: any;
   placesInfo: any;
   ticketsInfo: any;
-  ticketNumber: any = "No hay tickets";
-  ticketPosition: any = "No hay tickets";
-  ticketServices: any = "No hay tickets";
-  btnNombre: any="Mostrar tickets";
+  ticketNumber: any = "No hay tiquete";
+  ticketPosition: any = "No hay tiquete";
+  ticketServices: any = "No hay tiquete";
+  btnNombre: any="Mostrar tiquete";
+  lastPlaceId: String = "0";
+  lastTrackBeacons: String= "0";
+  updateRouteInterval: any;
+  lastTrack:String="0";
+  directionObject: any;
 
   constructor(private storage: Storage,
     private storeService: StorageService,
@@ -122,6 +127,7 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     clearInterval(this.intervalBeacons);
     clearInterval(this.intervalFinding);
+    clearInterval(this.updateRouteInterval);
     // clearInterval(this.interval);
   }
 
@@ -440,7 +446,7 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
       //Marcador hacia donde va la persona
      
       const popup = new mapboxgl.Popup({ closeButton: false })
-        .setHTML("<strong style='color:black'>Ticket Asignado:" + this.ticketNumber +
+        .setHTML("<strong style='color:black'>Tiquete Asignado:" + this.ticketNumber +
           "</strong></br><strong style='color:black'>Servicio:" + this.ticketServices +
           "</strong></br><strong style='color:black'>Posición:" + this.ticketPosition +
           "</strong>");
@@ -503,50 +509,29 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
         hideMenu: true,
         floor: 0,
         centerOnVenue: '5de813dcc85b5500169609d6',
-       lenguaje:'es',
-       preferredLanguage:'es'
+       language:'es',
+       preferredLanguage:'es',
 
       }).then(instance => {
         this.mapwizeMap = instance;
   
-    
+        // var div = document.getElementById("mwz-mapwizeSearch");
+        // div.style.visibility="hidden";
+       
+
         this.mapwizeMap.on('mapwize:directionstart', e => {
           if(this.trackBeacons===e.to.placeId){
             this.mapwizeMap.removeDirection();
-            //this.mapwizeMap.removeMarkers();
             this.mapwizeMap.removeRoutes();
             this.mapwizeMap.removeWaypoint();
-            
           }
           if(this.urlId=='0' && this.trackBeacons){
-          console.log('directionstart: ', e);
-          console.log(e.to.placeId);
-          var dir = {
-            "from": { "placeId": this.trackBeacons },
-            "to": { "placeId": e.to.placeId },
-            "options": { "isAccessible": false }
-          };
-          this.service.save(this.services.mapwizeParams.searchdirection, dir).subscribe((response) => {
-            
-            this.mapwizeMap.setDirection(response);
-          }, (err) => {
-    
-            console.error(err);
-          });
-         
+            this.createRouteFromUserPosition(e);
+            this.updateRouteFromUserPosition(e);
         }
-         
-       
+  
       });
-    //   this.mapwizeMap.on('mapwize:directionstop', e => {
-    //     console.log('directionstop');
-    //     if(this.trackBeacons==e.to.placeId){
-    //       this.mapwizeMap.removeDirection();
-    //       this.mapwizeMap.refresh();
-    //     }
-        
-    // });
-    
+
         //this.personLocation();
         //this.personLoggedLocation();
         //this.asociatedPersonLocation();
@@ -562,10 +547,48 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
 
       });
 
-    }, 1000);
-   
+    }, 1000); 
   }//fin de after
 
+  //Metodos de rutas
+  createRouteFromUserPosition(e){
+    if(this.lastPlaceId !== e.to.placeId){
+      this.lastPlaceId = e.to.placeId;
+      this.directionObject = e;
+      this.mapwizeMap.removeDirection();
+      var dir = {
+        "from": { "placeId": this.trackBeacons },
+        "to": { "placeId": this.directionObject.to.placeId },
+        "options": { "isAccessible": false }
+      };
+      this.service.save(this.services.mapwizeParams.searchdirection, dir).subscribe((response) => {
+        this.mapwizeMap.setDirection(response);
+      }, (err) => {
+
+        console.error(err);
+      });
+    }
+  }
+  updateRouteFromUserPosition(e){
+    this.updateRouteInterval = setInterval(() => {
+      if(this.directionObject && this.lastTrack !== this.trackBeacons){
+      this.lastTrack = this.trackBeacons;
+      this.mapwizeMap.removeDirection();
+      var dir = {
+        "from": { "placeId": this.trackBeacons },
+        "to": { "placeId": this.directionObject.to.placeId },
+        "options": { "isAccessible": false }
+      };
+
+      this.service.save(this.services.mapwizeParams.searchdirection, dir).subscribe((response) => {
+        this.mapwizeMap.setDirection(response);
+      }, (err) => {
+
+        console.error(err);
+      });
+    }
+  }, 1000);
+  }
   //Metodo que coloca el marcador y el popup de la persona loggeada
   personLocation() {
     // this.alert("lat:"+this.lastBeaconsLat);
@@ -861,8 +884,8 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
   //Fin de los metodos de la lectura de beacons
   async presentToastWithOptions() {
     const toast = await this.toastController.create({
-      header: 'Información de ticket',
-      message: "<strong style='color:black'>Ticket Asignado:" + this.ticketNumber +
+      header: 'Información de tiquete',
+      message: "<strong style='color:black'>Tiquete Asignado:" + this.ticketNumber +
         "</strong></br><strong style='color:black'>Servicio:" + this.ticketServices +
         "</strong></br><strong style='color:black'>Posición:" + this.ticketPosition +
         "</strong>",
@@ -889,12 +912,19 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
     this.hidenCard = !this.hidenCard;
     
     if(this.hidenCard){
-      this.btnNombre="Ocultar tickets"
+      this.btnNombre="Ocultar tiquete"
     }else{
-      this.btnNombre="Mostrar tickets"
+      this.btnNombre="Mostrar tiquete"
     }
   }
   back(){
     this.router.navigateByUrl('/servicios');
+  }
+  goBack(){
+    if(this.urlId === "0"){
+      this.router.navigateByUrl("/servicios");
+    } else {
+      this.router.navigateByUrl("/menu/first/tabs/tab2");
+    }
   }
 }// fin

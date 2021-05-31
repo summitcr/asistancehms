@@ -5,7 +5,8 @@ import { UtilsService } from '../services/utils.service';
 import { CrudService } from '../services/crud.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AlertController } from '@ionic/angular';
+import { AlertController, Platform } from '@ionic/angular';
+import { BLE } from '@ionic-native/ble/ngx';
 
 export interface Diagnostic {
   pacientId: number,
@@ -71,8 +72,11 @@ export class CoronavirusPage implements OnInit {
     private localParam: UtilStorageService,
     private router: Router,
     public formBuilder: FormBuilder,
-    private alertCtrl: AlertController) {
+    private alertCtrl: AlertController,
+    public platform: Platform,
+    private ble: BLE) {
     this.myForm = this.createMyForm();
+    this.enableBluetooth()
   }
 
   ngOnInit() {
@@ -95,7 +99,12 @@ export class CoronavirusPage implements OnInit {
     this.getUserIdentifier();
     //this.listaPoll();
   }
-
+  enableBluetooth(){
+    if(this.platform.is('android')){
+      this.ble.enable(
+        );
+    }
+  }
   getUserLogged() {
     this.storeService.localGet(this.localParam.localParam.userLogged).then((resp) => {
       this.userLogged = resp;
@@ -222,7 +231,7 @@ export class CoronavirusPage implements OnInit {
       preguntaDisnea: ['', Validators.required],
       preguntaTos: ['', Validators.required],
       preguntaNasal: ['', Validators.required],
-      preguntaOlfalto: ['', Validators.required],
+      preguntaOlfato: ['', Validators.required],
       preguntaGusto: ['', Validators.required],
       preguntaEtiologia: ['', Validators.required],
       preguntaSintomas: ['', Validators.required],
