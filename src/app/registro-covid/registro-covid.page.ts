@@ -137,10 +137,11 @@ export class RegistroCovidPage implements OnInit {
         Object.keys(resp).map((value, index, array) => {
           this.cantonesList.push({ id: value, value: resp[value] });
         });
+        console.log(this.cantonesList)
         if (this.myForm.controls['registro']['controls']['canton'].disabled) {
           this.myForm.controls['registro']['controls']['canton'].enable()
+          this.disableCantonSelect = false;
         }
-        this.disableCantonSelect = false;
       }).catch(err => {
         console.log(err)
       });
@@ -158,8 +159,8 @@ export class RegistroCovidPage implements OnInit {
         });
         if (this.myForm.controls['registro']['controls']['distrito'].disabled) {
           this.myForm.controls['registro']['controls']['distrito'].enable()
+          this.disableDistritoSelect = false;
         }
-        this.disableDistritoSelect = false;
       });
     }
     this.distritoSelect.value = undefined;

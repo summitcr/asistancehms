@@ -9,7 +9,7 @@ export class UbicacionService {
   private cantones: any;
   private distritos: any;
 
-  constructor( private http:HttpClient ) { }
+  constructor( private http:HttpClient ) {}
 
   /**
    * getProvincia

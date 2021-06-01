@@ -76,19 +76,19 @@
               <ion-select-option [value]="{id:7, value:'Limon'}">Limon</ion-select-option>
             </ion-select>
   
-            <ion-label [hidden]="disableCantonSelect" position="floating">Canton</ion-label>
+            <ion-label position="floating">Canton</ion-label>
             <ion-select formControlName="canton" placeholder="Selecione un Canton" #cantonSelect
               (ionChange)="GenerateDistritos(provinceSelect, cantonSelect)"
-              [hidden]="disableCantonSelect">
+            >
               <ion-select-option *ngFor="let canton of cantonesList" [value]="canton">
                 {{canton.value}}
               </ion-select-option>
             </ion-select>
   
-            <ion-label [hidden]="disableDistritoSelect" position="floating">Distrito</ion-label>
+            <ion-label position="floating">Distrito</ion-label>
             <ion-select formControlName="distrito" placeholder="Selecione un Distrito"
               #distritoSelect (ionChange)="GenerateDirection(provinceSelect, cantonSelect, distritoSelect)"
-              [hidden]="disableDistritoSelect">
+            >
               <ion-select-option *ngFor="let distrito of distritosList" [value]="distrito">
                 {{distrito.value}}
               </ion-select-option>
