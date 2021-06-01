@@ -142,6 +142,7 @@ export class RegistroCovidPage implements OnInit {
           this.myForm.controls['registro']['controls']['canton'].enable()
           this.disableCantonSelect = false;
         }
+        this.myForm.controls['registro']['controls']['distrito'].disable()
       }).catch(err => {
         console.log(err)
       });
