@@ -137,7 +137,12 @@ export class RegistroCovidPage implements OnInit {
         Object.keys(resp).map((value, index, array) => {
           this.cantonesList.push({ id: value, value: resp[value] });
         });
+        if (this.myForm.controls['registro']['controls']['canton'].disabled) {
+          this.myForm.controls['registro']['controls']['canton'].enable()
+        }
         this.disableCantonSelect = false;
+      }).catch(err => {
+        console.log(err)
       });
     }
     this.cantonSelect.value = undefined;
@@ -151,6 +156,9 @@ export class RegistroCovidPage implements OnInit {
         Object.keys(resp).map((value, index, array) => {
           this.distritosList.push({ id: value, value: resp[value] });
         });
+        if (this.myForm.controls['registro']['controls']['distrito'].disabled) {
+          this.myForm.controls['registro']['controls']['distrito'].enable()
+        }
         this.disableDistritoSelect = false;
       });
     }
@@ -326,9 +334,9 @@ export class RegistroCovidPage implements OnInit {
         direccion: new FormControl(''),
         edad: new FormControl(''),
         //genero: new FormControl(''),
-        provincia: new FormControl(undefined),
-        canton: new FormControl(undefined),
-        distrito: new FormControl(undefined),
+        provincia: new FormControl({value: undefined, disabled: false}),
+        canton: new FormControl({value: undefined, disabled: true}),
+        distrito: new FormControl({value: undefined, disabled: true}),
       }, Validators.required)
     });
   }
